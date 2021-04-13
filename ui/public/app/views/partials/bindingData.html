@@ -1,0 +1,418 @@
+<h3>Protein Binding Data</h3>
+<div class="panel panel-transparent">
+    <uib-tabset justified="true" class="bg-white p0" active="m.activeTab">
+        <uib-tab index="'ViewAllTab'">
+            <uib-tab-heading>
+                <em class="far fa-clock fa-fw"></em>View All Protein Binding Data
+            </uib-tab-heading>
+            <!--<div align="right">
+                <a class="btn btn-info btn-xs" ng-click="m.exportDataToCSV()">Export To CSV</a>
+            </div>-->
+            <div class="table-responsive">
+                <div ng-if="m.dataReady">
+                    <table datatable="" dt-options="m.dtOptions" dt-columns="m.dtColumns" dt-column-defs="m.dtColDefs" dt-instance="m.DtInstCallback"
+                        class="table table-hover">
+                    </table>
+                </div>
+            </div>
+            <div ng-show="!m.tableData">
+                <h3>Loading...</h3>
+            </div>
+            <div ng-show="m.tableData && m.tableData.length == 0">
+                <h3>There is no binding data in the database.</h3>
+            </div>
+            <div ng-show="m.lastRowClicked" class="panel-footer text-right container-fluid">
+                <div class="col-sm-8 pull-right">
+                    <a class="btn btn-info" ng-click="m.viewDetail()">View Detail</a>
+                    <!--<a class="btn btn-info" permission permission-only="['writeProAnalysis', 'adminResearch']" ng-click="m.editDetail()">Edit</a> -->
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'UploadTab'" ng-click="m.UploadForm.initTab()" permission permission-only="['writeBindingData', 'adminResearch']">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-plus-square"></em>Import Octet Binding Data
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-validate form-horizontal" name="m.UploadForm.ui.validate" ng-submit="m.UploadForm.SubmitTab()">
+                            <fieldset>
+                                <legend>Import Octet Binding Data</legend>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Purification Column
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <select name="column" class="chosen-select input-md" width="'200px'" ng-model="m.UploadForm.option" chosen data-placeholder-text-single="'Choose the column'"
+                                            ng-options="p for p in ['Loading', 'Sample']">
+                                        </select>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Octet Import</label>
+                                    <div class="col-sm-6">
+                                        <h4>Octet report file to import (must be Kinetics exp type)</h4>
+                                        <input id="file" filestyle="" type="file" accept=".xls" data-button-text="Choose File" data-classbutton="btn btn-info" data-classinput="form-control inline"
+                                            ng-click="m.InitFileHandler()" style="display: inline" />
+                                        <button type="button" class="btn btn-purple" ng-show="m.ShowImportBtn" ng-click="m.UploadForm.parseCSV()">Upload and Parse Data</button>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+                            <div class="col-sm-12">
+                                <div class="no-padding table-responsive" ng-if="m.UploadForm.data.BindingData.length > 0">
+                                    <table class="table table-striped table-hover mb-xl">
+                                        <thead>
+                                            <tr>
+                                                <th>Transfection</th>
+                                                <th>Purification</th>
+                                                <th>Date</th>
+                                                <th>Sensor Type</th>
+                                                <th>Sample ID</th>
+                                                <th>Loading Sample ID</th>
+                                                <!-- <th>Conc. (nM)</th> -->
+                                                <th>Real?</th>
+                                                <th>Low?</th>
+                                                <th>Response</th>
+                                                <th>KD (M)</th>
+                                                <th>KD Error</th>
+                                                <th>kon(1/Ms)</th>
+                                                <th>kon Error</th>
+                                                <th>kdis(1/s)</th>
+                                                <th>kdis Error</th>
+                                                <th>RMax</th>
+                                                <th>RMax Error</th>
+                                                <th>kobs(1/s)</th>
+                                                <th>Req</th>
+                                                <!-- <th>Full X^2</th>
+                                                <th>Full R^2</th>
+                                                <th>Instrument</th>
+                                                <th>Assoc.</th>
+                                                <th>Disassoc.</th>
+                                                <th>Fitting Type</th>
+                                                <th>Model</th> -->
+                                                <th>Notes</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="data in m.UploadForm.data.BindingData">
+                                                <td>
+                                                    <select name="transfectionId" class="chosen-select input-md" width="'100px'" ng-model="data.transfectionId" chosen data-placeholder-text-single="'Choose a transfection'"
+                                                        max-shown-results="100" search-contains="true" ng-options="p.value as p.text for p in m.TransfectionDisplayData.ItemList">
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select name="purificationId" class="chosen-select input-md" width="'100px'" ng-model="data.purificationId" chosen data-placeholder-text-single="'Choose a purification'"
+                                                        max-shown-results="100" search-contains="true" ng-options="p.value as p.text for p in m.PurificationDisplayData.ItemList">
+                                                    </select>
+                                                </td>
+                                                <td>{{getDateOnly(data.startDate)}}</td>
+                                                <td>{{data.sensorType}}</td>
+                                                <td>{{data.sensorId}}</td>
+                                                <td>{{data.loadingSensorId}}</td>
+                                                <!-- <td>{{data.concentration}}</td> -->
+                                                <td>
+                                                    <label class="checkbox-inline c-checkbox">
+                                                        <input type="checkbox" ng-model="data.realResponse">
+                                                        <span class="fa fa-check"></span>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label class="checkbox-inline c-checkbox">
+                                                        <input type="checkbox" ng-model="data.lowResponse">
+                                                        <span class="fa fa-check"></span>
+                                                    </label>
+                                                </td>
+                                                <td>{{data.response}}</td>
+                                                <td>{{data.kd}}</td>
+                                                <td>{{data.kdError}}</td>
+                                                <td>{{data.kon}}</td>
+                                                <td>{{data.konError}}</td>
+                                                <td>{{data.kdis}}</td>
+                                                <td>{{data.kdisError}}</td>
+                                                <td>{{data.rMax}}</td>
+                                                <td>{{data.rMaxError}}</td>
+                                                <td>{{data.kobs}}</td>
+                                                <td>{{data.req}}</td>
+                                                <!-- <td>{{data.fullX2}}</td>
+                                                <td>{{data.fullR2}}</td>
+                                                <td>{{data.instrumentType}}</td>
+                                                <td>{{data.associationStart}} - {{data.associationEnd}}</td>
+                                                <td>{{data.disassociationStart}} - {{data.disassociationEnd}}</td>
+                                                <td>{{data.fittingType}}</td>
+                                                <td>{{data.modelType}}</td> -->
+                                                <td>
+                                                    <input style="width: 200px" type="text" name="notes" class="form-control" ng-model="data.notes">
+                                                </td>
+                                                <td>
+                                                    <button ng-click="m.UploadForm.removeEntry($index)" type="button" class="btn btn-danger btn-sm"><em class="fa fa-trash"></em></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="panel-footer text-center">
+                                <button class="btn btn-info" type="submit">
+                                    Create
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'EditTab'" ng-show="m.editForm.show">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-edit"></em>Edit Binding Data
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form name="m.editForm.ui.validate" novalidate="" class="form-validate form-horizontal">
+                            <fieldset class="b0">
+                                <legend>Edit Binding Data</legend>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Protein Analysis</label>
+                                    <div class="col-sm-6">
+                                        <strong name="name" class="form-control force-noborder" ng-bind="m.editForm.name"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <!-- <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Purificatio</label>
+                                    <div class="col-sm-6" ng-if="m.TRListReady">
+                                        <div class="input-group mb">
+                                            <table class="table table-hover">
+                                                <tbody>
+                                                    <tr ng-repeat="entry in m.editForm.requestArray">
+                                                        <td>
+                                                            <a ng-href="/#!/app/research/proteinAnalysisRequest?op=view&id={{entry}}">{{m.TRDisplayData.Hash[entry]}}</a></td>
+                                                        <td>
+                                                            <button type="button" ng-click="removePair(entry)" class="btn btn-sm btn-danger">
+                                                                <em class="fa fa-trash-o"></em>
+                                                            </button>
+                                                            <button type="button" ng-if="m.TRDisplayData.ListHash[entry].status !== 'Completed'" ng-click="m.editForm.CompleteProteinAnalysisRequest(entry)" class="btn btn-success">
+                                                                Complete
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <select class="chosen-select input-md" width="'600px'" ng-model="m.editForm.requestId" chosen data-placeholder-text-single="'Choose a Request'"
+                                            ng-options="p.value as p.text for p in m.TRDisplayData.ItemList">
+                                            </select>
+                                            <button type="button" class="btn btn-labeled btn-success" ng-click="addPair(m.editForm.requestId)">
+                                                <span class="btn-label"><em class="fa fa-plus"></em></span>
+                                                Add
+                                            </button>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset> -->
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Method</label>
+                                    <div class="col-sm-6">
+                                        <select class="chosen-select input-md" width="'600px'" ng-model="m.editForm.method" chosen data-placeholder-text-single="'Choose a method'"
+                                            ng-options="p for p in m.analysisMethods">
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Protein Analysis Notes</label>
+                                    <div class="col-sm-6">
+                                        <textarea class="form-control" rows="4" placeholder="Protein Analysis notes..." ng-model="m.editForm.notes">
+                                        </textarea>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Key Documents</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <div ref-link-directive info="m.editForm.RefLinkList">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+
+                            <div class="panel-footer text-center">
+                                <button type="button" class="btn btn-info" ng-click="m.editForm.CancelTab()">Close</button>
+                                <button type="button" class="btn btn-info" ng-click="m.editForm.SubmitTab()">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'DetailTab'" ng-show="m.viewForm.show">
+            <uib-tab-heading>
+                <em class="fas fa-search fa-fw"></em>Protein Analysis details
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form ng-submit="submitViewForm()" novalidate="" class="form-validate form-horizontal">
+                            <fieldset class="b0">
+                                <legend>View details</legend>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Experiment Metadata</label>
+                                    <div class="col-sm-6">
+                                        <table class="table table-striped table-hover mb-xl">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Purification</td>
+                                                    <td>{{m.viewForm.data.purification}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Experiment Data &amp; Time</td>
+                                                    <td>{{m.viewForm.data.startDate}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Sensor Type</td>
+                                                    <td>{{m.viewForm.data.sensorType}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Sensor ID</td>
+                                                    <td>{{m.viewForm.data.sensorId}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Loading Sensor ID</td>
+                                                    <td>{{m.viewForm.data.loadingSensorId}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Fitting Type</td>
+                                                    <td>{{m.viewForm.data.fittingType}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Model Type</td>
+                                                    <td>{{m.viewForm.data.modelType}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Instrument Type</td>
+                                                    <td>{{m.viewForm.data.instrumentType}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Association</td>
+                                                    <td>{{m.viewForm.data.associationStart}} - {{m.viewForm.data.associationEnd}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Disassociation</td>
+                                                    <td>{{m.viewForm.data.disassociationStart}} - {{m.viewForm.data.disassociationEnd}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="col-md-10 col-md-offset-1">
+                                    <div class="no-padding table-responsive">
+                                        <table class="table table-striped table-bordered table-hover mb-xl">
+                                            <thead>
+                                                <tr class="lead">
+                                                    <th colspan="15">Data</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Concentration</th>
+                                                    <th>Response</th>
+                                                    <th colspan="2">Affinity Constant</th>
+                                                    <th colspan="2">Rate of Association</th>
+                                                    <th colspan="2">Rate of Disassociation</th>
+                                                    <th colspan="2">Maximum Response</th>
+                                                    <th>Observed Binding Rate</th>
+                                                    <th>Response @ Equilibrium</th>
+                                                    <th colspan="2">Curve Fitting</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>(nM)</th>
+                                                    <th></th>
+                                                    <th>KD (M)</th>
+                                                    <th>KD Error</th>
+                                                    <th>kon(1/Ms)</th>
+                                                    <th>kon Error</th>
+                                                    <th>kdis(1/s)</th>
+                                                    <th>kdis Error</th>
+                                                    <th>RMax</th>
+                                                    <th>RMax Error</th>
+                                                    <th>kobs(1/s)</th>
+                                                    <th>Req</th>
+                                                    <th>Full X<sup>2</sup></th>
+                                                    <th>Full R<sup>2</sup></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{m.viewForm.data.concentration}}</td>
+                                                    <td>{{m.viewForm.data.response}}</td>
+                                                    <td>{{m.viewForm.data.kd.toExponential(2)}}</td>
+                                                    <td>{{m.viewForm.data.kdError.toExponential(2)}}</td>
+                                                    <td>{{m.viewForm.data.kon.toExponential(2)}}</td>
+                                                    <td>{{m.viewForm.data.konError.toExponential(2)}}</td>
+                                                    <td>{{m.viewForm.data.kdis.toExponential(2)}}</td>
+                                                    <td>{{m.viewForm.data.kdisError.toExponential(2)}}</td>
+                                                    <td>{{m.viewForm.data.rMax}}</td>
+                                                    <td>{{m.viewForm.data.rMaxError}}</td>
+                                                    <td>{{m.viewForm.data.kobs.toExponential(2)}}</td>
+                                                    <td>{{m.viewForm.data.req}}</td>
+                                                    <td>{{m.viewForm.data.fullX2}}</td>
+                                                    <td>{{m.viewForm.data.fullR2}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <table class="table table-striped table-bordered table-hover mb-xl">
+                                        <thead>
+                                            <tr>
+                                                <th>Files linked to this data entry</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="p in m.viewForm.data.referenceArray">
+                                                <td>{{p.fileName}}</td>
+                                                <td>
+                                                    <button class="btn btn-info" ng-click="dl(p)">Download</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </fieldset>
+
+                            <div class="panel-footer text-center">
+                                <button type="button" class="btn btn-info" ng-click="m.viewForm.CancelTab()">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+    </uib-tabset>
+</div>

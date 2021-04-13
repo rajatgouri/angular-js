@@ -1,0 +1,401 @@
+<h3>Equipment Scheduling</h3>
+<div class="panel panel-default">
+    <div class="row inside calendar">
+        <div class="col-md-2">
+            <div class="well well-dark">
+                <strong>Watched Instruments</strong>
+                <div class="form-group" ng-repeat="instrument in m.instruments">
+                    <div class="checkbox c-checkbox">
+                        <label>
+                            <input type="checkbox" ng-model="m.calendar.filter[instrument.id]">
+                            <span class="fa fa-check"></span>{{instrument.name}}
+                        </label>
+                    </div>
+                </div>
+                <button class="btn btn-primary" ng-click="m.calendar.filterUpdate()">Update</button>
+                <button class="btn btn-warning" ng-click="m.calendar.resetFilter()">Reset</button>
+                <hr>
+                <strong>Group by</strong>
+                <div class="form-group">
+                    <select class="chosen-select input-md" width="'300px'" ng-model="m.calendar.colorGroup" chosen ng-change="m.calendar.groupUpdate()"
+                        data-placeholder-text-single="'Choose a group'" search-contains="true" ng-options="p for p in ['My Reservations', 'Project', 'Department', 'Equipment Group']">
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div id="calendar" fc fc-options="m.calendar.options" ng-model="m.calendar.events" ></div>
+        </div>
+    </div>
+</div>
+<!-- add modal -->
+<script type="text/ng-template" id="add.html">
+    <form class="form-validate form-horizontal" name="m.CreateForm.ui.validate" ng-submit="m.CreateForm.SubmitTab()">
+        <div class="modal-header">
+            <h3 class="modal-title">Create Reservation</h3>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            Project
+                        </label>
+                        <div class="col-sm-6">
+                            <select class="chosen-select input-md" width="'300px'" ng-model="m.CreateForm.data.projectId" chosen name="projectId"
+                                data-placeholder-text-single="'Choose a project'" search-contains="true" ng-options="p.value as p.text + ' - ' + m.ProjectDisplayData.ListHash[p.value].description for p in m.ProjectDisplayData.ItemList">
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            Instrument Group
+                        </label>
+                        <div class="col-sm-6">
+                            <select required class="chosen-select input-md" width="'300px'" ng-model="m.CreateForm.data.group" chosen name="group" ng-change="m.scheduler.filter()"
+                                data-placeholder-text-single="'Choose an instrument group'" search-contains="true" ng-options="p for p in m.instrumentGroups">
+                            </select>
+                            <span ng-show="m.ValidateCreateInput('group', 'required')" class="text-danger">This field is required</span>
+                        </div>
+                    </div>
+                </fieldset>
+                <div ng-if="m.CreateForm.data.group">
+                    <!-- <div ng-if="m.CreateForm.data.group == 'Octet'">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">
+                                    Number of Data Points
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="number" ng-change="m.CreateForm.octetRecommend()" placeholder="Data Points" ng-model="m.CreateForm.data.numPoints" class="form-control">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">
+                                    Run time (minutes)
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="number" ng-change="m.CreateForm.octetRecommend()" placeholder="Run Time (Hours)" ng-model="m.CreateForm.data.runTime" class="form-control">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div> -->
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">
+                                Instrument
+                            </label>
+                            <div class="col-sm-6">
+                                <select required class="chosen-select input-md" width="'300px'" ng-model="m.CreateForm.data.instrumentId" chosen name="instrumentId" ng-change="m.CreateForm.onChange()"
+                                    data-placeholder-text-single="'Choose an instrument'" search-contains="true" ng-options="p.id as p.name for p in m.scheduler.filteredInstruments">
+                                </select>
+                                <span ng-show="m.ValidateCreateInput('instrumentId', 'required')" class="text-danger">This field is required</span>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- <fieldset ng-if="m.CreateForm.data.group == 'Octet'">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Override</label>
+                            <div class="col-sm-6">
+                                <div class="input-group mb">
+                                    <div class="checkbox c-checkbox">
+                                        <label>
+                                            <input type="checkbox" ng-model="m.CreateForm.data.override"/>
+                                            <span class="fa fa-check"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4"></div>
+                        </div>
+                    </fieldset> -->
+
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">All Day</label>
+                            <div class="col-sm-6">
+                                <div class="input-group mb">
+                                    <div class="checkbox c-checkbox">
+                                        <label>
+                                            <input type="checkbox" ng-model="m.CreateForm.data.allDay"/>
+                                            <span class="fa fa-check"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4"></div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">
+                                Start Date
+                            </label>
+                            <div class="col-sm-6">
+                                <div class="input-group mb">
+                                    <input type="text" name="startDate" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="m.CreateForm.data.startDate.dt" is-open="m.CreateForm.data.startDate.opened"
+                                        ng-required="true" close-text="Close" class="form-control" ng-change="m.CreateForm.onChange()"/>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="m.dp.dpOpen($event, 'CreateForm', 'startDate')" class="btn btn-default">
+                                            <em class="far fa-calendar-alt"></em>
+                                        </button>
+                                    </span>
+                                    <table ng-if="!m.CreateForm.data.allDay">
+                                        <tbody>
+                                            <tr>
+                                                <td class="form-group hours">
+                                                    <input type="number" step="any" max="12" min="0" placeholder="HH" ng-model="m.CreateForm.data.startTime.hours" class="form-control text-center" maxlength="2" tabindex="'0'">
+                                                </td>
+                                                <td>:</td>
+                                                <td class="form-group minutes">
+                                                    <input type="number" step="any" max="60" min="0" placeholder="MM" ng-model="m.CreateForm.data.startTime.minutes" class="form-control text-center" maxlength="2" tabindex="'0'">
+                                                </td>
+                                                <td class="am-pm">
+                                                    <button type="button" class="btn btn-default text-center ng-binding" ng-click="m.CreateForm.data.startTime.toggleAMPM(m.CreateForm.data.startTime)" tabindex="'0'">{{m.CreateForm.data.startTime.type}}</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <span ng-show="m.ValidateCreateInput('startDate', 'required')" class="text-danger">This field is required</span>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">
+                                End Date
+                            </label>
+                            <div class="col-sm-6">
+                                <div class="input-group mb">
+                                    <input type="text" name="endDate" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="m.CreateForm.data.endDate.dt" is-open="m.CreateForm.data.endDate.opened"
+                                        ng-required="true" close-text="Close" class="form-control" ng-change="m.CreateForm.onChange()"/>
+                                    <span class="input-group-btn">
+                                        <button type="button" ng-click="m.dp.dpOpen($event, 'CreateForm', 'endDate')" class="btn btn-default">
+                                            <em class="far fa-calendar-alt"></em>
+                                        </button>
+                                    </span>
+                                    <table ng-if="!m.CreateForm.data.allDay">
+                                        <tbody>
+                                            <tr>
+                                                <td class="form-group hours">
+                                                    <input type="number" step="any" max="12" min="0" placeholder="HH" ng-model="m.CreateForm.data.endTime.hours" class="form-control text-center" maxlength="2" tabindex="'0'">
+                                                </td>
+                                                <td>:</td>
+                                                <td class="form-group minutes">
+                                                    <input type="number" step="any" max="60" min="0" placeholder="MM" ng-model="m.CreateForm.data.endTime.minutes" class="form-control text-center" maxlength="2" tabindex="'0'">
+                                                </td>
+                                                <td class="am-pm">
+                                                    <button type="button" class="btn btn-default text-center ng-binding" ng-click="m.CreateForm.data.endTime.toggleAMPM(m.CreateForm.data.endTime)" tabindex="'0'">{{m.CreateForm.data.endTime.type}}</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <span ng-show="m.ValidateCreateInput('endDate', 'required')" class="text-danger">This field is required</span>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">
+                                Assigned To
+                            </label>
+                            <div class="col-sm-6" ng-if="UserHash">
+                                <select name="assignedTo" class="chosen-select input-md" width="'300px'" ng-model="m.CreateForm.data.assignedTo"
+                                    required chosen data-placeholder-text-single="'Choose a user'" ng-options="p.id as p.name for p in ActiveUserList">
+                                </select>
+                                <span ng-show="m.ValidateCreateInput('assignedTo', 'required')" class="text-danger">This field is required</span>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="row inside">
+                        <div class="col-md-12" id="create" fc fc-options="m.scheduler.options" ng-model="m.scheduler.events"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-warning" type="button" ng-click="m.close()">Close</button>
+            <button class="btn btn-info" type="submit">Submit</button>
+        </div>
+    </form>
+</script>
+
+<!-- edit/view modal -->
+<script type="text/ng-template" id="edit.html">
+    <form class="form-validate form-horizontal" name="m.editForm.ui.validate" ng-submit="m.editForm.SubmitTab()">
+        <div class="modal-header">
+            <h3 class="modal-title">Event Details</h3>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            Project
+                        </label>
+                        <div class="col-sm-6">
+                            <select ng-if="m.editForm.data.me" class="chosen-select input-md" width="'300px'" ng-model="m.editForm.data.projectId" chosen name="projectId"
+                                data-placeholder-text-single="'Choose a project'" search-contains="true" ng-options="p.value as p.text + ' - ' + m.ProjectDisplayData.ListHash[p.value].targets for p in m.ProjectDisplayData.ItemList">
+                            </select>
+                            <strong ng-if="!m.editForm.data.me" class="form-control force-noborder" ng-bind="m.editForm.data.project"></strong>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            Instrument
+                        </label>
+                        <div class="col-sm-6">
+                            <select ng-if="m.editForm.data.me" required class="chosen-select input-md" width="'300px'" ng-model="m.editForm.data.instrumentId" chosen name="instrumentId"
+                                data-placeholder-text-single="'Choose an instrument'" search-contains="true" ng-options="p.id as p.name for p in m.instruments">
+                            </select>
+                            <strong ng-if="!m.editForm.data.me" class="form-control force-noborder" ng-bind="m.editForm.data.instrument"></strong>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            Assigned To
+                        </label>
+                        <div class="col-sm-6">
+                            <strong class="form-control force-noborder" ng-bind="UserHash[m.editForm.data.assignedTo]"></strong>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            Created By
+                        </label>
+                        <div class="col-sm-6">
+                            <strong class="form-control force-noborder" ng-bind="UserHash[m.editForm.data.createdBy]"></strong>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">All Day</label>
+                        <div class="col-sm-6">
+                            <div class="input-group mb">
+                                <div class="checkbox c-checkbox">
+                                    <label>
+                                        <input type="checkbox" ng-disabled="!m.editForm.data.me" ng-model="m.editForm.data.allDay"/>
+                                        <span class="fa fa-check"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4"></div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            Start Date
+                        </label>
+                        <div class="col-sm-6" ng-if="m.editForm.data.me">
+                            <div class="input-group mb">
+                                <input type="text" name="startDate" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="m.editForm.data.startDate.dt" is-open="m.editForm.data.startDate.opened"
+                                    ng-required="true" close-text="Close" class="form-control" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="m.dp.dpOpen($event, 'editForm', 'startDate')" class="btn btn-default">
+                                        <em class="far fa-calendar-alt"></em>
+                                    </button>
+                                </span>
+                                <table ng-if="!m.editForm.data.allDay">
+                                    <tbody>
+                                        <tr>
+                                            <td class="form-group hours">
+                                                <input type="number" step="any" max="12" min="0" placeholder="HH" ng-model="m.editForm.data.startTime.hours" class="form-control text-center" maxlength="2" tabindex="'0'">
+                                            </td>
+                                            <td>:</td>
+                                            <td class="form-group minutes">
+                                                <input type="number" step="any" max="60" min="0" placeholder="MM" ng-model="m.editForm.data.startTime.minutes" class="form-control text-center" maxlength="2" tabindex="'0'">
+                                            </td>
+                                            <td class="am-pm">
+                                                <button type="button" class="btn btn-default text-center ng-binding" ng-click="m.editForm.data.startTime.toggleAMPM(m.editForm.data.startTime)" tabindex="'0'">{{m.editForm.data.startTime.type}}</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <span ng-show="m.ValidateEditInput('startDate', 'required')" class="text-danger">This field is required</span>
+                        </div>
+                        <div class="col-sm-6" ng-if="!m.editForm.data.me">
+                            <strong class="form-control force-noborder" ng-bind="m.getDateTime(m.editForm.data.start)"></strong>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            End Date
+                        </label>
+                        <div class="col-sm-6" ng-if="m.editForm.data.me">
+                            <div class="input-group mb">
+                                <input type="text" name="endDate" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="m.editForm.data.endDate.dt" is-open="m.editForm.data.endDate.opened"
+                                    ng-required="true" close-text="Close" class="form-control" />
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="m.dp.dpOpen($event, 'editForm', 'endDate')" class="btn btn-default">
+                                        <em class="far fa-calendar-alt"></em>
+                                    </button>
+                                </span>
+                                <table ng-if="!m.editForm.data.allDay">
+                                    <tbody>
+                                        <tr>
+                                            <td class="form-group hours">
+                                                <input type="number" step="any" max="12" min="0" placeholder="HH" ng-model="m.editForm.data.endTime.hours" class="form-control text-center" maxlength="2" tabindex="'0'">
+                                            </td>
+                                            <td>:</td>
+                                            <td class="form-group minutes">
+                                                <input type="number" step="any" max="60" min="0" placeholder="MM" ng-model="m.editForm.data.endTime.minutes" class="form-control text-center" maxlength="2" tabindex="'0'">
+                                            </td>
+                                            <td class="am-pm">
+                                                <button type="button" class="btn btn-default text-center ng-binding" ng-click="m.editForm.data.endTime.toggleAMPM(m.editForm.data.endTime)" tabindex="'0'">{{m.editForm.data.endTime.type}}</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <span ng-show="m.ValidateEditInput('endDate', 'required')" class="text-danger">This field is required</span>
+                        </div>
+                        <div class="col-sm-6" ng-if="!m.editForm.data.me">
+                            <strong class="form-control force-noborder" ng-bind="m.getDateTime(m.editForm.data.end)"></strong>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" type="button" ng-if="m.editForm.data.me" ng-click="m.editForm.Delete()">Delete</button>
+            <button class="btn btn-warning" type="button" ng-click="m.close()">Close</button>
+            <button class="btn btn-info" type="submit" ng-if="m.editForm.data.me">Submit</button>
+        </div>
+    </form>
+</script>
+
+<script type="text/ng-template" id="eventPopover.html">
+    <div>{{event.content}}</div>
+    <div class="form-group">
+      <label>Popup Title:</label>
+      <input type="text" ng-model="dynamicPopover.title" class="form-control">
+    </div>
+</script>

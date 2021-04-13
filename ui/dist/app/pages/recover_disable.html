@@ -1,0 +1,26 @@
+<div ng-controller="RegisterFormController as reg" class="block-center mt-xl wd-xl">
+   <!-- START panel-->
+   <div class="panel panel-dark panel-flat">
+      <div class="panel-heading text-center">
+         <a href="#">
+            <img src="app/img/logo.png" alt="Image" class="block-center img-rounded" />
+         </a>
+      </div>
+      <div class="panel-body">
+         <p class="text-center pv">CONTACT ADMIN</p>
+         <form role="form" method="GET" action="/">
+            <p class="text-center">Please contact your IT admin to reset password.</p>
+            <button class="btn btn-danger btn-block" href="/">Return to home page</button>
+         </form>
+      </div>
+   </div>
+   <!-- END panel-->
+   <div class="p-lg text-center">
+      <span>&copy;</span>
+      <span ng-bind="app.year"></span>
+      <span>-</span>
+      <span ng-bind="app.name"></span>
+      <br/>
+      <span ng-bind="app.description"></span>
+   </div>
+</div>

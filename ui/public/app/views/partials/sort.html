@@ -1,0 +1,590 @@
+<h3>Sorts</h3>
+<div class="panel panel-transparent">
+    <uib-tabset justified="true" class="bg-white p0" active="m.activeTab">
+        <uib-tab index="'ViewAllTab'">
+            <uib-tab-heading>
+                <em class="far fa-clock fa-fww"></em>View all Sorts
+            </uib-tab-heading>
+            <!--<div>
+                <a class="btn btn-info" ng-click="m.viewDetail()">View Detail</a>
+                <a class="btn btn-info" ng-if="m.hasWritePerm" ng-click="m.editDetail()">Edit</a>
+            </div>-->
+            <div class="table-responsive">
+                <div ng-if="m.dataReady">
+                    <table datatable="" dt-options="m.dtOptions" dt-columns="m.dtColumns" dt-column-defs="m.dtColDefs" dt-instance="m.DtInstCallback"
+                        class="table table-hover">
+                    </table>
+                </div>
+            </div>
+            <div ng-show="!m.tableData">
+                <h3>Loading...</h3>
+            </div>
+            <div ng-show="m.tableData && m.tableData.length == 0">
+                <h3>There are no sorts in the database.</h3>
+            </div>
+            <div ng-show="m.lastRowClicked" class="panel-footer text-right container-fluid">
+                <div class="col-sm-8 pull-right">
+                    <a class="btn btn-info" ng-click="m.viewDetail()">View Detail</a>
+                    <a class="btn btn-info" permission permission-only="['writeBCC', 'adminADE']" ng-click="m.editDetail()">Edit</a>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'CreateTab'" permission permission-only="['writeBCC', 'adminADE']">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-plus-square"></em>Create Sort
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-validate form-horizontal" name="m.CreateForm.ui.validate" ng-submit="m.CreateForm.SubmitTab()">
+                            <fieldset>
+                                <legend>Create Sort</legend>
+                            </fieldset>
+
+                            <fieldset>
+                                <div ng-if="m.ActivationListReady" class="form-group">
+                                    <label class="col-sm-2 control-label">Activation</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <select chosen="" name="activation" required ng-model="m.CreateForm.data.activationId" width="'300px'" class="chosen-select input-md"
+                                                    data-placeholder-text-single="'Choose an activation'" ng-options="p.value as p.text for p in m.ActivationDisplayData.ItemList" ng-change="m.RefreshDependencyList(m.CreateForm.data.activationId)">
+                                            </select>
+                                        </div>
+                                        <span ng-show="m.ValidateCreateInput('activation', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        B Cell Source
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <select class="chosen-select input-md" width="'300px'" required name="bCellSourceId" ng-model="m.CreateForm.data.bCellSourceId" chosen data-placeholder-text-single="'Choose a B Cell Source'"
+                                                    ng-options="p.value as p.text for p in m.RelatedBCellSourceDisplayData.ItemList" ng-disabled="!m.RelatedBCellSourceListReady || !m.CreateForm.data.activationId">
+                                            </select>
+                                        </div>
+                                        <span ng-show="m.ValidateCreateInput('bCellSourceId', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Mix Condition
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <select class="chosen-select input-md" width="'300px'" required name="mixConditionId" ng-model="m.CreateForm.data.mixConditionId" chosen data-placeholder-text-single="'Choose a Mix Condition'"
+                                                    ng-options="p.value as p.text for p in m.RelatedMixConditionDisplayData.ItemList" ng-disabled="!m.RelatedMixConditionListReady || !m.CreateForm.data.activationId" ng-change="m.RefreshPlateInfo()">
+                                            </select>
+                                        </div>
+                                        <span ng-show="m.ValidateCreateInput('mixConditionId', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Sort Mode
+                                    </label>
+                                    <div class="col-sm-6" ng-if="modes">
+                                        <select required name="sortMode" class="chosen-select input-md" width="'300px'" chosen ng-model="m.CreateForm.data.ENUM_sortMode"
+                                            data-placeholder-text-single="'Choose a mode'" ng-options="p for p in modes">
+                                        </select>
+                                        <span ng-show="m.ValidateCreateInput('sortMode', 'required')" class="text-danger">This field is required</span>
+
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Population
+                                    </label>
+                                    <div class="col-sm-6" ng-if="populations">
+                                        <select required name="population" class="chosen-select input-md" width="'300px'" chosen ng-model="m.CreateForm.data.ENUM_population"
+                                            data-placeholder-text-single="'Choose a population'" ng-options="p for p in populations">
+
+                                        </select>
+                                        <span ng-show="m.ValidateCreateInput('population', 'required')" class="text-danger">This field is required</span>
+
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Antigen Specificity
+                                    </label>
+                                    <div class="col-sm-6" ng-if="antigenSpecificities">
+                                        <select required name="antigenSpecificity" class="chosen-select input-md" width="'300px'" chosen ng-model="m.CreateForm.data.ENUM_antigenSpecificity"
+                                            data-placeholder-text-single="'Choose an Antigen Specificity'" ng-options="p for p in antigenSpecificities">
+                                        </select>
+                                        <span ng-show="m.ValidateCreateInput('antigenSpecificity', 'required')" class="text-danger">This field is required</span>
+
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Sorter Used
+                                    </label>
+                                    <div class="col-sm-6" ng-if="sorterUseds">
+                                        <select required name="sorterUsed" class="chosen-select input-md" width="'300px'" chosen ng-model="m.CreateForm.data.ENUM_sorterUsed"
+                                            data-placeholder-text-single="'Choose a sorter'" ng-options="p for p in sorterUseds">
+
+                                        </select>
+                                        <span ng-show="m.ValidateCreateInput('sorterUsed', 'required')" class="text-danger">This field is required</span>
+
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Cells Seeded</label>
+                                    <div class="col-sm-6">
+                                        <input type="number" min="0" class="form-control" required rows="1" placeholder="" ng-model="m.CreateForm.data.cellsSeeded">
+                                        </input>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Plates Available</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <strong ng-if="m.CreateForm.data.mixConditionId" class="form-control force-noborder" >{{m.CreateForm.data.platesLeft}} / {{m.CreateForm.data.totalPlates}}</strong>
+                                            <strong ng-if="!m.CreateForm.data.mixConditionId" class="form-control force-noborder" >Please choose a Mix Condition</strong>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Number Of Plates</label>
+                                    <div class="col-sm-6">
+                                        <input type="number" min="1" ng-max="m.CreateForm.data.platesLeft" class="form-control" required rows="1" placeholder="" ng-model="m.CreateForm.data.numberOfPlates">
+                                        </input>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="panel-footer text-center">
+                                <button class="btn btn-purple" type="button" ng-click="m.CreateForm.LoadPreviousEntry()">
+                                    Load Previous Entry
+                                </button>
+                                <button class="btn btn-info" type="submit">
+                                    Create
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'EditTab'" ng-show="m.editForm.show">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-edit"></em>Edit Sort
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form name="m.editForm.ui.validate" ng-submit="m.editForm.SubmitTab()" novalidate="" class="form-validate form-horizontal">
+                            <fieldset class="b0">
+                                <legend>Edit Sort</legend>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Name</label>
+                                    <div class="col-sm-6">
+                                        <strong name="name" class="form-control force-noborder" ng-bind="m.editForm.name"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Activation</label>
+                                    <div class="col-sm-6">
+                                        <strong name="activationId" class="form-control force-noborder" ng-bind="m.ActivationDisplayData.Hash[m.editForm.activationId]"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        B Cell Source
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <select class="chosen-select input-md" width="'300px'" required name="bCellSourceId" ng-model="m.editForm.bCellSourceId" chosen data-placeholder-text-single="'Choose a B Cell Source'"
+                                                    ng-options="p.value as p.text for p in m.RelatedBCellSourceDisplayData.ItemList" ng-disabled="!m.RelatedBCellSourceListReady || !m.editForm.activationId">
+                                            </select>
+                                        </div>
+                                        <span ng-show="m.ValidateCreateInput('bCellSourceId', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Mix Condition
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <select class="chosen-select input-md" width="'300px'" required name="mixConditionId" ng-model="m.editForm.mixConditionId" chosen data-placeholder-text-single="'Choose a Mix Condition'"
+                                                ng-options="p.value as p.text for p in m.RelatedMixConditionDisplayData.ItemList" ng-disabled="!m.RelatedMixConditionListReady || !m.editForm.activationId" ng-change="m.RefreshPlateInfo()">
+                                            </select>
+                                        </div>
+                                        <span ng-show="m.ValidateCreateInput('mixConditionId', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Operator (sorter set up)
+                                    </label>
+                                    <div class="col-sm-6" ng-if="ActiveUserHash">
+                                        <select class="chosen-select input-md" width="'300px'" ng-model="m.editForm.operatorUserId" chosen data-placeholder-text-single="'Choose a sort operator'"
+                                            ng-options="p.id as p.name for p in ActiveUserList">
+                                        </select>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <!--<fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Sort Started</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <input type="text" name="timeSortStarted" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="m.editForm.timeSortStarted.dt"
+                                                is-open="m.editForm.timeSortStarted.opened" ng-required="true" close-text="Close"
+                                                class="form-control" />
+                                            <span class="input-group-btn">
+                                              <button type="button" ng-click="m.dp.dpOpen($event, 'CreateForm', 'timeSortStarted')" class="btn btn-default">
+                                                <em class="fa fa-calendar"></em>
+                                              </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>-->
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Time Started</label>
+                                    <div class="col-sm-6">
+                                        <table class="uib-timepicker">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="form-group hours">
+                                                        <input type="number" step="any" max="12" min="0" placeholder="HH" ng-model="m.editForm.timeSortStarted.hours" class="form-control text-center" maxlength="2" tabindex="'0'">
+                                                    </td>
+                                                    <td class="uib-separator">:</td>
+                                                    <td class="form-group minutes">
+                                                        <input type="number" step="any" max="60" min="0" placeholder="MM" ng-model="m.editForm.timeSortStarted.minutes" class="form-control text-center" maxlength="2" tabindex="'0'">
+                                                    </td>
+                                                    <td class="uib-time am-pm">
+                                                        <button type="button" class="btn btn-default text-center ng-binding" ng-click="m.editForm.timeSortStarted.toggleAMPM(m.editForm.timeSortStarted)" tabindex="'0'">{{m.editForm.timeSortStarted.type}}</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Sort Mode
+                                    </label>
+                                    <div class="col-sm-6" ng-if="modes">
+                                        <select required name="sortMode" class="chosen-select input-md" width="'300px'" chosen ng-model="m.editForm.ENUM_sortMode"
+                                            data-placeholder-text-single="'Choose a mode'" ng-options="p for p in modes">
+                                        </select>
+                                        <span ng-show="m.ValidateEditInput('sortMode', 'required')" class="text-danger">This field is required</span>
+
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Population
+                                    </label>
+                                    <div class="col-sm-6" ng-if="populations">
+                                        <select required name="population" class="chosen-select input-md" width="'300px'" chosen ng-model="m.editForm.ENUM_population"
+                                            data-placeholder-text-single="'Choose a population'" ng-options="p for p in populations">
+
+                                        </select>
+                                        <span ng-show="m.ValidateEditInput('population', 'required')" class="text-danger">This field is required</span>
+
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Sorter Used
+                                    </label>
+                                    <div class="col-sm-6" ng-if="sorterUseds">
+                                        <select required name="sorterUsed" class="chosen-select input-md" width="'300px'" chosen ng-model="m.editForm.ENUM_sorterUsed"
+                                            data-placeholder-text-single="'Choose a sorter'" ng-options="p for p in sorterUseds">
+                                        </select>
+                                        <span ng-show="m.ValidateEditInput('sorterUsed', 'required')" class="text-danger">This field is required</span>
+
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Antigen Specificity
+                                    </label>
+                                    <div class="col-sm-6" ng-if="antigenSpecificities">
+                                        <select required name="antigenSpecificity" class="chosen-select input-md" width="'300px'" chosen ng-model="m.editForm.ENUM_antigenSpecificity"
+                                            data-placeholder-text-single="'Choose an Antigen Specificity'" ng-options="p for p in antigenSpecificities">
+                                        </select>
+                                        <span ng-show="m.ValidateEditInput('antigenSpecificity', 'required')" class="text-danger">This field is required</span>
+
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Cells Seeded</label>
+                                    <div class="col-sm-6">
+                                        <input type="number" min="0" class="form-control" required rows="1" placeholder="" ng-model="m.editForm.cellsSeeded">
+                                        </input>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="panel-footer text-center">
+                                <button type="button" class="btn btn-info" ng-click="m.editForm.CancelTab()">Close</button>
+                                <button type="button" class="btn btn-info" ng-click="m.editForm.SubmitTab()">Save</button>
+                                <button type="button" class="btn btn-inverse pull-right" permission permission-only="'adminADE'" ng-click="m.editForm.Delete()">Delete</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'DetailTab'" ng-show="m.viewForm.show">
+            <uib-tab-heading>
+                <em class="fas fa-search fa-fw"></em>Sort details
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form ng-submit="submitViewForm()" novalidate="" class="form-validate form-horizontal">
+                            <fieldset class="b0">
+                                <legend>View details</legend>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Name</label>
+                                    <div class="col-sm-6">
+                                        <strong name="name" class="form-control force-noborder" ng-bind="m.viewForm.name"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Activation</label>
+                                    <div class="col-sm-6" ng-if="m.ActivationListReady">
+                                        <a name="activationId" class="form-control force-noborder" ng-bind="m.ActivationDisplayData.Hash[m.viewForm.activationId]" ng-href="#!!/app/ade/activation?op=view&id={{m.viewForm.activationId}}"></a>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">B Cell Source</label>
+                                    <div class="col-sm-6" ng-if="m.DependencyListReady">
+                                        <a name="activationId" class="form-control force-noborder" ng-bind="m.DependencyDisplayData.Hash[m.viewForm.bCellSourceId]" ng-href="#!!/app/ade/bCellSource?op=view&id={{m.viewForm.bCellSourceId}}"></a>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Mix Condition</label>
+                                    <div class="col-sm-6" ng-if="m.MixConditionListReady">
+                                        <a name="activationId" class="form-control force-noborder" ng-bind="m.MixConditionDisplayData.Hash[m.viewForm.mixConditionId]" ng-href="#!!/app/ade/mixCondition?op=view&id={{m.viewForm.mixConditionId}}"></a>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Operator</label>
+                                    <div class="col-sm-6">
+                                        <strong name="operatorUserId" class="form-control force-noborder" ng-bind="UserHash[m.viewForm.operatorUserId]"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <!--<fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Sort Operator</label>
+                                    <div class="col-sm-6">
+                                        <strong name="sortOperatorUserId" class="form-control force-noborder" ng-bind="m.UserHash[m.viewForm.sortOperatorUserId]"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>-->
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Time Sort Started</label>
+                                    <div class="col-sm-6">
+                                        <strong name="timeSortStarted" class="form-control force-noborder" ng-bind="m.viewForm.timeSortStarted"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Time Finished</label>
+                                    <div class="col-sm-6">
+                                        <strong name="timeFinished" class="form-control force-noborder" ng-bind="m.viewForm.timeFinished"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Sort Mode</label>
+                                    <div class="col-sm-6">
+                                        <strong name="ENUM_sortMode" class="form-control force-noborder" ng-bind="m.viewForm.ENUM_sortMode"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Population</label>
+                                    <div class="col-sm-6">
+                                        <strong name="ENUM_population" class="form-control force-noborder" ng-bind="m.viewForm.ENUM_population"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Sorter Used</label>
+                                    <div class="col-sm-6">
+                                        <strong name="ENUM_sorterUsed" class="form-control force-noborder" ng-bind="m.viewForm.ENUM_sorterUsed"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Antigen Specificity</label>
+                                    <div class="col-sm-6">
+                                        <strong name="ENUM_antigenSpecificity" class="form-control force-noborder" ng-bind="m.viewForm.ENUM_antigenSpecificity"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Cells Seeded</label>
+                                    <div class="col-sm-6">
+                                        <strong name="cellsSeeded" class="form-control force-noborder" ng-bind="m.viewForm.cellsSeeded"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Number of Plates</label>
+                                    <div class="col-sm-6">
+                                        <strong name="numberOfPlates" class="form-control force-noborder" ng-bind="m.viewForm.numberOfPlates"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Created By</label>
+                                    <div class="col-sm-6">
+                                        <strong name="createdBy" class="form-control force-noborder" ng-bind="m.viewForm.createdBy"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Updated By</label>
+                                    <div class="col-sm-6">
+                                        <strong name="updatedBy" class="form-control force-noborder" ng-bind="m.viewForm.updatedBy"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Created At</label>
+                                    <div class="col-sm-6">
+                                        <strong name="createdAt" class="form-control force-noborder" ng-bind="m.viewForm.createdAt"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Updated At</label>
+                                    <div class="col-sm-6">
+                                        <strong name="updatedAt" class="form-control force-noborder" ng-bind="m.viewForm.updatedAt"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <!--<fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">External Links</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <table class="table table-hover">
+                                                <tbody>
+                                                    <tr ng-repeat="entry in m.viewForm.referneceArray" ng-click="showReferenceLink(client)">
+                                                        <td><a ng-href="{{entry.value}}">{{entry.key}}</a></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>-->
+                            <div class="panel-footer text-center">
+                                <button type="button" class="btn btn-info" ng-click="m.viewForm.CancelTab()">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+    </uib-tabset>
+</div>

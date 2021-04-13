@@ -1,0 +1,469 @@
+<h3>Stable Cell Line</h3>
+<div class="panel panel-transparent">
+    <uib-tabset justified="true" class="bg-white p0" active="m.activeTab">
+        <uib-tab index="'ViewAllTab'">
+            <uib-tab-heading>
+                <em class="far fa-clock fa-fw"></em>View all Stable Cell Lines
+            </uib-tab-heading>
+            <div class="table-responsive">
+                <div ng-if="m.dataReady">
+                    <table datatable="" dt-options="m.dtOptions" dt-columns="m.dtColumns" dt-column-defs="m.dtColDefs" dt-instance="m.DtInstCallback"
+                        class="table table-hover">
+                        </table>
+                </div>
+            </div>
+            <div ng-show="!m.tableData">
+                <h3>Loading...</h3>
+            </div>
+            <div ng-show="m.tableData && m.tableData.length == 0">
+                <h3>There are no stable cell lines in the database.</h3>
+            </div>
+            <div ng-show="m.lastRowClicked" class="panel-footer text-right container-fluid">
+                <div class="col-sm-8 pull-right">
+                    <a class="btn btn-info" ng-click="m.viewDetail()">View Detail</a>
+                    <a class="btn btn-info" permission permission-only="['writeSCL', 'adminResearch']" ng-click="m.editDetail()">Edit</a>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'CreateTab'" permission permission-only="['writeSCL', 'adminResearch']" select="m.CreateForm.initTab()">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-plus-square"></em>Create Stable Cell Line
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-validate form-horizontal" name="m.CreateForm.ui.validate" ng-submit="m.CreateForm.SubmitTab()">
+                            <fieldset>
+                                <legend>Create Stable Cell Line</legend>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Plasmid
+                                    </label>
+                                    <div class="col-sm-6" ng-if="m.PlasmidListReady">
+                                        <select name="plasmid" required class="chosen-select input-md" width="'300px'" ng-model="m.CreateForm.data.plasmidId" chosen data-placeholder-text-single="'Choose a plasmid'"
+                                            ng-options="p.value as p.text for p in m.PlasmidDisplayData.ItemList">
+                                        </select>
+                                        <span ng-show="m.ValidateCreateInput('plasmid', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Parental Cell Line
+                                    </label>
+                                    <div class="col-sm-6" ng-if="parentalCellLines">
+                                        <select required name="ENUM_parentalCellLine" class="chosen-select input-md" width="'300px'" chosen ng-model="m.CreateForm.data.ENUM_parentalCellLine"
+                                            data-placeholder-text-single="'Choose a parent cell line'" ng-options="p for p in parentalCellLines">
+                                        </select>
+                                        <span ng-show="m.ValidateCreateInput('ENUM_parentalCellLine', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Transfection Kit
+                                    </label>
+                                    <div class="col-sm-6" ng-if="transfectionMethods">
+                                        <select required name="ENUM_transfectionMethod" class="chosen-select input-md" width="'300px'" chosen ng-model="m.CreateForm.data.ENUM_transfectionMethod"
+                                            data-placeholder-text-single="'Choose a method'" ng-options="p for p in transfectionMethods">
+                                        </select>
+                                        <span ng-show="m.ValidateCreateInput('ENUM_transfectionMethod', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Program ID</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" required rows="1" placeholder="" ng-model="m.CreateForm.data.programId">
+                                        </input>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Selection Marker
+                                    </label>
+                                    <div class="col-sm-6" ng-if="selectionMarkers">
+                                        <select required name="ENUM_selectionMarker" class="chosen-select input-md" width="'300px'" chosen ng-model="m.CreateForm.data.ENUM_selectionMarker"
+                                            data-placeholder-text-single="'Choose a method'" ng-options="p for p in selectionMarkers">
+                                        </select>
+                                        <span ng-show="m.ValidateCreateInput('ENUM_selectionMarker', 'required')" class="text-danger">This field is required</span>
+
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Protein Alias</label>
+                                    <div class="col-sm-6">
+                                        <textarea class="form-control" required rows="1" placeholder="" ng-model="m.CreateForm.data.proteinAlias">
+                                        </textarea>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Protein
+                                    </label>
+                                    <div class="col-sm-6" ng-if="m.PlasmidListReady">
+                                        <select name="protein" class="chosen-select input-md" width="'300px'" ng-model="m.CreateForm.data.proteinId" chosen data-placeholder-text-single="'Choose a protein'"
+                                            ng-options="p.value as p.text for p in m.ProteinDisplayData.ItemList">
+                                            <option value="">N/A</option>
+                                        </select>
+                                        <span ng-show="m.ValidateCreateInput('protein', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Transfection Date</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <input type="text" name="transfectionDate" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="m.CreateForm.data.transfectionDate.dt"
+                                                is-open="m.CreateForm.data.transfectionDate.opened" ng-required="true" close-text="Close"
+                                                class="form-control" />
+                                            <span class="input-group-btn">
+                                              <button type="button" ng-click="m.dp.dpOpen($event, 'CreateForm', 'transfectionDate')" class="btn btn-default">
+                                                <em class="far fa-calendar-alt"></em>
+                                              </button>
+                                            </span>
+                                        </div>
+                                        <span ng-show="validateInput('transfectionDate', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="panel-footer text-center">
+                                <button class="btn btn-info" type="submit">
+                                    Create
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'EditTab'" ng-show="m.editForm.show" select="m.CreateForm.initTab()">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-edit"></em>Edit Stable Cell Line
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form name="m.editForm.ui.validate" ng-submit="m.editForm.SubmitTab()" novalidate="" class="form-validate form-horizontal">
+                            <fieldset class="b0">
+                                <legend>Edit Stable Cell Line</legend>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Name</label>
+                                    <div class="col-sm-6">
+                                        <strong name="name" class="form-control force-noborder" ng-bind="m.editForm.name"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Plasmid</label>
+                                    <div class="col-sm-6" ng-if="m.PlasmidListReady">
+                                        <select required name="plasmid" class="chosen-select input-md" width="'300px'" ng-model="m.editForm.plasmidId" chosen data-placeholder-text-single="'Choose a plasmid'"
+                                            ng-options="p.value as p.text for p in m.PlasmidDisplayData.ItemList">
+                                        </select>
+                                        <span ng-show="m.ValidateEditInput('plasmid', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Protein
+                                    </label>
+                                    <div class="col-sm-6" ng-if="m.ProteinListReady">
+                                        <select name="protein" class="chosen-select input-md" width="'300px'" ng-model="m.editForm.proteinId" chosen data-placeholder-text-single="'Choose a protein'"
+                                            ng-options="p.value as p.text for p in m.ProteinDisplayData.ItemList">
+                                            <option value="">N/A</option>
+                                        </select>
+                                        <span ng-show="m.ValidateEditInput('protein', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Transfection Date</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <input type="text" name="transfectionDate" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="m.editForm.data.transfectionDate.dt"
+                                                is-open="m.editForm.data.transfectionDate.opened" ng-required="true" close-text="Close"
+                                                class="form-control" />
+                                            <span class="input-group-btn">
+                                              <button type="button" ng-click="m.dp.dpOpen($event, 'editForm', 'transfectionDate')" class="btn btn-default">
+                                                <em class="far fa-calendar-alt"></em>
+                                              </button>
+                                            </span>
+                                        </div>
+                                        <span ng-show="m.ValidateEditInput('transfectionDate', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Parental Cell Line
+                                    </label>
+                                    <div class="col-sm-6" ng-if="parentalCellLines">
+                                        <select required name="ENUM_parentalCellLine" class="chosen-select input-md" width="'300px'" chosen ng-model="m.editForm.ENUM_parentalCellLine"
+                                            data-placeholder-text-single="'Choose a parent cell line'" ng-options="p for p in parentalCellLines">
+                                        </select>
+                                        <span ng-show="m.ValidateEditInput('ENUM_parentalCellLine', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Transfection Kit
+                                    </label>
+                                    <div class="col-sm-6" ng-if="transfectionMethods">
+                                        <select required name="ENUM_transfectionMethod" class="chosen-select input-md" width="'300px'" chosen ng-model="m.editForm.ENUM_transfectionMethod"
+                                            data-placeholder-text-single="'Choose a method'" ng-options="p for p in transfectionMethods">
+                                        </select>
+                                        <span ng-show="m.ValidateEditInput('ENUM_transfectionMethod', 'required')" class="text-danger">This field is required</span>
+
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Program ID</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" required rows="1" placeholder="" ng-model="m.editForm.programId">
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Selection Marker
+                                    </label>
+                                    <div class="col-sm-6" ng-if="selectionMarkers">
+                                        <select required name="ENUM_selectionMarker" class="chosen-select input-md" width="'300px'" chosen ng-model="m.editForm.ENUM_selectionMarker"
+                                            data-placeholder-text-single="'Choose a method'" ng-options="p for p in selectionMarkers">
+                                        </select>
+                                        <span ng-show="m.ValidateEditInput('ENUM_selectionMarker', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Protein Alias</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="proteinAlias" class="form-control" required rows="1" placeholder="Protein Alias" ng-model="m.editForm.proteinAlias">
+                                        <span ng-show="m.ValidateEditInput('proteinAlias', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Key Documents</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <div ref-link-directive info="m.editForm.RefLinkList">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+
+
+                            <div class="panel-footer text-center">
+                                <button type="button" class="btn btn-info" ng-click="m.editForm.CancelTab()">Close</button>
+                                <button type="button" class="btn btn-info" ng-click="m.editForm.SubmitTab()">Save</button>
+                                <button type="button" class="btn btn-inverse" permission permission-only="'adminResearch'" ng-click="m.editForm.Delete()">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'DetailTab'" ng-show="m.viewForm.show">
+            <uib-tab-heading>
+                <em class="fas fa-search fa-fw"></em>Stable Cell Line details
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form ng-submit="submitViewForm()" novalidate="" class="form-validate form-horizontal">
+                            <fieldset class="b0">
+                                <legend>View details</legend>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Name</label>
+                                    <div class="col-sm-6">
+                                        <strong name="name" class="form-control force-noborder" ng-bind="m.viewForm.name"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Plasmid</label>
+                                    <div class="col-sm-6">
+                                        <strong class="form-control force-noborder"><a ng-href="#!/app/research/plasmids?op=view&id={{m.viewForm.plasmidId}}">{{m.viewForm.plasmid}}</a> - {{m.viewForm.plasmidDescription}}</strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset ng-if="m.viewForm.protein">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Protein</label>
+                                    <div class="col-sm-6">
+                                        <strong class="form-control force-noborder"><a ng-href="#!/app/research/proteins?op=view&id={{m.viewForm.proteinId}}">{{m.viewForm.protein}}</a> - {{m.viewForm.proteinDescription}}</strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Transfection	Date</label>
+                                    <div class="col-sm-6">
+                                        <strong name="transfectionDate" class="form-control force-noborder" ng-bind="m.viewForm.transfectionDate"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Parental Cell Line</label>
+                                    <div class="col-sm-6">
+                                        <strong name="ENUM_parentalCellLine" class="form-control force-noborder" ng-bind="m.viewForm.ENUM_parentalCellLine"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Selection Marker</label>
+                                    <div class="col-sm-6">
+                                        <strong name="selectionMarker" class="form-control force-noborder" ng-bind="m.viewForm.ENUM_selectionMarker"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Transfection Kit</label>
+                                    <div class="col-sm-6">
+                                        <strong name="ENUM_transfectionMethod" class="form-control force-noborder" ng-bind="m.viewForm.ENUM_transfectionMethod"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Protein Alias</label>
+                                    <div class="col-sm-6">
+                                        <strong name="proteinAlias" class="form-control force-noborder" ng-bind="m.viewForm.proteinAlias"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Program ID</label>
+                                    <div class="col-sm-6">
+                                        <strong name="programId" class="form-control force-noborder" ng-bind="m.viewForm.programId"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Created By</label>
+                                    <div class="col-sm-6">
+                                        <strong name="createdBy" class="form-control force-noborder" ng-bind="m.viewForm.createdBy"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Updated By</label>
+                                    <div class="col-sm-6">
+                                        <strong name="updatedBy" class="form-control force-noborder" ng-bind="m.viewForm.updatedBy"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Created At</label>
+                                    <div class="col-sm-6">
+                                        <strong name="createdAt" class="form-control force-noborder" ng-bind="m.viewForm.createdAt"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Updated At</label>
+                                    <div class="col-sm-6">
+                                        <strong name="updatedAt" class="form-control force-noborder" ng-bind="m.viewForm.updatedAt"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="row">
+                                    <label class="col-sm-2 control-label">Key Documents</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <select chosen="" name="section" required ng-model="selectedSection" width="'300px'" class="chosen-select input-md" data-placeholder-text-single="'Choose a section'"
+                                                ng-options="s as s for s in selectedSectionList">
+                                                        </select>
+                                            <table class="table table-hover">
+                                                <tbody>
+                                                    <tr ng-repeat="entry in m.viewForm.referneceArray | filter: { section: selectedSection }" ng-click="showReferenceLink(client)">
+                                                        <td>{{entry.section}}</td>
+                                                        <td><a target="_blank" ng-href="{{entry.url}}">{{entry.name}}</a></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+                            <div class="panel-footer text-center">
+                                <button type="button" class="btn btn-info" ng-click="m.viewForm.CancelTab()">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+    </uib-tabset>
+</div>

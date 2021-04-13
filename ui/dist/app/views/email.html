@@ -1,0 +1,97 @@
+<!-- 
+<div class="pull-right">
+    <div class="input-group">
+        <button class="btn btn-sm btn-success" ng-click="m.saveDashboard()" ng-show="m.widgets.editEnabled"><i class="fas fa-save"></i></button>
+        <button class="btn btn-sm btn-warning" ng-click="m.widgets.editEnabled = true" ng-disabled="m.widgets.editEnabled"><i class="far fa-edit"></i></button>
+    </div>
+</div> -->
+<h3>
+    Email Templates 
+</h3>
+
+
+<div class="row" >
+    <div class="col-lg-4" ng-repeat="col in m.widgets.data">
+        <div class="box-placeholder card" >
+            <div class="card-body">
+                <h3>{{col.subject}}</h3>
+                <p>{{col.text}}</p>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- 
+<script type="text/ng-template" id="editWidget.html">
+    <form name="m.widgets.edit.ui.validate" class="form-validate form-horizontal">
+        <div class="modal-header">
+            <h3 class="modal-title">Edit Widget</h3>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12 form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Hide Title</label>
+                            <div class="col-sm-10">
+                                <label class="checkbox-inline c-checkbox">
+                                    <input type="checkbox" ng-model="m.widgets.edit.data.hideTitle">
+                                    <span class="fa fa-check"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset ng-if="m.widgets.edit.data.type == 'text'">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Text</label>
+                            <div class="col-sm-10">
+                                <input name="text" required type="text" class="form-control" ng-model="m.widgets.edit.data.text"/>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset ng-if="m.widgets.edit.data.type == 'tableau'">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Tableau Dashboard URL</label>
+                            <div class="col-sm-10">
+                                <input name="dashboardName" required type="text" class="form-control" ng-model="m.widgets.edit.data.dashboardName" uib-tooltip="enter the path after <hostname>/#/views/"/>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset ng-if="m.widgets.edit.data.type === 'tableau' || m.widgets.edit.data.type === 'text'">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Widget Name</label>
+                            <div class="col-sm-10">
+                                <input name="name" required type="text" class="form-control" ng-model="m.widgets.edit.data.name"/>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset ng-if="m.widgets.edit.data.type == 'tableau'">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Widget Height</label>
+                            <div class="col-sm-10">
+                                <input name="height" min="10" max="1000" ng-init="m.widgets.edit.data.height" required type="number" class="form-control" ng-model="m.widgets.edit.data.height"/>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset ng-if="m.widgets.edit.data.type == 'tableau'">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Show Toolbar</label>
+                            <div class="col-sm-10">
+                                <label class="checkbox-inline c-checkbox">
+                                    <input type="checkbox" ng-model="m.widgets.edit.data.showToolbar" ng-true-value="'yes'" ng-false-value="'no'">
+                                    <span class="fa fa-check"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-success" type="button" ng-click="m.widgets.edit.submit()">Save</button>
+            <button class="btn btn-warning" type="button" ng-click="m.widgets.edit.close()">Close</button>
+        </div>
+    </form>
+</script>
+ -->

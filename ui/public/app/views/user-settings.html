@@ -1,0 +1,227 @@
+<h3>
+    {{ 'offsidebar.setting.SETTINGS' | translate }}
+   <small>{{ 'dashboard.WELCOME' | translate:{ appName: app.name } }} !</small>
+</h3>
+<div class="panel panel-default" data-ng-show="global.authenticated">
+    <div class="panel-heading">{{ 'offsidebar.setting.Preferences' | translate }}</div>
+    <div class="panel-body">
+        <form class="form-horizontal ng-pristine ng-valid">
+            <fieldset>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Language</label>
+                    <div class="col-sm-10">
+                        <div class="form-group">
+                            <div uib-dropdown="" is-open="language.listIsOpen" class="btn-group">
+                                <button type="button" uib-dropdown-toggle="" class="btn btn-default">{{language.selected}}
+                                    <span class="caret"></span>
+                                </button>
+                                <ul role="menu" class="dropdown-menu dropdown-menu-right">
+                                    <li ng-repeat="(localeId, langName) in language.available"><a ng-click="language.set(localeId, $event)">{{langName}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">{{ 'offsidebar.setting.USERNAME' | translate }}</label>
+                    <div class="col-sm-10">
+                        <div class="form-group">
+                            <strong class="form-control force-noborder" ng-bind="global.user.email"></strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-lg">
+                    <label class="col-sm-2 control-label">Default # of Table Rows</label>
+                    <div class="col-sm-3">
+                        <input type="number" min="1" max="1000" placeholder="# of Rows" required class="form-control" ng-model="app.layout.tableRows">
+                    </div>
+                </div>
+                <div class="form-group mb-lg">
+                    <label class="col-sm-2 control-label">{{ 'offsidebar.setting.THEME' | translate }}</label>
+                    <div class="col-sm-5">
+                        <div class="table-grid mb">
+                            <div class="col mb">
+                                <div class="setting-color">
+                                    <label>
+                                        <input type="radio" name="setting-theme" ng-model="app.layout.theme" value="app/css/theme-a.css" />
+                                        <span class="icon-check"></span>
+                                        <span class="split">
+                                        <span class="color bg-info"></span>
+                                        <span class="color bg-info-light"></span>
+                                        </span>
+                                        <span class="color bg-white"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col mb">
+                                <div class="setting-color">
+                                    <label>
+                                        <input type="radio" name="setting-theme" ng-model="app.layout.theme" value="app/css/theme-b.css" />
+                                        <span class="icon-check"></span>
+                                        <span class="split">
+                                        <span class="color bg-green"></span>
+                                        <span class="color bg-green-light"></span>
+                                        </span>
+                                        <span class="color bg-white"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col mb">
+                                <div class="setting-color">
+                                    <label>
+                                        <input type="radio" name="setting-theme" ng-model="app.layout.theme" value="app/css/theme-c.css" />
+                                        <span class="icon-check"></span>
+                                        <span class="split">
+                                        <span class="color bg-purple"></span>
+                                        <span class="color bg-purple-light"></span>
+                                        </span>
+                                        <span class="color bg-white"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col mb">
+                                <div class="setting-color">
+                                    <label>
+                                        <input type="radio" name="setting-theme" ng-model="app.layout.theme" value="app/css/theme-d.css" />
+                                        <span class="icon-check"></span>
+                                        <span class="split">
+                                        <span class="color bg-danger"></span>
+                                        <span class="color bg-danger-light"></span>
+                                        </span>
+                                        <span class="color bg-white"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col mb">
+                                <div class="setting-color">
+                                    <label>
+                                        <input type="radio" name="setting-theme" ng-model="app.layout.theme" value="app/css/theme-i.css" />
+                                        <span class="icon-check"></span>
+                                        <span class="split">
+                                        <span class="color bg-warning"></span>
+                                        <span class="color bg-warning-light"></span>
+                                        </span>
+                                        <span class="color bg-white"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-grid mb">
+                            <div class="col mb">
+                                <div class="setting-color">
+                                    <label>
+                                        <input type="radio" name="setting-theme" ng-model="app.layout.theme" value="app/css/theme-e.css" />
+                                        <span class="icon-check"></span>
+                                        <span class="split">
+                                        <span class="color bg-info-dark"></span>
+                                        <span class="color bg-info"></span>
+                                        </span>
+                                        <span class="color bg-gray-dark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col mb">
+                                <div class="setting-color">
+                                    <label>
+                                        <input type="radio" name="setting-theme" ng-model="app.layout.theme" value="app/css/theme-f.css" />
+                                        <span class="icon-check"></span>
+                                        <span class="split">
+                                        <span class="color bg-green-dark"></span>
+                                        <span class="color bg-green"></span>
+                                        </span>
+                                        <span class="color bg-gray-dark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col mb">
+                                <div class="setting-color">
+                                    <label>
+                                        <input type="radio" name="setting-theme" ng-model="app.layout.theme" value="app/css/theme-g.css" />
+                                        <span class="icon-check"></span>
+                                        <span class="split">
+                                        <span class="color bg-purple-dark"></span>
+                                        <span class="color bg-purple"></span>
+                                        </span>
+                                        <span class="color bg-gray-dark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col mb">
+                                <div class="setting-color">
+                                    <label>
+                                        <input type="radio" name="setting-theme" ng-model="app.layout.theme" value="app/css/theme-h.css" />
+                                        <span class="icon-check"></span>
+                                        <span class="split">
+                                        <span class="color bg-danger-dark"></span>
+                                        <span class="color bg-danger"></span>
+                                        </span>
+                                        <span class="color bg-gray-dark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col mb">
+                                <div class="setting-color">
+                                    <label>
+                                        <input type="radio" name="setting-theme" ng-model="app.layout.theme" value="app/css/theme-j.css" />
+                                        <span class="icon-check"></span>
+                                        <span class="split">
+                                        <span class="color bg-warning-dark"></span>
+                                        <span class="color bg-warning"></span>
+                                        </span>
+                                        <span class="color bg-gray-dark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">{{ 'offsidebar.setting.layout.Sidebar' | translate }}</label>
+                    <div class="col-sm-2">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="pull-left ng-scope">{{ 'offsidebar.setting.layout.COLLAPSED'| translate }}</p>
+                                <div class="pull-right">
+                                    <label class="switch">
+                                        <input type="checkbox" ng-model="app.layout.isCollapsed" ng-disabled="app.layout.isCollapsedText"><span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="pull-left">{{ 'offsidebar.setting.layout.COLLAPSED' | translate }} w/Text</p>
+                                <div class="pull-right">
+                                    <label class="switch">
+                                        <input type="checkbox" ng-model="app.layout.isCollapsedText" ng-disabled="app.layout.isCollapsed"><span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="pull-left">{{ 'offsidebar.setting.layout.Float' | translate }}</p>
+                                <div class="pull-right">
+                                    <label class="switch">
+                                        <input type="checkbox" ng-model="app.layout.isFloat"><span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="pull-left">{{ 'offsidebar.setting.layout.Hover' | translate }}</p>
+                                <div class="pull-right">
+                                    <label class="switch">
+                                        <input type="checkbox" ng-model="app.layout.asideHover"><span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

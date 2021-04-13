@@ -1,0 +1,23 @@
+{
+    app: {
+        name: "LIMS Data Service - Development"
+    },
+    domain: {
+        user: "http://localhost:9509/",
+        data: "http://localhost:9507/"
+    },
+    db: {
+	    name: "TestDatabase",
+	    password: "password",
+	    username: "CocoTest",
+	    host: "limsprd-db1.systimmune.net",
+	    port: 3306
+    },
+    email: {
+        host: "smtp.sendgrid.net",
+        port: 587,
+        secure: true,
+        username: "",
+        pass: ""
+    }
+}

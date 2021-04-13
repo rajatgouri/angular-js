@@ -1,0 +1,152 @@
+<h3>Time Per Project</h3>
+<div class="panel panel-transparent">
+    <uib-tabset justified="true" class="bg-white p0" active="m.activeTab">
+        <uib-tab index="'ViewAllTab'">
+            <uib-tab-heading>
+                <em class="far fa-clock fa-fw responsive"></em> View all FTE
+            </uib-tab-heading>
+
+            <div class="table-responsive">
+                <div ng-if="m.dataReady">
+                    <table datatable="" dt-options="m.dtOptions" dt-columns="m.dtColumns" dt-column-defs="m.dtColDefs" dt-instance="m.DtInstCallback"
+                        class="table table-hover">
+                    </table>
+                </div>
+            </div>
+            <div ng-show="!m.tableData">
+                <h3>Loading...</h3>
+            </div>
+            <div ng-show="m.tableData && m.tableData.length == 0">
+                <h3>There are no Entries in the database.</h3>
+            </div>
+            <div ng-show="m.lastRowClicked" class="panel-footer text-right container-fluid">
+                <div class="col-sm-8 pull-right">
+                    <!--<a class="btn btn-info" permission permission-only="['writeProtein', 'adminResearch']" ng-click="m.editDetail()">Edit</a>-->
+                </div>
+            </div>
+        </uib-tab>
+
+        <uib-tab index="'BulkCreateTab'" ng-click="m.CreateForm.initTab()">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-plus-square"></em>Create Time Entry
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-validate form-horizontal" name="m.BulkCreateForm.ui.validate" ng-submit="m.BulkCreateForm.SubmitTab()">
+                            <fieldset>
+                                <legend>Create time Entry</legend>
+                            </fieldset>
+                            <h3>Instructions:</h3>
+                            <h4>
+                                To record time spent on projects per pay period click the 'Add Entry' button,
+                                then fill out the entry table below for each project you worked on in that pay period.
+                                <br><br>
+                                Round to the nearest whole percent when recording % time.
+                                <br><br>
+                                In cases where % of time relates to multiple projects, divide % of time among these projects and record appropriatly.
+                                <br><br>
+                                Confirm that your percentages add up to 100% and that there are no duplicates then click 'Create'.
+                                <br><br>
+                                The total amount of hours per pay period for exempt employees is 86.67 as is complaint with payroll records. Keep this in mind when calculating your percentages.
+                            </h4>
+                            <br><br>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-labeled btn-success" ng-click="m.BulkCreateForm.addEntry()">
+                                            <span class="btn-label"><em class="fa fa-plus"></em></span>
+                                            Add Entry
+                                        </button>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr ng-if="m.BulkCreateForm.data.timeToAdd.length > 0">
+
+                                        <td width="250px">
+                                            <strong>Time Categories</strong>
+                                            <!--<button uib-tooltip="Copy Data" type="button" ng-click="m.BulkCreateForm.copyData('OtherTimeSpent')" class="btn btn-sm btn-default">
+                                                <em class="fas fa-level-down-alt"></em>
+                                            </button>-->
+                                        </td>
+                                        <td width="100px">
+                                        </td>
+                                        <!--<td>
+                                            <strong>Project ID</strong>
+                                            <button uib-tooltip="Copy Data" type="button" ng-click="m.BulkCreateForm.copyData('projectId')" class="btn btn-sm btn-default">
+                                                <em class="fas fa-level-down-alt"></em>
+                                            </button>
+                                        </td>-->
+                                        <td width="100px">
+                                            <strong>Pay Period</strong>&nbsp;
+                                            <!--<button uib-tooltip="Copy Data" type="button" ng-click="m.BulkCreateForm.copyData('PayPeriodId')" class="btn btn-sm btn-default">
+                                                <em class="fas fa-level-down-alt"></em>
+                                            </button>-->
+                                        </td>
+                                        <td width="150px">
+                                            <strong>% of Time</strong>
+                                        </td>
+                                        <!--<td width="75px"></td>-->
+                                        <td width="450px">
+                                            <strong>Notes</strong>&nbsp;
+                                            <!--<button uib-tooltip="Copy Data" type="button" ng-click="m.BulkCreateForm.copyData('Notes')" class="btn btn-sm btn-default">
+                                                <em class="fas fa-level-down-alt"></em>
+                                            </button>-->
+                                        </td>
+                                    </tr>
+                                    <tr ng-repeat="p in m.BulkCreateForm.data.timeToAdd">
+                                        <td>
+                                            <select chosen name="TimeCat" required ng-model="p.TimeCat" width="'300px'" class="chosen-select input-md"
+                                                search-contains="true"  ng-show="m.ValidateBulkCreateInput('TimeCat', 'required')" data-placeholder-text-single="'Choose a Category'" ng-options="p.value as p.text for p in m.TimeSpentCategoriesDisplayData.ItemList">
+                                            </select>
+                                            <span ng-show="m.ValidateBulkCreateInput('TimeCat', 'required')" class="text-danger">This field is required</span>
+                                        </td>
+                                        <!-- Need to make this select visable only when project is selected-->
+                                        <td>
+                                            <select chosen name="project" ng-model="p.projectId" width="'300px'" class="chosen-select input-md"
+                                                search-contains="true"  ng-show="m.ValidateBulkCreateInput('project', 'required')" data-placeholder-text-single="'Choose a project'" ng-options="p.value as p.text + ' - ' + m.ProjectDisplayData.ListHash[p.value].description for p in m.ProjectDisplayData.ItemList">
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select required chosen name="PayPeriod" ng-model="p.PayPeriodId" width="'300px'" class="chosen-select input-md"
+                                                search-contains="true"  ng-show="m.ValidateBulkCreateInput('PayPeriod', 'required')" data-placeholder-text-single="'Choose a Pay Period'" ng-options="p.name + ' - ' + p.endDate for p in m.showList">
+                                            </select>
+                                            <span ng-show="m.ValidateBulkCreateInput('PayPeriod', 'required')" class="text-danger">This field is required</span>
+                                        </td>
+                                        <td>
+                                            <input type="number" min="0" max='100' required name="TimeSpent" placeholder="%" class="form-control" ng-model="p.TimeSpent">
+                                            <span ng-show="m.ValidateBulkCreateInput('TimeSpent', 'required')" class="text-danger">This field is required</span>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="Notes" class="form-control" ng-model="p.Notes">
+                                            <span ng-show="m.ValidateBulkCreateInput('Notes')" class="text-danger">This field is required</span>
+                                        </td>
+                                        <td>
+                                            <a ng-click="m.BulkCreateForm.removeEntry($index)" class="btn btn-danger">Remove</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="panel-footer text-center">
+                                <button class="btn btn-info" type="submit">
+                                    Create
+                                </button>
+                                <button class="btn btn-warning" type="button" ng-click="m.BulkCreateForm.ResetTab()">
+                                    Reset
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+
+    </uib-tabset>
+</div>

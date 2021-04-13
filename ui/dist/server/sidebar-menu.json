@@ -1,0 +1,33 @@
+[{
+    "text": "Home",
+    "heading": "true",
+    "translate": "sidebar.heading.HOME"
+}, {
+    "text": "Home",
+    "sref": "app.home",
+    "icon": "icon-home",
+    "label": "label label-info",
+    "translate": "sidebar.nav.HOME"
+}, {
+    "text": "Scheduling",
+    "sref": "app.facilities.scheduling",
+    "icon": "fas fa-calendar-alt",
+    "label": "label label-info"
+}, {
+    "text": "FTE",
+    "heading": "true"
+}, {
+    "text": "Time Per Project",
+    "sref": "app.TimePerProject",
+    "icon": "fas fa-user-clock",
+    "label": "label label-info"
+
+}, {
+    "text": "Accounting",
+    "icon": "far fa-bookmark",
+    "label": "label label-info",
+    "translate": "sidebar.nav.ACCOUNTING",
+    "submenu": [
+        {"text": "Project Staffing", "sref": "app.accounting.fte"}
+    ]
+}]

@@ -1,0 +1,35 @@
+{
+  "db": "mongodb://localhost/mean-travis",
+  "port": 3002,
+  "app": {
+    "name": "MEAN - A Modern Stack - Test on travis"
+  },
+  "facebook": {
+    "clientID": "APP_ID",
+    "clientSecret": "APP_SECRET",
+    "callbackURL": "http://localhost:3002/auth/facebook/callback"
+  },
+  "twitter": {
+    "clientID": "CONSUMER_KEY",
+    "clientSecret": "CONSUMER_SECRET",
+    "callbackURL": "http://localhost:3002/auth/twitter/callback"
+  },
+  "github": {
+    "clientID": "APP_ID",
+    "clientSecret": "APP_SECRET",
+    "callbackURL": "http://localhost:3002/auth/github/callback"
+  },
+  "google": {
+    "clientID": "APP_ID",
+    "clientSecret": "APP_SECRET",
+    "callbackURL": "http://localhost:3002/auth/google/callback"
+  },
+  "azuread": {
+        "identityMetadata": "https://login.microsoftonline.com/systimmuneinc.onmicrosoft.com/.well-known/openid-configuration",
+        "clientID": "8db4d61c-dc38-472c-bd90-a7fad248917e",
+        "validateIssuer": true,
+        "audience": "",
+        "passReqToCallback": false,
+        "loggingLevel": "info"
+    }
+}

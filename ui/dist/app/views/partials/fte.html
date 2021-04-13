@@ -1,0 +1,204 @@
+<h3>Project Staffing:</h3>
+<div ui-view class="panel panel-transparent">
+    <uib-tabset justified="true" class="bg-white p0" active="m.activeTab">
+        <uib-tab index="'ViewAllTab'">
+            <uib-tab-heading>
+                <em class="far fa-clock fa-fw"></em>View Staffing Time per Pay Period
+            </uib-tab-heading>
+            <div align="left" class="buttoncontainer">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-primary" ng-model="m.timeCategory.includeProject" data-color="primary" ng-change="m.onStatusChange()"
+                            uib-btn-checkbox><span class="fa fa-check2" aria-hidden="true"></span> Project</button>
+                    <button type="button" class="btn btn-sm btn-success" ng-model="m.timeCategory.includeAdmin" data-color="primary" ng-change="m.onStatusChange()"
+                            uib-btn-checkbox><span class="fa fa-check2" aria-hidden="true"></span> Administration</button>
+
+                </div>
+                <!--<a class="btn btn-info btn-sm pull-right" ng-click="m.exportDataToCSV()">Export To CSV</a>-->
+            </div>
+            <div class="table-responsive">
+                <div ng-if="m.dataReady">
+                    <table datatable="" dt-options="m.dtOptions" dt-columns="m.dtColumns" dt-column-defs="m.dtColDefs" dt-instance="m.DtInstCallback"
+                        class="table table-hover">
+                    </table>
+                </div>
+            </div>
+            <div ng-show="!m.tableData">
+                <h3>Loading...</h3>
+            </div>
+            <div ng-show="m.tableData && m.tableData.length == 0">
+                <h3>There are no Time Entries in the database.</h3>
+            </div>
+            <!-- User actions -->
+
+        </uib-tab>
+        <!--
+        <uib-tab index="'ViewByProject'">
+            <uib-tab-heading>
+                <em class="far fa-clock fa-fw"></em>View Staffing Time by Project
+            </uib-tab-heading>
+
+            <div class="table-responsive">
+                <div ng-if="m.dataReady">
+                    <table datatable="" dt-options="m.dtOptions" dt-columns="m.dtColumns" dt-column-defs="m.dtColDefs" dt-instance="m.DtInstCallback"
+                        class="table table-hover">
+                    </table>
+                </div>
+            </div>
+            <div ng-show="!m.tableData">
+                <h3>Loading...</h3>
+            </div>
+            <div ng-show="m.tableData && m.tableData.length == 0">
+                <h3>There are no Time Entries in the database.</h3>
+            </div>
+
+        </uib-tab> -->
+        <uib-tab index="'BulkLotCreate'" permission permission-only="['accountingUser']" >
+            <uib-tab-heading>
+                <em class="far fa-fw fa-plus-square"></em>Upload Pay Periods
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-validate form-horizontal" name="m.BulkLotCreate.ui.validate" ng-submit="m.BulkLotCreate.SubmitTab()">
+                            <fieldset>
+                                <legend>Upload Pay Period Data</legend>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Import from Excel
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <div class="well well-sm">
+                                            <p>Data must be in Sheet1 and have the following columns:
+                                                <ul><li>Start Date, End Date</li></ul>
+                                            </p>
+                                            <p>Columns may be left blank. </p>
+                                        </div>
+                                        <input id="file" filestyle type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-button-text="Choose File" data-classbutton="btn btn-info" data-classinput="form-control inline"
+                                            ng-click="m.InitHandler()" style="display: inline"/>
+                                        <button class="btn btn-purple" ng-show="m.ShowImportBtn" ng-click="m.BulkLotCreate.parseCSV()">Upload and Parse Data</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        <!-- Manual -->
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-labeled btn-success" ng-click="m.BulkLotCreate.addEntry()">
+                                            <span class="btn-label"><em class="fa fa-plus"></em></span>
+                                            Add Entry
+                                        </button>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr ng-if="m.BulkLotCreate.data.lotsToAdd.length > 0">
+                                        <td width="150px">
+                                            <strong>Start Date</strong>&nbsp;
+                                            <button uib-tooltip="Copy Data" type="button" ng-click="m.BulkLotCreate.copyData('name')" class="btn btn-sm btn-default">
+                                                <em class="fas fa-level-down-alt"></em>
+                                            </button>
+                                        </td>
+                                        <td width="5px"></td>
+                                        <td width="150px">
+                                            <strong>End Date</strong>&nbsp;
+                                            <button uib-tooltip="Copy Data" type="button" ng-click="m.BulkLotCreate.copyData('endDate')" class="btn btn-sm btn-default">
+                                                <em class="fas fa-level-down-alt"></em>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr ng-repeat="p in m.BulkLotCreate.data.lotsToAdd">
+                                        <td>
+                                            <div class="input-group mb">
+                                                <input type="text" name="name" width="'150px'" placeholder="Start Date" ng-model="p.name" class="form-control" />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="text" nam="endDate" width="'150px'" class="form-control" placeholder="End Date" ng-model="p.endDate">
+                                        </td>
+                                        <td>
+                                            <a ng-click="m.BulkLotCreate.removeEntry($index)" class="btn btn-danger">Remove</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="panel-footer text-center">
+                                <button class="btn btn-info" type="submit">
+                                    Create
+                                </button>
+                                <button class="btn btn-warning" type="button" ng-click="m.BulkLotCreate.ResetTab()">
+                                    Reset
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        <!--<uib-tab index="'CreateTab'" permission permission-only="['accountingUser']" ng-click="m.CreateForm.initTab()">
+                <uib-tab-heading>
+                    <em class="far fa-fw fa-plus-square"></em>Set Paramaters for FTE calculations
+                </uib-tab-heading>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form class="form-validate form-horizontal" name="m.CreateForm.ui.validate" ng-submit="m.CreateForm.SubmitTab()">
+                                <fieldset>
+                                    <legend> </legend>
+                                </fieldset>
+
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">
+                                            Import from Excel
+                                        </label>
+                                        <div class="col-sm-6">
+                                            <div class="well well-sm">
+                                                <p>Data must be in Sheet1 and have the following columns:
+                                                    <ul><li>Prep Date, Plasmid, Order Ref, Concentration, Volume, Operator, Notes</li></ul>
+                                                </p>
+                                                <p>Columns may be left blank. <strong>Operator column not working, please leave blank.</strong></p>
+                                            </div>
+                                            <input id="lot" filestyle type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-button-text="Choose File" data-classbutton="btn btn-info" data-classinput="form-control inline"
+                                                ng-click="m.InitLotHandler()" style="display: inline"/>
+                                            <button type="button" class="btn btn-purple" ng-show="m.ShowImportBtn" ng-click="m.BulkLotCreate.parseCSV()">Upload and Parse Data</button>
+                                        </div>
+                                    </div>
+                                </fieldset>-->
+
+                                <!--<fieldset>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">$ Amount per Hour</label>
+                                            <div class="col-sm-6">
+                                                    <input type="number" min="0"  required name="HourlyAmount" required="" class="form-control" ng-model="m.CreateForm.data.HourlyAmount"
+                                                    is-float/>
+                                                <span ng-show="m.ValidateCreateInput('HourlyAmount', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                        </div>
+                                    </fieldset>-->
+
+                                <!--<div class="panel-footer text-center">-->
+                                    <!--<button class="btn btn-info" type="submit">
+                                        Upload
+                                    </button>-->
+                                <!--</div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </uib-tab>-->
+
+
+
+
+
+</div>

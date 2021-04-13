@@ -1,0 +1,39 @@
+{
+  "name": "sequence-viewer",
+  "main": "dist/sequence-viewer.min.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calipho-sib/sequence-viewer.git"
+  },
+  "keywords": [
+    "sequence",
+    "nextprot",
+    "uniprot",
+    "protein",
+    "viewer"
+  ],
+  "authors": [
+    "Mathieu Schaeffer <mat.schaeff@gmail.com>",
+    "Calipho Team <ndu@isb-sib.ch>"
+  ],
+  "license": "GNU GPL v2",
+  "dependencies": {
+    "jquery": "~2.1.3"
+  },
+  "homepage": "https://github.com/calipho-sib/sequence-viewer",
+  "version": "0.2.35",
+  "_release": "0.2.35",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.2.35",
+    "commit": "7068fc688050d0fe002441c139f8453367febc4b"
+  },
+  "_source": "https://github.com/calipho-sib/sequence-viewer.git",
+  "_target": "^0.2.18",
+  "_originalSource": "sequence-viewer"
+}

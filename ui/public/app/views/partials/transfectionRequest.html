@@ -1,0 +1,1197 @@
+<h3>Transfection Requests</h3>
+<div class="panel panel-transparent">
+    <uib-tabset justified="true" class="bg-white p0" active="m.activeTab">
+        <uib-tab index="'ViewAllTab'">
+            <uib-tab-heading>
+                <em class="far fa-clock fa-fw"></em>View Transfection Requests
+            </uib-tab-heading>
+            <div align="left" class="buttoncontainer">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-warning" ng-model="m.statusFilter.includePending" data-color="primary" ng-change="m.onStatusChange()"
+                        uib-btn-checkbox><span class="fa fa-check2" aria-hidden="true"></span> Pending</button>
+                    <button type="button" class="btn btn-sm btn-purple" ng-model="m.statusFilter.includeApproved" data-color="primary" ng-change="m.onStatusChange()"
+                        uib-btn-checkbox><span class="fa fa-check2" aria-hidden="true"></span> Approved</button>
+                    <button type="button" class="btn btn-sm btn-primary" ng-model="m.statusFilter.includeProgress" data-color="primary" ng-change="m.onStatusChange()"
+                        uib-btn-checkbox><span class="fa fa-check2" aria-hidden="true"></span> In Progress</button>
+                    <button type="button" class="btn btn-sm btn-info" ng-model="m.statusFilter.includePurification" data-color="primary" ng-change="m.onStatusChange()"
+                        uib-btn-checkbox><span class="fa fa-check2" aria-hidden="true"></span> In Purification</button>
+                    <button type="button" class="btn btn-sm btn-success" ng-model="m.statusFilter.includeComplete" data-color="primary" ng-change="m.onStatusChange()"
+                        uib-btn-checkbox><span class="fa fa-check2" aria-hidden="true"></span> Completed</button>
+                    <button type="button" class="btn btn-sm btn-danger" ng-model="m.statusFilter.includeFailed" data-color="primary" ng-change="m.onStatusChange()"
+                        uib-btn-checkbox><span class="fa fa-check2" aria-hidden="true"></span> Failed</button>
+                </div>
+                <!--<a class="btn btn-info btn-sm pull-right" ng-click="m.exportDataToCSV()">Export To CSV</a>-->
+            </div>
+            <div ng-if="m.transfectionsReady">
+                <table id="tr" datatable="" dt-options="m.dtOptions" dt-columns="m.dtColumns" dt-column-defs="m.dtColDefs" dt-instance="m.DtInstCallback"
+                    class="table table-hover">
+                </table>
+            </div>
+            <div ng-show="!m.tableData">
+                <h3>Loading...</h3>
+            </div>
+            <div ng-show="m.tableData && m.tableData.length == 0">
+                <h3>There are no transfection requests in the database.</h3>
+            </div>
+            <!-- User actions -->
+            <div ng-show="m.lastRowClicked" class="panel-footer text-right container-fluid">
+                <div class="col-sm-8 pull-right">
+                    <a class="btn btn-purple" permission permission-only="['adminResearch']" ng-if="m.currentRowData.requestStatus == 'Pending'" ng-click="m.approveReq()">Approve</a>
+                    <a class="btn btn-success" permission permission-only="['writeTR', 'adminResearch']" ng-if="m.currentRowData.requestStatus == 'Pending'" ng-click="m.dnaReady()">DNA Ready</a>
+                    <a class="btn btn-primary" permission permission-only="['createTR', 'writeTR', 'adminResearch']" ng-click="m.duplicateTransfectionReq()">Duplicate Request</a>
+                    <a class="btn btn-primary" permission permission-only="['writeTransfection', 'adminResearch']" ng-if="m.currentRowData.requestStatus == 'Approved'" ng-click="m.newTransfectionFromRequest()">New Transfection</a>
+                    <a class="btn btn-info" ng-click="m.viewDetail()">View Detail</a>
+                    <a class="btn btn-info" permission permission-only="['createTR', 'writeTR', 'adminResearch']" ng-click="m.editDetail()">Edit</a>
+                </div>
+            </div>
+        </uib-tab>
+        <!-- <uib-tab index="'CreateTab'" permission permission-only="['createTR', 'writeTR', 'adminResearch']" select="createTransfectionSelected()">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-plus-square"></em>Create Transfection Request
+            </uib-tab-heading>
+            <div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form name="m.CreateForm.ui.validate" ng-submit="m.CreateForm.SubmitTab()" novalidate="" class="form-validate form-horizontal">
+                                <div>
+                                    <fieldset class="b0">
+                                        <legend>Create a transfection request</legend>
+                                    </fieldset>
+
+                                    <fieldset ng-if="!m.CreateForm.data.proteinId">
+                                        <div ng-if="m.createOptions" class="form-group">
+                                            <label class="col-sm-2 control-label">Create Options</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group mb">
+                                                    <select chosen="" name="createOption" required ng-model="m.CreateForm.data.createOption" width="'300px'" class="chosen-select input-md"
+                                                        data-placeholder-text-single="'Choose an option'" ng-options="p.value as p.text for p in m.createOptions">
+                                                    </select>
+                                                </div>
+                                                <span ng-show="m.ValidateCreateInput('createOption', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                            <div class="col-sm-4"></div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset ng-if="m.CreateForm.data.createOption == 2 && !m.CreateForm.data.proteinId">
+                                        <div ng-if="m.ProteinListReady" class="form-group">
+                                            <label class="col-sm-2 control-label">Protein</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group mb">
+                                                    <select chosen="" name="protein" required ng-model="m.CreateForm.data.proteinId" width="'300px'" class="chosen-select input-md"
+                                                        max-shown-results="100" search-contains="true" data-placeholder-text-single="'Choose a protein'" ng-options="p.value as p.text for p in m.ProteinDisplayData.ItemList">
+                                                    </select>
+                                                </div>
+                                                <span ng-show="m.ValidateCreateInput('protein', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                            <div class="col-sm-4"></div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset ng-if="m.CreateForm.data.createOption == 1 && !m.CreateForm.data.proteinId">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">
+                                                Project
+                                            </label>
+                                            <div class="col-sm-6" ng-if="m.ProjectListReady">
+                                                <select name="projectId" required class="chosen-select input-md" width="'300px'" ng-model="m.CreateForm.data.ProjectId" chosen name="ProjectId"
+                                                    data-placeholder-text-single="'Choose a project'" ng-options="p.value as p.text + ' - ' + m.ProjectDisplayData.ListHash[p.value].targets for p in m.ProjectDisplayData.ItemList"
+                                                    ng-change="m.RefreshProteinName()">
+
+                                                    </select>
+                                                <span ng-show="m.ValidateCreateInput('projectId')" class="text-danger">This field is required</span>
+                                            </div>
+
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset ng-if="m.CreateForm.data.createOption == 1 && m.CreateForm.data.proteinId">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Protein Name</label>
+                                            <div class="col-sm-6">
+                                                <strong name="proteinName" class="form-control force-noborder" ng-bind="m.CreateForm.data.proteinName"></strong>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset ng-if="m.CreateForm.data.createOption == 2 && m.CreateForm.data.proteinId">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Protein Name</label>
+                                            <div class="col-sm-6">
+                                                <strong name="proteinName" class="form-control force-noborder">{{m.ProteinDisplayData.Hash[m.CreateForm.data.proteinId]}}</strong>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset ng-if="m.CreateForm.data.createOption == 1 && !m.CreateForm.data.proteinId">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">
+                                                Molecule Type
+                                            </label>
+                                            <div class="col-sm-6" ng-if="molecuTypes">
+                                                <select required name="MoleculeType" class="chosen-select input-md" width="'300px'" chosen ng-model="m.CreateForm.data.ProteinMoleculeType"
+                                                    data-placeholder-text-single="'Choose a type'" ng-options="p for p in molecuTypes"
+                                                    ng-change="m.RefreshProteinName()">
+
+                                                    </select>
+                                                <span ng-show="m.ValidateCreateInput('MoleculeType')" class="text-danger">This field is required</span>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset ng-if="m.CreateForm.data.createOption == 1 && !m.CreateForm.data.proteinId">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Plasmid</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group mb">
+                                                    <div class="">
+                                                        <table class="table table-striped">
+                                                            <tbody>
+                                                                <select class="chosen-select input-md" width="'600px'" ng-model="m.CreateForm.data.PlasmidId" chosen data-placeholder-text-single="'Choose a Plasmid'"
+                                                                    ng-options="p.value as p.text for p in m.PlasmidDisplayData.ItemList">
+                                                                    </select>
+                                                            </tbody>
+                                                            <button type="button" class="btn btn-labeled btn-success" ng-click="addPlasmid(m.CreateForm.data.PlasmidId)">
+                                                                <span class="btn-label"><em class="fa fa-plus"></em></span>
+                                                                Add
+                                                            </button>
+                                                        </table>
+                                                        <table class="table table-striped">
+                                                            <tbody>
+                                                                <tr ng-repeat="p in m.plasmidListToAdd">
+                                                                    <td style="width: 150px"> {{m.PlasmidDisplayData.Hash[p]}}
+                                                                    </td>
+                                                                    <td>
+                                                                        <a ng-click="removePlasmid($index)" class="btn btn-danger">Remove</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4"></div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset ng-if="m.CreateForm.data.createOption == 1 && !m.CreateForm.data.proteinId">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Protein Description</label>
+                                            <div class="col-sm-6">
+                                                <textarea class="form-control" name="description" required rows="4" placeholder="Please put the alias at the beginning" ng-model="m.CreateForm.data.Description"></textarea>
+                                            </div>
+                                            <span ng-show="m.ValidateCreateInput('description')" class="text-danger">This field is required</span>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset ng-if="m.CreateForm.data.createOption == 1 && !m.CreateForm.data.proteinId">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label"></label>
+                                            <div class="col-sm-6">
+                                                <button type="button" class="btn btn-info" ng-click="submitProteinCreateForm()">
+                                                    Create Protein
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset ng-if="m.CreateForm.data.proteinId">
+                                        <div ng-if="transfectionScales" class="form-group">
+                                            <label class="col-sm-2 control-label">Scale (mL)</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group mb">
+                                                    <select chosen="" required name="scale" ng-model="m.CreateForm.data.transfectionScale" width="'300px'" class="chosen-select input-md"
+                                                        data-placeholder-text-single="'Choose a scale'" ng-options="s for s in transfectionScales">
+                                                        </select>
+                                                </div>
+                                                <span ng-show="m.ValidateCreateInput('scale', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                            <div class="col-sm-4"></div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset ng-if="m.CreateForm.data.proteinId">
+                                        <div ng-if="transfectionTypes" class="form-group">
+                                            <label class="col-sm-2 control-label">Transfection Type</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group mb">
+                                                    <select chosen="" required name="transfectionType" ng-model="m.CreateForm.data.transfectionType" width="'300px'" class="chosen-select input-md"
+                                                        data-placeholder-text-single="'Choose a transfection type'" ng-options="s for s in transfectionTypes">
+                                                        </select>
+                                                </div>
+                                                <span ng-show="m.ValidateCreateInput('transfectionType', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                            <div class="col-sm-4"></div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset ng-if="m.CreateForm.data.proteinId">
+                                        <div ng-if="transfectionCellLines" class="form-group">
+                                            <label class="col-sm-2 control-label">Cell line</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group mb">
+                                                    <select chosen="" required name="cellLine" ng-model="m.CreateForm.data.transfectionCellLine" width="'300px'" class="chosen-select input-md"
+                                                        data-placeholder-text-single="'Choose a cell line'" ng-options="s for s in transfectionCellLines">
+                                                    </select>
+                                                </div>
+                                                <span ng-show="m.ValidateCreateInput('cellLine', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                            <div class="col-sm-4"></div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset ng-if="m.CreateForm.data.proteinId">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Purify</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group mb">
+                                                    <select chosen="" required name="purifyOrNot" ng-model="m.CreateForm.data.purifyOrNot" width="'300px'" class="chosen-select input-md"
+                                                        ng-change="m.CreateForm.changePurify()" data-placeholder-text-single="'Purify?'" ng-options="p for p in ['Yes', 'No']">
+                                                    </select>
+                                                </div>
+                                                <span ng-show="m.ValidateCreateInput('purifyOrNot', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                            <div class="col-sm-4"></div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset ng-if="m.CreateForm.data.proteinId && m.CreateForm.data.purifyOrNot == 'Yes'">
+                                        <div ng-if="transfectionTags" class="form-group">
+                                            <label class="col-sm-2 control-label">Purification Tags</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group mb">
+                                                    <select chosen="" required name="transfectionRequestTags" width="'300px'" class="chosen-select input-md" data-placeholder-text-single="'Choose a purification tag'"
+                                                        ng-model="m.CreateForm.data.transfectionTag" ng-options="s for s in transfectionTags">
+                                                        </select>
+                                                </div>
+                                                <span ng-show="m.ValidateCreateInput('transfectionRequestTags', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                            <div class="col-sm-4"></div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset ng-if="m.CreateForm.data.proteinId && m.CreateForm.data.purifyOrNot == 'Yes'">
+                                        <div ng-if="transfectionPurificationMethods" class="form-group">
+                                            <label class="col-sm-2 control-label">Purification Method</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group mb">
+                                                    <select chosen="" required name="transfectionPurificationMethod" ng-model="m.CreateForm.data.transfectionPurificationMethod" width="'300px'"
+                                                        class="chosen-select input-md" data-placeholder-text-single="'Choose a Method'"
+                                                        ng-options="s for s in m.CreateForm.data.methods">
+                                                    </select>
+                                                </div>
+                                                <span ng-show="m.ValidateCreateInput('transfectionPurificationMethod', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                            <div class="col-sm-4"></div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset ng-if="m.CreateForm.data.proteinId && m.CreateForm.data.purifyOrNot == 'Yes'">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Buffer Exchange</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group mb">
+                                                    <div class="checkbox c-checkbox">
+                                                        <label>
+                                                            <input type="checkbox" ng-model="m.CreateForm.data.transfectionBufferExchange" ng-true-value="'Yes'" ng-false-value="'No'" />
+                                                            <span class="fa fa-check"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4"></div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset ng-if="m.CreateForm.data.proteinId && m.CreateForm.data.purifyOrNot == 'No'">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Transfection Date</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group mb">
+                                                    <input type="text" name="requestedDate" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="m.CreateForm.data.requestedDate.dt"
+                                                        is-open="m.CreateForm.data.requestedDate.opened" ng-required="true" close-text="Close"
+                                                        class="form-control" />
+                                                    <span class="input-group-btn">
+                                                      <button type="button" ng-click="m.dp.dpOpen($event, 'CreateForm', 'requestedDate')" class="btn btn-default">
+                                                        <em class="far fa-calendar-alt"></em>
+                                                      </button>
+                                                    </span>
+                                                </div>
+                                                <span ng-show="m.ValidateCreateInput('requestedDate', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset ng-if="m.CreateForm.data.proteinId && m.CreateForm.data.purifyOrNot == 'No'">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Harvest Date</label>
+                                            <div class="col-sm-6">
+                                                <div class="input-group mb">
+                                                    <input type="text" name="requestedHarvestDate" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="m.CreateForm.data.requestedHarvestDate.dt"
+                                                        is-open="m.CreateForm.data.requestedHarvestDate.opened" ng-required="true" close-text="Close"
+                                                        class="form-control" />
+                                                    <span class="input-group-btn">
+                                                      <button type="button" ng-click="m.dp.dpOpen($event, 'CreateForm', 'requestedHarvestDate')" class="btn btn-default">
+                                                        <em class="far fa-calendar-alt"></em>
+                                                      </button>
+                                                    </span>
+                                                </div>
+                                                <span ng-show="m.ValidateCreateInput('requestedHarvestDate', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset ng-if="m.CreateForm.data.proteinId">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Requester Notes</label>
+                                            <div class="col-sm-6">
+                                                <textarea name="requesterNotes" rows="4" placeholder="Notes about the transfection" class="form-control"
+                                                    ng-model="m.CreateForm.data.requesterNotes">
+                                                    </textarea>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">
+                                            </label>
+                                            <div class="col-sm-6">
+                                                <div class="jumbotron m0">
+                                                    <h3 class="mt0">Submission Notes</h3>
+                                                    <p>Submissions by Wednesday @ noon will have guaranteed plasmid sequence confirmation.</p>
+                                                    <p>Submissions by Thursday @ noon may not have plasmid sequence confirmation.</p>
+                                                    <p>Submissions after that will be queued to the following week.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <div class="panel-footer text-center">
+                                        <button type="button" class="btn btn-info" ng-click="m.resetCreateOption()">Reset</button>
+                                        <button ng-if="m.CreateForm.data.proteinId" type="submit" class="btn btn-info">Create</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </uib-tab> -->
+        <uib-tab index="'EditTab'" ng-show="m.editForm.show">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-edit"></em>Edit Transfection Request
+            </uib-tab-heading>
+            <div>
+                <div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form name="m.editForm.ui.validate" novalidate="" class="form-validate form-horizontal">
+                                    <div>
+                                        <fieldset class="b0">
+                                            <legend>Edit a transfection request</legend>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Transfection Request
+                                                </label>
+                                                <div class="col-sm-6">
+                                                    <strong required="" class="form-control force-noborder ng-binding" ng-bind="m.editForm.name" />
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Protein</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <strong name="ProteinName" class="form-control force-noborder ng-binding" ng-bind="m.ProteinDisplayData.Hash[m.editForm.proteinId]" ng-href="{{m.editForm.proteinUrl}}"></strong>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div ng-if="transfectionScales" class="form-group">
+                                                <label class="col-sm-2 control-label">Scale (mL)</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <select chosen="" required name="scale" ng-model="m.editForm.transfectionScale" width="'300px'" class="chosen-select input-md"
+                                                            data-placeholder-text-single="'Choose a scale'" ng-options="s for s in transfectionScales">
+                                                            </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div ng-if="transfectionTypes" class="form-group">
+                                                <label class="col-sm-2 control-label">Transfection Type</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <select chosen="" required name="transfectionType" ng-model="m.editForm.transfectionType" width="'300px'" class="chosen-select input-md"
+                                                            data-placeholder-text-single="'Choose a type'" ng-options="s for s in transfectionTypes">
+                                                            </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div ng-if="transfectionCellLines" class="form-group">
+                                                <label class="col-sm-2 control-label">Transfection Cell Line</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <select chosen="" required name="transfectionCellLine" ng-model="m.editForm.transfectionCellLine" width="'300px'" class="chosen-select input-md"
+                                                            data-placeholder-text-single="'Choose a cell line'" ng-options="s for s in transfectionCellLines">
+                                                            </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Purify</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <div class="checkbox c-checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="m.editForm.transfectionPurifyOrNot" ng-true-value="'Yes'" ng-false-value="'No'" />
+                                                                <span class="fa fa-check"></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset ng-if="m.editForm.transfectionPurifyOrNot == 'Yes'">
+                                            <div ng-if="transfectionTags" class="form-group">
+                                                <label class="col-sm-2 control-label">Purification Tags</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <select chosen="" required name="transfectionRequestTags" ng-model="m.editForm.transfectionRequestTags" width="'300px'" class="chosen-select input-md"
+                                                            data-placeholder-text-single="'Choose a tag'" ng-options="s for s in transfectionTags">
+                                                            </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset ng-if="m.editForm.transfectionPurifyOrNot == 'Yes'">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Purification Method</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <select chosen="" required name="transfectionPurificationMethod" ng-model="m.editForm.transfectionPurificationMethod" width="'300px'"
+                                                            class="chosen-select input-md" data-placeholder-text-single="'Choose a Method'"
+                                                            ng-options="s for s in transfectionPurificationMethods">
+                                                            </select>
+                                                    </div>
+                                                    <span ng-show="validateTransfectionRequestEditInput('transfectionPurificationMethod', 'required')" class="text-danger">This field is required</span>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset ng-if="m.editForm.transfectionPurifyOrNot == 'Yes'">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Buffer Exchange</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <div class="checkbox c-checkbox">
+                                                            <label>
+                                                                <input type="checkbox" ng-model="m.editForm.transfectionBufferExchange" ng-true-value="'Yes'" ng-false-value="'No'" />
+                                                                <span class="fa fa-check"></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <span ng-show="validateTransfectionRequestEditInput('transfectionBufferExchange', 'required')" class="text-danger">This field is required</span>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset ng-if="m.editForm.transfectionPurifyOrNot == 'No'">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Transfection Date</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <input type="text" name="requestedDate" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="m.editForm.data.requestedDate.dt"
+                                                            is-open="m.editForm.data.requestedDate.opened" ng-required="true" close-text="Close"
+                                                            class="form-control" />
+                                                        <span class="input-group-btn">
+                                                        <button type="button" ng-click="m.dp.dpOpen($event, 'editForm', 'requestedDate')" class="btn btn-default">
+                                                            <em class="far fa-calendar-alt"></em>
+                                                        </button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset ng-if="m.editForm.transfectionPurifyOrNot == 'No'">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Harvest Date</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <input type="text" name="requestedHarvestDate" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="m.editForm.data.requestedHarvestDate.dt"
+                                                            is-open="m.editForm.data.requestedHarvestDate.opened" ng-required="true" close-text="Close"
+                                                            class="form-control" />
+                                                        <span class="input-group-btn">
+                                                        <button type="button" ng-click="m.dp.dpOpen($event, 'editForm', 'requestedHarvestDate')" class="btn btn-default">
+                                                            <em class="far fa-calendar-alt"></em>
+                                                        </button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Requester Notes</label>
+                                                <div class="col-sm-6">
+                                                    <textarea name="requesterNotes" rows="4" placeholder="Instructions or requests for the transfection" class="form-control"
+                                                        ng-model="m.editForm.requesterNotes"></textarea>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Admin Notes</label>
+                                                <div class="col-sm-6">
+                                                    <textarea name="notes" rows="4" placeholder="Internal notes about the transfection request" class="form-control"
+                                                        ng-model="m.editForm.notes"></textarea>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Status</label>
+                                                <div class="col-sm-6">
+                                                    <strong name="requestStatus" class="form-control force-noborder" ng-bind="m.editForm.requestStatus"></strong>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <div class="panel-footer text-center">
+                                            <button type="button" class="btn btn-info" ng-click="m.editForm.CancelTab()">Close</button>
+                                            <button type="submit" class="btn btn-info" ng-click="m.editForm.SubmitTab()">Save</button>
+                                            <button type="submit" class="btn btn-warning" permission permission-only="['writeTR', 'adminResearch']" ng-if="m.editForm.requestStatus == 'Approved'" ng-click="updateTRStatus('Pending')">Pending</button>
+                                            <button type="submit" class="btn btn-success" permission permission-only="['writeTR', 'adminResearch']" ng-click="updateTRStatus('Completed')">Complete</button>
+                                            <button type="submit" class="btn btn-danger" permission permission-only="['writeTR', 'adminResearch']" ng-click="updateTRStatus('Failed')">Fail</button>
+                                            <button type="submit" class="btn btn-inverse" ng-if="m.editForm.requestStatus == 'Pending'" ng-click="m.deleteTransfectionRequest()">Delete</button>
+                                        </div>
+                                    </div>
+                                    <!-- END panel-->
+                                </form>
+                            </div>
+                        </div>
+                        <!-- END row-->
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        <!-- <uib-tab ng-show="1"> -->
+        <uib-tab index="'DetailTab'" ng-show="m.viewForm.show">
+            <uib-tab-heading>
+                <em class="fas fa-search fa-fw"></em>View Transfection Request
+            </uib-tab-heading>
+            <div>
+                <div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form name="m.viewForm.ui.validate" novalidate="" class="form-validate form-horizontal">
+                                    <!-- START panel-->
+                                    <div>
+                                        <fieldset class="b0">
+                                            <legend>View Transfection Request Details</legend>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Transfection Request
+                                                </label>
+                                                <div class="col-sm-6">
+                                                    <strong name="name" class="form-control force-noborder" ng-bind="m.viewForm.data.name"></strong>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Protein</label>
+                                                <div class="col-sm-6">
+                                                    <a name="proteinId" class="form-control force-noborder" ng-bind="m.viewForm.data.Protein.name" ui-sref="app.research.proteins({ op: 'view', id: m.viewForm.data.proteinId })"></a>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Protein Description</label>
+                                                <div class="col-sm-6">
+                                                    <strong style="height:100%" name="desc" class="form-control force-noborder" ng-bind="m.viewForm.data.Protein.description"></strong>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Scale (mL)</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <strong name="scale" ng-bind="m.viewForm.data.ENUM_transfectionScale" width="'300px'" class="form-control force-noborder">
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Transfection Type</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <strong name="transfectionType" ng-bind="m.viewForm.data.ENUM_transfectionType" width="'300px'" class="form-control force-noborder">
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Cell line</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <strong name="transfectionCellLine" ng-bind="m.viewForm.data.ENUM_transfectionCellLine" width="'300px'" class="form-control force-noborder">
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Purify</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <strong name="transfectionPurifyOrNot" ng-bind="m.viewForm.data.purifyOrNot" width="'300px'" class="form-control force-noborder">
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset ng-if="m.viewForm.transfectionPurifyOrNot == 'Yes'">
+                                            <div ng-if="transfectionsReady" class="form-group">
+                                                <label class="col-sm-2 control-label">Purification Tag</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <strong name="transfectionTag" width="'300px'" class="form-control force-noborder" ng-bind="m.viewForm.data.ENUM_transfectionTag">
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset ng-if="m.viewForm.transfectionPurifyOrNot == 'Yes'">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Purification Method</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <strong name="transfectionPurificationMethod" ng-bind="m.viewForm.data.ENUM_transfectionPurificationMethod" width="'300px'" class="form-control force-noborder">
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset ng-if="m.viewForm.transfectionPurifyOrNot == 'Yes'">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Buffer Exchange</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <strong name="transfectionBufferExchange" ng-bind="m.viewForm.data.bufferExchange" width="'300px'" class="form-control force-noborder">
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset ng-if="m.viewForm.transfectionPurifyOrNot == 'No'">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Requested Transfection Date</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <strong name="transfectionDate" ng-bind="m.viewForm.data.requestedDate" width="'300px'" class="form-control force-noborder">
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset ng-if="m.viewForm.transfectionPurifyOrNot == 'No'">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Requested Harvest Date</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <strong name="transfectionHarvestDate" ng-bind="m.viewForm.data.requestedHarvestDate" width="'300px'" class="form-control force-noborder">
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Plasmids</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <table class="table table-hover">
+                                                            <tbody>
+                                                                <tr ng-repeat="entry in m.viewForm.data.Protein.Plasmids">
+                                                                    <td><a ng-href="/#!/app/research/plasmids?op=view&id={{entry.id}}">{{entry.name}}</a></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Requester Notes</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <strong style="height:100%" name="requesterNotes" ng-bind="m.viewForm.data.requesterNotes" width="'300px'" class="form-control force-noborder">
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Admin Notes</label>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb">
+                                                        <strong style="height:100%" name="notes" ng-bind="m.viewForm.data.notes" width="'300px'" class="form-control force-noborder">
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Requested By</label>
+                                                <div class="col-sm-6">
+                                                    <strong name="requesterId" class="form-control force-noborder" ng-bind="UserHash[m.viewForm.data.requesterId]"></strong>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Created By</label>
+                                                <div class="col-sm-6">
+                                                    <strong name="createdBy" class="form-control force-noborder" ng-bind="UserHash[m.viewForm.data.createdBy]"></strong>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Updated By</label>
+                                                <div class="col-sm-6">
+                                                    <strong name="updatedBy" class="form-control force-noborder" ng-bind="UserHash[m.viewForm.data.updatedBy]"></strong>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Approved By</label>
+                                                <div class="col-sm-6">
+                                                    <strong name="approvedBy" class="form-control force-noborder" ng-bind="UserHash[m.viewForm.data.approvedBy]"></strong>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Created At</label>
+                                                <div class="col-sm-6">
+                                                    <strong name="createdAt" class="form-control force-noborder" ng-bind="m.viewForm.data.createdAt"></strong>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Updated At</label>
+                                                <div class="col-sm-6">
+                                                    <strong name="updatedAt" class="form-control force-noborder" ng-bind="m.viewForm.data.updatedAt"></strong>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Status</label>
+                                                <div class="col-sm-6">
+                                                    <strong name="requestStatus" class="form-control force-noborder" ng-bind="m.viewForm.data.requestStatus"></strong>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <div class="panel-footer text-center">
+                                            <button type="button" class="btn btn-info" ng-click="m.viewForm.CancelTab()">Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- END panel-->
+                                </form>
+                            </div>
+                        </div>
+                        <!-- END row-->
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'BulkCreateTab'" permission permission-only="['createTR', 'writeTR', 'adminResearch']" ng-click="m.BulkCreateForm.initTab()">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-plus-square"></em>Bulk Create Transfection Requests
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-validate form-horizontal" name="m.BulkCreateForm.ui.validate" ng-submit="m.BulkCreateForm.SubmitTab()">
+                            <fieldset>
+                                <legend>Bulk Create Transfection Requests</legend>
+                            </fieldset>
+
+                            <!-- <fieldset>
+                                <div ng-if="transfectionScales" class="form-group">
+                                    <label class="col-sm-2 control-label">Scale</label>
+                                    <div class="col-sm-6">
+                                        <select chosen="" required name="scale" ng-model="m.BulkCreateForm.data.transfectionScale" width="'300px'" class="chosen-select input-md"
+                                            data-placeholder-text-single="'Choose a scale'" ng-options="s for s in transfectionScales">
+                                        </select>
+                                        <span ng-show="m.ValidateBulkCreateInput('scale', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset> -->
+                            <fieldset>
+                                <div ng-if="transfectionTypes" class="form-group">
+                                    <label class="col-sm-2 control-label">Transfection Type</label>
+                                    <div class="col-sm-6">
+                                        <select chosen="" required name="transfectionType" ng-model="m.BulkCreateForm.data.transfectionType" width="'300px'" class="chosen-select input-md"
+                                            data-placeholder-text-single="'Choose a transfection type'" ng-options="s for s in transfectionTypes">
+                                        </select>
+                                        <span ng-show="m.ValidateBulkCreateInput('transfectionType', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div ng-if="transfectionCellLines" class="form-group">
+                                    <label class="col-sm-2 control-label">Cell line</label>
+                                    <div class="col-sm-6">
+                                        <select chosen="" required name="cellLine" ng-model="m.BulkCreateForm.data.transfectionCellLine" width="'300px'" class="chosen-select input-md"
+                                            data-placeholder-text-single="'Choose a cell line'" ng-options="s for s in transfectionCellLines">
+                                        </select>
+                                        <span ng-show="m.ValidateBulkCreateInput('cellLine', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-labeled btn-success" ng-click="m.BulkCreateForm.addEntry('requestsToAdd')">
+                                            <span class="btn-label"><em class="fa fa-plus"></em></span>
+                                            Add Entry (with Purification)
+                                        </button>
+                                        <button type="button" class="btn btn-labeled btn-success" ng-click="m.BulkCreateForm.addEntry('requestsToAddNoPur')">
+                                            <span class="btn-label"><em class="fa fa-plus"></em></span>
+                                            Add Entry (Transfection Only)
+                                        </button>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr ng-if="m.BulkCreateForm.data.requestsToAdd.length > 0">
+                                        <td><strong>Protein</strong></td>
+                                        <td>
+                                            <strong>Scale (mL)</strong>&nbsp;
+                                            <button uib-tooltip="Copy Data" type="button" ng-click="m.BulkCreateForm.copyData('requestsToAdd', 'transfectionScale')" class="btn btn-sm btn-default">
+                                                <em class="fas fa-level-down-alt"></em>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <strong>Purification Tags</strong>&nbsp;
+                                            <button uib-tooltip="Copy Data" type="button" ng-click="m.BulkCreateForm.copyData('requestsToAdd', 'transfectionTag')" class="btn btn-sm btn-default">
+                                                <em class="fas fa-level-down-alt"></em>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <strong>Purification Method</strong>&nbsp;
+                                            <button uib-tooltip="Copy Data" type="button" ng-click="m.BulkCreateForm.copyData('requestsToAdd', 'transfectionPurificationMethod')" class="btn btn-sm btn-default">
+                                                <em class="fas fa-level-down-alt"></em>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <strong>Buffer Exchange</strong>&nbsp;
+                                            <button uib-tooltip="Copy Data" type="button" ng-click="m.BulkCreateForm.copyData('requestsToAdd', 'bufferExchange')" class="btn btn-sm btn-default">
+                                                <em class="fas fa-level-down-alt"></em>
+                                            </button>
+                                        </td>
+                                        <td width="550px"><strong>Requester Notes</strong></td>
+                                        <td width="75px"></td>
+                                    </tr>
+                                    <tr ng-repeat="p in m.BulkCreateForm.data.requestsToAdd">
+                                        <td>
+                                            <select chosen name="protein" required ng-model="p.proteinId" class="chosen-select full-width input-md"
+                                                max-shown-results="100" ng-change="m.BulkCreateForm.changeProtein(p)" search-contains="true" data-placeholder-text-single="'Choose a protein'" ng-options="p.value as p.text for p in m.ProteinDisplayData.ItemList">
+                                            </select>
+                                            <span ng-show="m.ValidateBulkCreateInput('protein', 'required')" class="text-danger">This field is required</span>
+                                        </td>
+                                        <td>
+                                            <select chosen required name="scale" ng-model="p.transfectionScale" class="chosen-select input-md"
+                                                data-placeholder-text-single="'Choose a scale'" ng-options="s for s in transfectionScales">
+                                            </select>
+                                            <span ng-show="m.ValidateBulkCreateInput('scale', 'required')" class="text-danger">This field is required</span>
+                                        </td>
+                                        <td>
+                                            <select chosen name="transfectionRequestTags" class="chosen-select full-width input-md" data-placeholder-text-single="'Choose a Tag'"
+                                                required ng-model="p.transfectionTag" ng-options="s for s in transfectionTags">
+                                            </select>
+                                            <span ng-show="m.ValidateBulkCreateInput('transfectionRequestTags', 'required')" class="text-danger">This field is required</span>
+                                        </td>
+                                        <td>
+                                            <select chosen name="transfectionPurificationMethod" class="chosen-select full-width input-md" data-placeholder-text-single="'Choose a Purification Method'"
+                                                required ng-model="p.transfectionPurificationMethod" ng-options="s for s in p.methods">
+                                            </select>
+                                            <span ng-show="m.ValidateBulkCreateInput('transfectionPurificationMethod', 'required')" class="text-danger">This field is required</span>
+                                        </td>
+                                        <td>
+                                            <div class="checkbox c-checkbox">
+                                                <label>
+                                                    <input type="checkbox" ng-model="p.bufferExchange" ng-true-value="'Yes'" ng-false-value="'No'" />
+                                                    <span class="fa fa-check"></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" rows="1" placeholder="Notes" ng-model="p.requesterNotes"></input>
+                                        </td>
+                                        <td>
+                                            <a ng-click="m.BulkCreateForm.removeEntry('requestsToAdd', $index)" class="btn btn-danger">Remove</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr ng-if="m.BulkCreateForm.data.requestsToAddNoPur.length > 0">
+                                        <td><strong>Protein</strong></td>
+                                        <td>
+                                            <strong>Scale (mL)</strong>&nbsp;
+                                            <button uib-tooltip="Copy Data" type="button" ng-click="m.BulkCreateForm.copyData('requestsToAddNoPur', 'transfectionScale')" class="btn btn-sm btn-default">
+                                                <em class="fas fa-level-down-alt"></em>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <strong>Transfection Date</strong>&nbsp;
+                                            <button uib-tooltip="Copy Data" type="button" ng-click="m.BulkCreateForm.copyData('requestsToAddNoPur', 'requestedDate', true)" class="btn btn-sm btn-default">
+                                                <em class="fas fa-level-down-alt"></em>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <strong>Harvest Date</strong>&nbsp;
+                                            <button uib-tooltip="Copy Data" type="button" ng-click="m.BulkCreateForm.copyData('requestsToAddNoPur', 'requestedHarvestDate', true)" class="btn btn-sm btn-default">
+                                                <em class="fas fa-level-down-alt"></em>
+                                            </button>
+                                        </td>
+                                        <td width="550px"><strong>Requester Notes</strong></td>
+                                        <td width="75px"></td>
+                                    </tr>
+                                    <tr ng-repeat="p in m.BulkCreateForm.data.requestsToAddNoPur">
+                                        <td>
+                                            <select chosen name="protein" required ng-model="p.proteinId" class="chosen-select full-width input-md"
+                                                search-contains="true" data-placeholder-text-single="'Choose a protein'" ng-options="p.value as p.text for p in m.ProteinDisplayData.ItemList">
+                                            </select>
+                                            <span ng-show="m.ValidateBulkCreateInput('protein', 'required')" class="text-danger">This field is required</span>
+                                        </td>
+                                        <td>
+                                            <select chosen required name="scale" ng-model="p.transfectionScale" class="chosen-select input-md"
+                                                data-placeholder-text-single="'Choose a scale'" ng-options="s for s in transfectionScales">
+                                            </select>
+                                            <span ng-show="m.ValidateBulkCreateInput('scale', 'required')" class="text-danger">This field is required</span>
+                                        </td>
+                                        <td>
+                                            <div class="input-group mb">
+                                                <input type="text" name="requestedDate" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="p.requestedDate.dt"
+                                                    is-open="p.requestedDate.opened" ng-required="true" close-text="Close" class="form-control" />
+                                                <span class="input-group-btn">
+                                                    <button type="button" ng-click="m.BulkCreateForm.dpOpen($event, p.requestedDate)" class="btn btn-default">
+                                                        <em class="far fa-calendar-alt"></em>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                            <span ng-show="m.ValidateBulkCreateInput('requestedDate', 'required')" class="text-danger">This field is required</span>
+                                        </td>
+                                        <td>
+                                            <div class="input-group mb">
+                                                <input type="text" name="requestedHarvestDate" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="p.requestedHarvestDate.dt"
+                                                    is-open="p.requestedHarvestDate.opened" ng-required="true" close-text="Close" class="form-control" />
+                                                <span class="input-group-btn">
+                                                    <button type="button" ng-click="m.BulkCreateForm.dpOpen($event, p.requestedHarvestDate)" class="btn btn-default">
+                                                        <em class="far fa-calendar-alt"></em>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                            <span ng-show="m.ValidateBulkCreateInput('requestedHarvestDate', 'required')" class="text-danger">This field is required</span>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" rows="1" placeholder="Notes" ng-model="p.requesterNotes"></input>
+                                        </td>
+                                        <td>
+                                            <a ng-click="m.BulkCreateForm.removeEntry('requestsToAddNoPur', $index)" class="btn btn-danger">Remove</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <div class="jumbotron m0">
+                                            <h3 class="mt0">Submission Notes</h3>
+                                            <p>Submissions by Wednesday @ noon will have guaranteed plasmid sequence confirmation.</p>
+                                            <p>Submissions by Thursday @ noon may not have plasmid sequence confirmation.</p>
+                                            <p>Submissions after that will be queued to the following week.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="panel-footer text-center">
+                                <button class="btn btn-info" type="submit">
+                                    Create
+                                </button>
+                                <button class="btn btn-warning" type="button" ng-click="m.BulkCreateForm.ResetTab()">
+                                    Reset
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'BulkEditTab'" permission permission-only="['writeTR', 'adminResearch']">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-edit"></em>Bulk Edit Requests
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-validate form-horizontal" name="m.BulkEditForm.ui.validate" ng-submit="m.BulkEditForm.SubmitTab()">
+                            <fieldset>
+                                <legend>Bulk Edit Transfection Requests</legend>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Status
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <select required name="requestStatus" class="chosen-select input-md" width="'300px'" ng-model="m.BulkEditForm.data.requestStatus" chosen data-placeholder-text-single="'Filter by Status'"
+                                            ng-options="p for p in ['Pending', 'Approved']" search-contains="true" ng-change="m.BulkEditForm.updateCurrTRs()">
+                                        </select>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr ng-if="m.BulkEditForm.data.currTRs.length > 0">
+                                        <td width="150px"><strong>Request #</strong></td>
+                                        <td width="150px"><strong>Status</strong></td>
+                                        <td width="150px"><strong>Protein</strong></td>
+                                        <td width="150px"><strong>Plasmids</strong></td>
+                                        <td width="150px"><strong>Requested By</strong></td>
+                                        <td width="50px"><strong>DNA Ready</strong></td>
+                                        <td><strong>Admin Notes</strong></td>
+                                        <td ng-if="m.BulkEditForm.data.requestStatus == 'Pending'" permission permission-only="'adminResearch'" width="50px"><strong>Approved</strong></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr ng-repeat="p in m.BulkEditForm.data.currTRs">
+                                        <td>
+                                            {{p.name}}
+                                        </td>
+                                        <td>
+                                            {{p.requestStatus}}
+                                        </td>
+                                        <td>
+                                            {{m.ProteinDisplayData.Hash[p.proteinId]}}
+                                        </td>
+                                        <td>
+                                            {{p.plasmids}}
+                                        </td>
+                                        <td>
+                                            {{UserHash[p.requesterId]}}
+                                        </td>
+                                        <td>
+                                            <div class="checkbox c-checkbox">
+                                                <label>
+                                                    <input type="checkbox" ng-model="p.dnaReady" ng-true-value="'Yes'" ng-false-value="'No'" />
+                                                    <span class="fa fa-check"></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input name="adminNotes" type="text" placeholder="Text" class="form-control" rows="1" ng-model="p.notes">
+                                            </input>
+                                        </td>
+                                        <td ng-if="m.BulkEditForm.data.requestStatus == 'Pending'" permission permission-only="'adminResearch'">
+                                            <div class="checkbox c-checkbox">
+                                                <label>
+                                                    <input type="checkbox" ng-model="p.approved"/>
+                                                    <span class="fa fa-check"></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button ng-click="m.BulkEditForm.removeEntry($index)" type="button" class="btn btn-danger btn-sm"><em class="fa fa-times"></em></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="panel-footer text-center">
+                                <button class="btn btn-info" type="submit">
+                                    Update
+                                </button>
+                                <button class="btn btn-warning" type="button" ng-click="m.BulkEditForm.ResetData()">
+                                    Reset
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+    </uib-tabset>
+</div>

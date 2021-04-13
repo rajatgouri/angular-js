@@ -1,0 +1,23 @@
+{
+    app: {
+        name: "LIMS Data Service - Production"
+    },
+    domain: {
+        user: "http://localhost:9509/",
+        data: "http://localhost:9507/"
+    },
+    db: {
+	    name: "lims_com_virtual",
+	    password: "soiewru23434",
+	    username: "lims_co16",
+	    host: "127.0.0.1",
+	    port: 3306
+    },
+    email: {
+        host: "smtp.sendgrid.net",
+        port: 587,
+        secure: true,
+        username: "",
+        pass: ""
+    }
+}

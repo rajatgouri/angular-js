@@ -1,0 +1,134 @@
+ <style>
+    .updating{
+    color: rgb(120,176,255);
+    font-weight: bold;
+
+}
+</style>
+<h3>
+   <div class="pull-right">
+      <div class="input-group">
+        <!-- this uses fixed width to avoid expand outside the group container-->
+        <select chosen="" data-placeholder-text-single="'Choose a query type'" required="" name="" width="'200px'" class="chosen-select input-md">
+           <option value="queries">test</option>
+        </select>
+      </div>
+   </div>
+   Equipment Management
+</h3>
+<div ui-view class="row" ng-show="true">
+    <div class="panel" permission permission-only="'adminQuery'" ng-class="{'panel-danger': editing, 'panel-default': !editing}">
+        <div class="panel-heading">
+            <h3 class="panel-title">Coming Soon to a LIMS near you!!</h3>
+            <h4> This page will hold information on each machine, its order information, maintance history, and any associated files</h4>
+        </div>
+        <!--<div class="panel-body">-->
+        <!-- <div class="panel-body panel-danger" ng-class="{'panel-danger': editing}"> -->
+            <form name="form.formValidate" novalidate="" class="form-validate form-horizontal">
+                <!-- START panel--> <!--
+                <fieldset ng-show="editing">
+                    <div class="queryDiv">
+                        <label class="col-sm-2 control-label" ng-class="{updating: editing===true}" >Query Name:</label>
+                        <div class="col-sm-6">
+                           <strong class="form-control">{{testQuery.name}}</strong>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="queryDiv">
+                        <label class="col-sm-2 control-label" ng-class="{updating: editing===true}" >Custom Query:</label>
+                        <div class="col-sm-6">
+                            <textarea ui-codemirror ui-codemirror-opts="editorOptions" name="query" rows="4" placeholder="Please type your query.." ng-model="testQuery.expression" >
+                            </textarea>
+                            <div class="text-center">-->
+                                <!--<button type="submit" ng-click="executeTestQuery()" class="btn btn-primary">Execute</button>-->
+                            <!--</div>
+                        </div>
+                        <span ng-show="testQuery.error" class="text-danger">{{testQuery.error}}</span>
+                    </div>
+                </fieldset>
+                <fieldset ng-hide="editing">
+                    <div class="queryDiv">
+                        <label class="col-sm-2 control-label" ng-class="{updating: editing===true}">Save as:</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control ng-pristine ng-valid ng-touched" ng-model="testQuery.name"/>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default ng-isolate-scope" ng-click="testQuery.save()">Save</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="queryDiv">
+                        <lable class="col-sm-2 control-label" style="font-weight: bold;" ng-class="{updating: editing===true}" >Query Group:</lable>
+                        <div class="col-sm-8">
+                            <div class="checkbox-inline c-checkbox" ng-repeat="chk in ckboxes">
+                                <label>
+                                    <input type="checkbox" ng-model="chk.val">
+                                    <span class="fa fa-check"></span>{{chk.label}}</label>
+                            </div>
+                        </div>
+
+                    </div>
+                </fieldset> 
+
+                <div class="panel-footer text-center" ng-show="editing">
+                    <button type="button" ng-model="updateQuery" ng-click="testQuery.save()" class="btn btn-info">{{updateQuery}}</button>
+                </div>
+
+                <table ng-table="tableParams" class="table ng-table-rowselected">
+                    <thead>
+                        <tr>
+                            <th ng-repeat="(header, value) in testQuery.results[0]"> {{header}}</th>
+                        </tr>
+                    </thead>
+                    <tr ng-repeat="result in tableParams.data" ng-class="{'active': user.$selected}">
+                        <td ng-repeat="cell in result"> {{cell}} </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Saved queries</h3>
+        </div>
+        <div class="panel-body">
+            <form name="form.formValidate" novalidate="" class="form-validate form-horizontal">-->
+                <!-- END panel-->
+                <!-- Show Resules--><!--
+                <div class="table-responsive">
+                    <div ng-if="querylibsReady">
+                        <table datatable dt-options="dtOptions" dt-columns="dtColumns" dt-instance="dtInstCallback" class="table table-hover">
+                        </table>
+                    </div>
+                </div>
+                <div>
+
+                </div>
+                <div class="panel-footer text-center">
+                    <button ng-if="userAllowed" ng-click="editQuery()" class="btn btn-info">Edit</button>
+                    <button type="submit" ng-click="query.initTable()" class="btn btn-info">Execute</button>
+                </div>
+                <div ng-show="nonSelectQuery">
+                    <h4>Only "select" queries are permitted.</h4>
+                </div>
+                <div ng-show="noResultExists">
+                    <h4>No result found.</h4>
+                </div>
+                </br>
+                <div ng-show="errorFound">
+                    <h4 ng-bind="error"></h4>
+                </div>
+                <div class="table-responsive">
+                    <div ng-if="query.dataReady">
+                        <table datatable id="query" dt-options="query.dtOptions" dt-columns="query.dtColumns" dt-instance="query.DtInstCallback"
+                            class="table table-hover">
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>-->
+    </div>

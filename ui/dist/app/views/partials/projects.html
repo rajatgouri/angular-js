@@ -1,0 +1,247 @@
+<h3>All Projects</h3>
+<div ui-view class="panel panel-transparent">
+    <uib-tabset justified="true" class="bg-white p0" active="m.activeTab">
+        <uib-tab index="'ViewAllTab'">
+            <uib-tab-heading>
+                <em class="far fa-clock fa-fw"></em>View Projects
+            </uib-tab-heading>
+            <!--<div align="right">
+                <a class="btn btn-info btn-xs" ng-click="exportDataToCSV()">Export To CSV</a>
+            </div>-->
+            <div class="table-responsive">
+                <div ng-if="m.projectsReady">
+                    <table datatable="" dt-options="m.dtOptions" dt-columns="m.dtColumns" dt-column-defs="m.dtColDefs" dt-instance="m.DtInstCallback"
+                        class="table table-hover">
+                    </table>
+                </div>
+            </div>
+            <div ng-show="!m.tableData">
+                <h3>Loading...</h3>
+            </div>
+            <div ng-show="m.tableData && m.tableData.length == 0">
+                <h3>There are no projects in the database.</h3>
+            </div>
+            <!-- User actions -->
+            <div ng-show="m.lastRowClicked" class="panel-footer text-right container-fluid">
+                <div class="col-sm-8 pull-right">
+                    <a class="btn btn-info" ng-href="#!/app/projects/details?id={{m.currentRowData.id}}">Project Detail</a>
+                    <a class="btn btn-info" permission permission-only="['writeProject', 'adminProject']" ng-click="editProject()">Edit</a>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'CreateTab'" permission permission-only="['writeProject', 'adminProject']">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-plus-square"></em>Create Project</uib-tab-heading>
+            <div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form name="m.CreateForm.ui.validate" ng-submit="m.CreateForm.SubmitTab()" novalidate="" class="form-validate form-horizontal">
+                                <!-- START panel-->
+                                <div>
+                                    <fieldset class="b0">
+                                        <legend>Create a project</legend>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Description</label>
+                                            <div class="col-sm-6">
+                                                <textarea required name="desc" rows="1" placeholder="Description of project" class="form-control" ng-model="m.CreateForm.data.description"></textarea>
+                                                <span ng-show="m.ValidateCreateInput('desc', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Targets</label>
+                                            <div class="col-sm-6">
+                                                <textarea name="targets" rows="1" placeholder="Targets of the project.." class="form-control" ng-model="m.CreateForm.data.targets"></textarea>
+                                                <span ng-show="m.ValidateCreateInput('targets', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Goals</label>
+                                            <div class="col-sm-6">
+                                                <textarea name="goals" rows="1" placeholder="Goals of the project.." class="form-control" ng-model="m.CreateForm.data.goals"></textarea>
+                                                <span ng-show="m.ValidateCreateInput('goals', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Platforms</label>
+                                            <div class="col-sm-6">
+                                              <select name="platforms" multiple="multiple" ng-model="m.CreateForm.data.platforms" width="'400px'" class="chosen-select form-control"
+                                                  ng-options="p for p in platforms" chosen placeholder-text-multiple="'Choose platforms'">
+                                              </select>
+                                                <span ng-show="m.ValidateCreateInput('platforms', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Status</label>
+                                            <div class="col-sm-6">
+                                              <select name="status" required class="chosen-select input-md" width="'300px'" ng-model="m.CreateForm.data.status" chosen data-placeholder-text-single="'Choose a status'"
+                                                  search-contains="true" ng-options="p for p in statuses">
+                                              </select>
+                                                <span ng-show="m.ValidateCreateInput('status', 'required')" class="text-danger">This field is required</span>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="panel-footer text-center">
+                                        <button type="submit" class="btn btn-info">Create</button>
+                                    </div>
+                                </div>
+                                <!-- END panel-->
+                            </form>
+                        </div>
+                    </div>
+                    <!-- END row-->
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'EditTab'" ng-show="m.editForm.show">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-edit"></em>Edit Project
+                <em class="fa fa-times-circle" ng-mousedown="m.editForm.CancelTab()" style="float: right;"></em>
+            </uib-tab-heading>
+            <div>
+                <div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form name="m.editForm.ui.validate" ng-submit="m.editForm.SubmitTab()" novalidate="" class="form-validate form-horizontal">
+                                      <fieldset class="b0">
+                                          <legend>Edit a project</legend>
+                                      </fieldset>
+                                      <fieldset>
+                                          <div class="row">
+                                              <label class="col-sm-2 control-label">Project Name</label>
+                                              <div class="col-sm-6">
+                                                  <strong name="projectName" class="form-control force-noborder" ng-bind="m.editForm.name"></strong>
+                                              </div>
+                                          </div>
+                                      </fieldset>
+                                      <fieldset>
+                                          <div class="form-group">
+                                              <label class="col-sm-2 control-label">Description</label>
+                                              <div class="col-sm-6">
+                                                  <textarea required name="desc" rows="1" placeholder="Description of project" class="form-control" ng-model="m.editForm.description"></textarea>
+                                                  <span ng-show="m.ValidateEditInput('desc', 'required')" class="text-danger">This field is required</span>
+                                              </div>
+                                          </div>
+                                      </fieldset>
+                                      <fieldset>
+                                          <div class="form-group">
+                                              <label class="col-sm-2 control-label">Targets</label>
+                                              <div class="col-sm-6">
+                                                  <textarea name="targets" rows="1" placeholder="Targets of the project.." class="form-control" ng-model="m.editForm.targets"></textarea>
+                                                  <span ng-show="m.ValidateEditInput('targets', 'required')" class="text-danger">This field is required</span>
+                                              </div>
+                                          </div>
+                                      </fieldset>
+                                      <fieldset>
+                                          <div class="form-group">
+                                              <label class="col-sm-2 control-label">Goals</label>
+                                              <div class="col-sm-6">
+                                                  <textarea name="goals" rows="1" placeholder="Goals of the project.." class="form-control" ng-model="m.editForm.goals"></textarea>
+                                                  <span ng-show="m.ValidateEditInput('goals', 'required')" class="text-danger">This field is required</span>
+                                              </div>
+                                          </div>
+                                      </fieldset>
+                                      <fieldset>
+                                          <div class="form-group">
+                                              <label class="col-sm-2 control-label">Platforms</label>
+                                              <div class="col-sm-6">
+                                                  <select name="platforms" multiple="multiple" ng-model="m.editForm.platforms" width="'400px'" class="chosen-select form-control"
+                                                      ng-options="p for p in platforms" chosen placeholder-text-multiple="'Choose platforms'">
+                                                  </select>
+                                                  <span ng-show="m.ValidateEditInput('platforms', 'required')" class="text-danger">This field is required</span>
+                                              </div>
+                                          </div>
+                                      </fieldset>
+                                      <fieldset>
+                                          <div class="form-group">
+                                              <label class="col-sm-2 control-label">Stages</label>
+                                              <div class="col-sm-6">
+                                                  <table class="table table-striped table-hover" ng-if="m.editForm.stages.length > 0">
+                                                      <thead>
+                                                          <tr>
+                                                              <th>Stage</th>
+                                                              <th>Leader</th>
+                                                              <th></th>
+                                                          </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                          <tr ng-repeat="stage in m.editForm.stages">
+                                                              <td>
+                                                                <select name="stage" required class="chosen-select input-md" width="'300px'" ng-model="stage.stage" chosen data-placeholder-text-single="'Choose a stage'"
+                                                                    search-contains="true" ng-options="p for p in stages">
+                                                                </select>
+                                                              </td>
+                                                              <td>
+                                                                <select chosen name="projectLeaderId" required ng-model="stage.userId" width="'300px'" class="chosen-select input-md"
+                                                                    data-placeholder-text-single="'Choose a project leader'" ng-options="p.id as p.name for p in ActiveUserList">
+                                                                </select>
+                                                              </td>
+                                                              <td>
+                                                                <button ng-click="m.editForm.removeLeader($index)" type="button" class="btn btn-danger btn-sm"><em class="fa fa-trash"></em></button>
+                                                              </td>
+                                                          </tr>
+                                                      </tbody>
+                                                  </table>
+                                                  <button type="button" class="btn btn-success" ng-click="m.editForm.addLeader()">Add Stage</button>
+                                              </div>
+                                          </div>
+                                      </fieldset>
+                                      <fieldset>
+                                          <div class="form-group">
+                                              <label class="col-sm-2 control-label">Status</label>
+                                              <div class="col-sm-6">
+                                                  <select name="status" required class="chosen-select input-md" width="'300px'" ng-model="m.editForm.status" chosen data-placeholder-text-single="'Choose a status'"
+                                                      search-contains="true" ng-options="p for p in statuses">
+                                                  </select>
+                                                  <span ng-show="m.ValidateEditInput('status', 'required')" class="text-danger">This field is required</span>
+                                              </div>
+                                          </div>
+                                      </fieldset>
+                                      <fieldset>
+                                          <div class="form-group">
+                                              <label class="col-sm-2 control-label">SharePoint URL</label>
+                                              <div class="col-sm-6">
+                                                  <input name="sharePointGroup" type="url" placeholder="URL to SharePoint Document Library" class="form-control" ng-model="m.editForm.sharePointGroup">
+                                                  <span ng-show="m.ValidateEditInput('sharePointGroup', 'required')" class="text-danger">This field is required</span>
+                                              </div>
+                                          </div>
+                                      </fieldset>
+  
+                                      <fieldset>
+                                          <div class="form-group">
+                                              <label class="col-sm-2 control-label">Key Documents</label>
+                                              <div class="col-sm-6">
+                                                  <div class="input-group mb">
+                                                      <div ref-link-directive info="m.editForm.RefLinkList">
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="col-sm-4"></div>
+                                          </div>
+                                      </fieldset>
+  
+                                      <div class="panel-footer text-center">
+                                          <button type="button" class="btn btn-info" ng-click="m.editForm.CancelTab()">Close</button>
+                                          <button type="submit" class="btn btn-info">Save</button>
+                                      </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- END row-->
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+    </uib-tabset>
+</div>

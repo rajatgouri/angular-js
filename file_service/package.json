@@ -1,0 +1,37 @@
+{
+    "name": "systimmune-lims-fileservice",
+    "description": "SystImmune LIMS File Service component",
+    "version": "0.98.1",
+    "private": true,
+    "author": "Nathan Thorpe",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://git.systimmune.net/it/lims.git"
+    },
+    "engines": {
+        "node": "4.2.x",
+        "npm": "2.14.x"
+    },
+    "dependencies": {
+        "async": "latest",
+        "express": "^4.16.3",
+        "express-fileupload": "^1.0.0",
+        "glob": "^6.0.1",
+        "json5": "^2.1.0",
+        "lodash": "latest",
+        "mongoose": "5.3.8",
+        "gridfs-stream": "1.1.1",
+        "nconf": "^0.8.2",
+        "request": "^2.78.0",
+        "standard-error": "^1.1.0",
+        "winston": "^3.1.0"
+    },
+    "devDependencies": {
+        "eslint": "^5.10.0",
+        "eslint-plugin-import": "^2.14.0",
+        "eslint-plugin-node": "^8.0.0",
+        "eslint-plugin-promise": "^4.0.1",
+        "eslint-plugin-standard": "^4.0.0"
+    }
+}

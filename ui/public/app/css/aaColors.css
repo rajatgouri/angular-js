@@ -1,0 +1,72 @@
+.E {
+    background-color: magenta;
+}
+.S {
+    background-color: salmon;
+}
+.G {
+    background-color: yellowgreen;
+}
+.R {
+    background-color: skyblue;
+}
+.Q {
+    background-color: deepskyblue;
+}
+.V {
+    background-color: lawngreen;
+}
+.L {
+    background-color: crimson;
+}
+.T {
+    background-color: wheat;
+}
+.P {
+    background-color: yellow;
+}
+.C {
+    background-color: gold;
+}
+.F {
+    background-color: tan;
+}
+.I {
+    background-color: seagreen;
+}
+.A {
+    background-color: grey;
+}
+.W {
+    background-color: salmon;
+}
+.D {
+    background-color: indianred;
+}
+.Y {
+    background-color: greenyellow;
+}
+.K {
+    background-color: royalblue;
+}
+.N {
+    background-color: cyan;
+}
+.M {
+    background-color: cyan;
+}
+.H {
+    background-color: orange;
+}
+span.dna-A {
+   color: firebrick;
+}
+span.dna-C {
+    color: blue;
+}
+span.dna-G {
+    color: goldenrod;
+}
+span.dna-T {
+    color: green;
+}

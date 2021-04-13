@@ -1,0 +1,75 @@
+{
+    "dashboard": {
+        "WELCOME": "欢迎来到 {{appName}} 数据管理系统",
+        "INTRO": "家庭仪表板",
+        "History": "最新活动",
+        "research": "研究仪表板",
+        "pd": "流程开发仪表板"
+    },
+    "offsidebar": {
+        "setting": {
+            "SETTINGS": "设置",
+            "SIGNOUT": "登出",
+            "THEME": "主题色",
+            "USERNAME": "用户名",
+            "Preferences": "优先",
+            "layout": {
+                "Sidebar": "侧边栏",
+                "COLLAPSED": "倒塌",
+                "Hover": "徘徊",
+                "Float": "浮动"
+            }
+        }
+    },
+    "sidebar": {
+        "WELCOME": "欢迎",
+        "heading": {
+            "HEADER": "数据",
+            "COMPONENTS": "Componentes",
+            "MORE": "更多",
+            "HOME": "主页",
+            "PROJECT": "项目"
+        },
+        "nav": {
+            "HOME": "主页",
+            "RESEARCH": "研究",
+            "ADE": "抗体发现",
+            "PD": "流程开发",
+            "PROJECT": "项目",
+            "Admin": "行政",
+            "Document": "更改日志",
+            "FACILITIES": "事业",
+            "QUERY": "询",
+            "proteinsummary": "蛋白质摘要",
+            "plasmids": "质粒",
+            "transfections": "转染",
+            "tr": "转染请求",
+            "purifications": "清洗",
+            "proteins": "蛋白质",
+            "par": "分析请求",
+            "proteinanalytics": "蛋白质分析",
+            "scl": "稳定的细胞系",
+            "IO": "免疫腫瘤學",
+            "pr": "蛋白质要求"
+        }
+    },
+    "sections": {
+        "bioreactorExperiment": "生物反应器实验",
+        "bioreactor": "生物反应器",
+        "bioreactorCondition": "生物反应器条件",
+        "bioChemData": "生物反应器化学数据",
+        "bioVCDData": "生物反应器生存力数据",
+        "bioreactorGraph": "生物反应器图",
+        "bioreactorPurification": "生物反应器净化",
+        "bioreactorAnalytic": "生物反应器分析",
+        "clExperiment": "细胞系实验",
+        "clHarvest": "细胞系收获",
+        "clPurification": "细胞系纯化",
+        "clPackage": "AYY",
+        "clAnalytic": "细胞系分析",
+        "cellLineExperiment": "细胞系实验",
+        "cellLineHarvest": "细胞系收获",
+        "cellLinePurification": "细胞系纯化",
+        "cellLineAnalytic": "细胞系分析"
+    }
+}

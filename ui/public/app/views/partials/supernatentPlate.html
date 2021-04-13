@@ -1,0 +1,482 @@
+<h3>Supernatent Plates</h3>
+<div class="panel panel-transparent">
+    <uib-tabset justified="true" class="bg-white p0" active="m.activeTab">
+        <uib-tab index="'ViewAllTab'">
+            <uib-tab-heading>
+                <em class="far fa-clock fa-fw"></em>View all Supernatent Plates
+            </uib-tab-heading>
+            <div class="table-responsive">
+                <div ng-if="m.dataReady">
+                    <table datatable="" dt-options="m.dtOptions" dt-columns="m.dtColumns" dt-column-defs="m.dtColDefs" dt-instance="m.DtInstCallback"
+                        class="table table-hover">
+                    </table>
+                </div>
+            </div>
+            <div ng-show="!m.tableData">
+                <h3>Loading...</h3>
+            </div>
+            <div ng-show="m.tableData && m.tableData.length == 0">
+                <h3>There are no supernatent plates in the database.</h3>
+            </div>
+            <div ng-show="m.lastRowClicked" class="panel-footer text-right container-fluid">
+                <div class="col-sm-8 pull-right">
+                    <a class="btn btn-info" ng-click="m.viewDetail()">View Detail</a>
+                    <a class="btn btn-info" permission permission-only="['writeBCC', 'adminADE']" ng-click="m.editDetail()">Edit</a>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'CreateTab'" permission permission-only="['writeBCC', 'adminADE']">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-plus-square"></em>Create Supernatent Plate
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-validate form-horizontal" name="m.CreateForm.ui.validate" ng-submit="m.CreateForm.SubmitTab()">
+                            <fieldset>
+                                <legend>Create Supernatent Plate(s)</legend>
+                            </fieldset>
+
+                            <fieldset>
+                                <div ng-if="m.BCCPlateListReady" class="form-group">
+                                    <label class="col-sm-2 control-label">BCC Plate</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <select required name="bCCPlate" class="chosen-select input-md" width="'150px'" ng-model="m.CreateForm.data.fromBCCPlateId" chosen data-placeholder-text-single="'From'"
+                                                ng-options="key as value for (key, value) in m.BCCPlateDisplayData.Hash" ng-change="m.updatePlateRange()">
+                                            </select>
+                                            <span ng-show="m.ValidateCreateInput('bCCPlate', 'required')" class="text-danger">This field is required</span>
+                                            <select class="chosen-select input-md" width="'150px'" ng-model="m.CreateForm.data.toBCCPlateId" chosen data-placeholder-text-single="'To'"
+                                                ng-options="key as value for (key, value) in m.BCCPlateDisplayData.Hash" ng-change="m.updatePlateRange()">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Plates to Add</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <strong ng-if="m.supernatentListToAdd.length > 0" class="form-control force-noborder" ng-bind="m.supernatentListToAdd.join(', ')"></strong>
+                                            <strong ng-if="!m.supernatentListToAdd.length > 0 && m.CreateForm.data.fromBCCPlateId" class="form-control force-noborder" ng-bind="m.CreateForm.data.fromBCCPlateId"></strong>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+                            
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Day of Harvest</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <input type="text" name="dayOfHarvest" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="m.CreateForm.data.dayOfHarvest.dt"
+                                                is-open="m.CreateForm.data.dayOfHarvest.opened" ng-required="true" close-text="Close"
+                                                class="form-control" />
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="m.dp.dpOpen($event, 'CreateForm', 'dayOfHarvest')" class="btn btn-default">
+                                                    <em class="far fa-calendar-alt"></em>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <span ng-show="m.ValidateCreateInput('dayOfHarvest', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Operator
+                                    </label>
+                                    <div class="col-sm-6" ng-if="ActiveUserHash">
+                                        <select required class="chosen-select input-md" width="'300px'" name="operator" ng-model="m.CreateForm.data.operator" chosen data-placeholder-text-single="'Choose an operator'"
+                                            ng-options="key as value for (key, value) in ActiveUserHash">
+                                        </select>
+                                        <span ng-show="m.ValidateCreateInput('operator', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Method of Harvest
+                                    </label>
+                                    <div class="col-sm-6" ng-if="harvestMehtodList">
+                                        <select required name="harvestMehtod" class="chosen-select input-md" width="'300px'" chosen ng-model="m.CreateForm.data.harvestMehtod"
+                                            data-placeholder-text-single="'Choose a Harvest Method'" ng-options="p for p in harvestMehtodList">
+                                            </select>
+                                        <span ng-show="m.ValidateCreateInput('harvestMehtod', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Volume of Harvest [mL]</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <input type="number" min="0" required step="any" name="harvestVolume" class="form-control" ng-model="m.CreateForm.data.harvestVolume"
+                                            />
+                                            <span ng-show="m.ValidateCreateInput('harvestVolume', 'required')" class="text-danger">This field is required</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Reagent added to well
+                                    </label>
+                                    <div class="col-sm-6" ng-if="reagentAddedToWellList">
+                                        <select required name="reagentAddedToWell" class="chosen-select input-md" width="'300px'" chosen ng-model="m.CreateForm.data.reagentAddedToWell"
+                                            data-placeholder-text-single="'Choose a Reagent'" ng-options="p for p in reagentAddedToWellList">
+                                            </select>
+                                        <span ng-show="m.ValidateCreateInput('reagentAddedToWell', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Volume of Reagent [mL]</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <input type="number" min="0" required step="any" name="reagentVolume" class="form-control" ng-model="m.CreateForm.data.reagentVolume"
+                                            />
+                                            <span ng-show="m.ValidateCreateInput('reagentVolume', 'required')" class="text-danger">This field is required</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Notes</label>
+                                    <div class="col-sm-6">
+                                        <textarea class="form-control" rows="1" placeholder="" ng-model="m.CreateForm.data.notes">
+                                        </textarea>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="panel-footer text-center">
+                                <button class="btn btn-info" type="submit">
+                                    Create
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+
+        <uib-tab index="'EditTab'" ng-show="m.editForm.show">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-edit"></em>Edit Supernatent Plate
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form name="m.editForm.ui.validate" ng-submit="m.editForm.SubmitTab()" novalidate="" class="form-validate form-horizontal">
+                            <fieldset class="b0">
+                                <legend>Edit Supernatent Plate</legend>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Name</label>
+                                    <div class="col-sm-6">
+                                        <strong name="name" class="form-control force-noborder" ng-bind="m.editForm.name"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div ng-if="m.BCCPlateListReady" class="form-group">
+                                    <label class="col-sm-2 control-label">BCC Plate</label>
+                                    <div class="col-sm-6">
+                                        <a name="bCCPlate" ng-bind="m.editForm.bCCPlate" ng-href="#!/app/ade/bCCPlate?op=view&id={{m.editForm.bCCPlateId}}"
+                                            width="'300px'" class="form-control force-noborder">
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Day of Harvest</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <input type="text" name="" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="m.editForm.data.dayOfHarvest.dt"
+                                                is-open="m.editForm.data.dayOfHarvest.opened" ng-required="true" close-text="Close"
+                                                class="form-control" />
+                                            <span class="input-group-btn">
+                                     <button type="button" ng-click="m.dp.dpOpen($event, 'editForm', 'dayOfHarvest')" class="btn btn-default">
+                                        <em class="far fa-calendar-alt"></em>
+                                      </button>
+                                    </span>
+                                        </div>
+                                        <span ng-show="m.ValidateEditInput('dayOfHarvest', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Operator
+                                    </label>
+                                    <div class="col-sm-6" ng-if="ActiveUserHash">
+                                        <select class="chosen-select input-md" width="'300px'" ng-model="m.editForm.operator" chosen data-placeholder-text-single="'Choose an operator'"
+                                            ng-options="p.id as p.name for p in ActiveUserList">
+                                        </select>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Method of Harvest
+                                    </label>
+                                    <div class="col-sm-6" ng-if="harvestMehtodList">
+                                        <select required name="ENUM_methodOfHarvest" class="chosen-select input-md" width="'300px'" chosen ng-model="m.editForm.ENUM_methodOfHarvest"
+                                            data-placeholder-text-single="'Choose a stain type'" ng-options="p for p in harvestMehtodList">
+                                            </select>
+                                        <span ng-show="m.ValidateEditInput('ENUM_methodOfHarvest', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Volume of Harvest</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <input type="number" min="0" required step="any" name="harvestVolume" class="form-control" ng-model="m.editForm.harvestVolume"/>
+                                            <span ng-show="m.ValidateEditInput('harvestVolume', 'required')" class="text-danger">This field is required</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Reagent added to well
+                                    </label>
+                                    <div class="col-sm-6" ng-if="reagentAddedToWellList">
+                                        <select required name="ENUM_reagent" class="chosen-select input-md" width="'300px'" chosen ng-model="m.editForm.ENUM_reagent"
+                                            data-placeholder-text-single="'Choose a stain type'" ng-options="p for p in reagentAddedToWellList">
+                                            </select>
+                                        <span ng-show="m.ValidateEditInput('ENUM_reagent', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Volume of reagent</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <input type="number" min="0" required step="any" name="reagentVolume" class="form-control" ng-model="m.editForm.reagentVolume"
+                                            />
+                                            <span ng-show="m.ValidateEditInput('reagentVolume', 'required')" class="text-danger">This field is required</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Notes</label>
+                                    <div class="col-sm-6">
+                                        <textarea class="form-control" rows="1" placeholder="" ng-model="m.editForm.notes">
+                                        </textarea>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="panel-footer text-center">
+                                <button type="button" class="btn btn-info" ng-click="m.editForm.CancelTab()">Close</button>
+                                <button type="button" class="btn btn-info" ng-click="m.editForm.SubmitTab()">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+
+        <uib-tab index="'DetailTab'" ng-show="m.viewForm.show">
+            <uib-tab-heading>
+                <em class="fas fa-search fa-fw"></em>Supernatent Plate details
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form ng-submit="submitViewForm()" novalidate="" class="form-validate form-horizontal">
+                            <fieldset class="b0">
+                                <legend>View details</legend>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Name</label>
+                                    <div class="col-sm-6">
+                                        <strong name="name" class="form-control force-noborder" ng-bind="m.viewForm.name"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">BCC Plate</label>
+                                    <div class="col-sm-6">
+                                        <a name="bCCPlate" ng-bind="m.viewForm.bCCPlate" ng-href="#!/app/ade/bCCPlate?op=view&id={{m.viewForm.bCCPlateId}}"
+                                            width="'300px'" class="form-control force-noborder">
+                                        </a>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Activation</label>
+                                    <div class="col-sm-6">
+                                        <a name="activation" ng-bind="m.viewForm.activation" ng-href="#!/app/ade/activation?op=view&id={{m.viewForm.activationId}}"
+                                            width="'300px'" class="form-control force-noborder">
+                                        </a>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Project</label>
+                                    <div class="col-sm-6">
+                                        <a name="project" ng-bind="m.viewForm.project" ng-href="#!/app/projects/projects?viewId={{m.viewForm.projectId}}"
+                                            width="'300px'" class="form-control force-noborder">
+                                        </a>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Day of Harvest</label>
+                                    <div class="col-sm-6">
+                                        <strong name="dayOfHarvest" class="form-control force-noborder" ng-bind="m.viewForm.dayOfHarvest"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Operator</label>
+                                    <div class="col-sm-6">
+                                        <strong name="operator" class="form-control force-noborder" ng-bind="m.viewForm.operator"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Method of Harvest</label>
+                                    <div class="col-sm-6">
+                                        <strong name="harvestMehtod" class="form-control force-noborder" ng-bind="m.viewForm.harvestMehtod"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Volume of Harvest [mL]</label>
+                                    <div class="col-sm-6">
+                                        <strong name="harvestVolume" class="form-control force-noborder" ng-bind="m.viewForm.harvestVolume"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Reagent added to well</label>
+                                    <div class="col-sm-6">
+                                        <strong name="reagentAddedToWell" class="form-control force-noborder" ng-bind="m.viewForm.reagentAddedToWell"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Volume of Reagent [mL]</label>
+                                    <div class="col-sm-6">
+                                        <strong name="reagentVolume" class="form-control force-noborder" ng-bind="m.viewForm.reagentVolume"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Notes</label>
+                                    <div class="col-sm-6">
+                                        <strong name="notes" class="form-control force-noborder" ng-bind="m.viewForm.notes"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Created By</label>
+                                    <div class="col-sm-6">
+                                        <strong name="createdBy" class="form-control force-noborder" ng-bind="m.viewForm.createdBy"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Updated By</label>
+                                    <div class="col-sm-6">
+                                        <strong name="updatedBy" class="form-control force-noborder" ng-bind="m.viewForm.updatedBy"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Created At</label>
+                                    <div class="col-sm-6">
+                                        <strong name="createdAt" class="form-control force-noborder" ng-bind="m.viewForm.createdAt"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Updated At</label>
+                                    <div class="col-sm-6">
+                                        <strong name="updatedAt" class="form-control force-noborder" ng-bind="m.viewForm.updatedAt"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="panel-footer text-center">
+                                <button type="button" class="btn btn-info" ng-click="m.viewForm.CancelTab()">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+    </uib-tabset>
+</div>

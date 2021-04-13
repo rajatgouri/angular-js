@@ -1,0 +1,45 @@
+{
+    app: {
+        name: "LIMS Gate Service - Production"
+    },
+    expressSessionSecret: '$uper$ecret$e$$ionKey',
+    domain: {
+        user: "http://localhost:3002/",
+        data: "http://localhost:3001/"
+    },
+    db: {
+	    name: "SI_LIMS_PROD",
+	    password: "<Not Tracked In Git>",
+	    username: "lims_app",
+	    host: "limsprd-db1.sysimmune.net",
+	    port: 3306
+    },
+    azuread: {
+        tenantIdOrName: 'systimmuneinc.onmicrosoft.com',
+        redirectUrl: 'https://lims.systimmune.net/api/login',
+        clientID: 'b74ebc89-2ecc-4b18-99b2-d8a59eb9363e',
+        clientSecret: '<Not Tracked In Git>',
+        identityMetadata: 'https://login.microsoftonline.com/systimmuneinc.onmicrosoft.com/v2.0/.well-known/openid-configuration',
+        allowHttpForRedirectUrl: false,
+        responseType: 'code',
+        validateIssuer: false,
+        responseMode: 'query',
+        scope: ['User.Read']
+    },
+    helperAPI: "https://graphs.apps.systimmune.net/",
+    seqUtilsAPI: {
+        url: "http://sequence-utils.apps.systimmune.net/",
+        key: "<not tracked>"
+    },
+    ldap: {
+        server: {
+            url: 'ldaps://dc1.systimmune.net:636',
+            bindDn: '<nottracked>',
+            bindCredentials: '<nottracked>',
+            searchBase: 'OU=SystImmune,dc=systimmune,dc=net',
+            searchFilter: '(&(objectcategory=person)(objectclass=user)(|(samaccountname={{username}})(userPrincipalName={{username}})))',
+            searchAttributes: ['displayName', 'mail', 'userPrincipalName', 'department'],
+            sslCert: './config/env/ca.crt'
+        }
+    },
+}

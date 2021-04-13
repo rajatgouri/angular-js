@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="angle">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="{{app.description}}">
+    <title data-ng-bind="pageTitle">SystImmune Portal</title>
+    <!-- Bootstrap styles-->
+    <link rel="stylesheet" href="app/css/bootstrap.css" data-ng-if="!app.layout.isRTL">
+    <link rel="stylesheet" href="app/css/app.css" data-ng-if="!app.layout.isRTL">
+    <link rel="stylesheet" href="app/css/home.css">
+    <link rel="icon" href="app/img/favicon.ico">
+    <!-- Themes-->
+    <link rel="stylesheet" ng-href="{{app.layout.theme}}" data-ng-if="app.layout.theme">
+<link href="/css/vendor.css" rel="stylesheet"></head>
+
+<body data-ng-class="{ 'layout-fixed' : app.layout.isFixed, 'aside-collapsed-text': app.layout.isCollapsedText, 'aside-collapsed' : app.layout.isCollapsed, 'layout-boxed' : app.layout.isBoxed, 'layout-fs': app.useFullLayout, 'hidden-footer': app.hiddenFooter, 'layout-h': app.layout.horizontal, 'aside-float': app.layout.isFloat, 'offsidebar-open': app.offsidebarOpen, 'aside-toggled': app.asideToggled}">
+ 
+    <div data-preloader></div>
+    <div data-ui-view="" data-autoscroll="false" class="wrapper"></div>
+
+    <!-- Fix me, make it work with webpack..., still requires bower -->
+    <script src="lib/jquery/dist/jquery.js"></script>
+    <script src="lib/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="lib/datatables.net-plugins/sorting/natural.js"></script>
+    <script src="lib/datatables.net-responsive/js/dataTables.responsive.js"></script>
+    <script src="lib/datatables.net-colreorder/js/dataTables.colReorder.min.js"></script>
+    <script src="lib/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="lib/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="lib/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    <script src="lib/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="lib/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="lib/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <script src="lib/jszip/dist/jszip.min.js"></script>
+
+    <!--<script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>-->
+
+    <script type="text/javascript" src="https://jira.systimmune.net/s/6a0827e1671e1aadd5b717cf12c68835-T/mnbilf/711001/b6b48b2829824b869586ac216d119363/2.0.31/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=6047115a"></script>
+<script type="text/javascript" src="/vendor.a5f8567edaf23b0cb98f.js"></script><script type="text/javascript" src="/app.a5f8567edaf23b0cb98f.js"></script></body>
+
+</html>

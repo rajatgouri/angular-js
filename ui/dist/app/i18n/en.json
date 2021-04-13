@@ -1,0 +1,84 @@
+{
+    "dashboard": {
+        "WELCOME": "Welcome to {{appName}}",
+        "INTRO": "Home Dashboard",
+        "History": "Latest Activities",
+        "research": "Research Dashboard",
+        "pd": "Process Development Dashboard",
+        "io": "Immuno-Oncology Dashboard",
+        "ade": "Antibody Discovery Dashboard"
+    },
+    "offsidebar": {
+        "setting": {
+            "SETTINGS": "Settings",
+            "SIGNOUT": "Signout",
+            "THEME": "Theme Color",
+            "USERNAME": "Username",
+            "Preferences": "Preferences",
+            "layout": {
+                "Sidebar": "Sidebar",
+                "COLLAPSED": "Collapsed",
+                "Hover": "Hover",
+                "Float": "Float"
+            }
+        }
+    },
+    "sidebar": {
+        "WELCOME": "Welcome",
+        "heading": {
+            "HEADER": "Data",
+            "COMPONENTS": "Components",
+            "MORE": "More",
+            "PROJECT": "Project",
+            "HOME": "Home"
+        },
+        "nav": {
+            "RESEARCH": "Research",
+            "ADE": "Antibody Discovery",
+            "PD": "PD",
+            "Admin": "Administration",
+            "FACILITIES": "Facilities",
+            "DASHBOARD": "Dashboard",
+            "WIDGETS": "Widgets",
+            "PROJECT": "Project",
+            "HOME": "Home",
+            "QUERY": "Query",
+            "Document": "Change Log",
+            "DOCUMENTATION": "Documentation",
+            "proteinsummary": "Protein Summary",
+            "plasmids": "Plasmids",
+            "constructRequest": "Construct Requests",
+            "transfections": "Transfections",
+            "tr": "Transfection Request",
+            "purifications": "Purifications",
+            "proteins": "Proteins",
+            "par": "Protein Analysis Requests",
+            "proteinanalytics": "Protein Analytics",
+            "bindingData": "Protein Binding Data",
+            "scl": "Stable Cell Lines",
+            "pr": "Protein Requests",
+            "IO": "IO",
+            "ACCOUNTING": "Accounting",
+            "EQUIPMENTMANAGEMENT": "Equipment Management"
+        }
+    },
+    "sections": {
+        "bioreactorExperiment": "Bioreactor Experiments",
+        "bioreactor": "Bioreactors",
+        "bioreactorCondition": "Bioreactor Conditions",
+        "bioChemData": "Bioreactor Chem Data",
+        "bioVCDData": "Bioreactor VCD/Titer",
+        "bioreactorGraph": "Bioreactor Graphs",
+        "bioreactorPurification": "Bioreactor Purifications",
+        "bioreactorAnalytic": "Bioreactor Analytics",
+        "clExperiment": "Cell Line Experiments",
+        "clHarvest": "Cell Line Harvests",
+        "clPurification": "Cell Line Purifications",
+        "clPackage": "Cell Line Package",
+        "clAnalytic": "Cell Line Analytics",
+        "cellLineExperiment": "Cell Line Experiments",
+        "cellLineHarvest": "Cell Line Harvests",
+        "cellLinePurification": "Cell Line Purifications",
+        "cellLineAnalytic": "Cell Line Analytics"
+    }
+}

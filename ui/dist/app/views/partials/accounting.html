@@ -1,0 +1,286 @@
+<!--This partial HTML file holds the data structures for the tabs:
+        Billing by Project tab - Takes statements from BoA statement and Procurify and presents the data by project id 
+        BoA Statement - reads the table that holds the boa statement data
+        Procurify Statements - reads the table that holds the procurify statement data
+        Upload New Statements - allows user to select files to upload BoA files and Procurify files
+-->
+
+<h3>Project Billing</h3>
+<div class="panel panel-transparent">
+    <uib-tabset justified="true" class="bg-white p0" active="m.activeTab">
+        <uib-tab index="'AccountingStatements'">
+            <uib-tab-heading>
+                <em class="fas fa-tasks fa-fw responsive"></em> View Billing by Project
+            </uib-tab-heading>
+            <div class="table-responsive">
+                <div ng-if="m.AccountingStatements.dataReady">
+                    <table id="AccountingStatements" datatable dt-options="m.AccountingStatements.dtOptions" dt-columns="m.AccountingStatements.dtColumns" dt-column-defs="m.AccountingStatements.dtColDefs" dt-instance="m.AccountingStatements.DtInstCallback"
+                        class="table table-hover">
+                    </table>
+                </div>
+            </div>
+            <div class="row inside">
+                <h3 ng-if="!m.AccountingStatements.tableData.length">There are no entries in the database.</h3>
+            </div>
+            
+        </uib-tab>
+        <!--This is where you can individually look at the BoaStatements table data-->
+        <uib-tab index="'BoaStatements'" ng-click="m.BoaStatements.initData()">
+            <uib-tab-heading>
+                <em class="fas fa-tasks fa-fw responsive"></em> View Bank Of America Statements
+            </uib-tab-heading>
+            <div class="table-responsive">
+                <div ng-if="m.BoaStatements.dataReady">
+                    <table id="BoaStatements" datatable dt-options="m.BoaStatements.dtOptions" dt-columns="m.BoaStatements.dtColumns" dt-column-defs="m.BoaStatements.dtColDefs" dt-instance="m.BoaStatements.DtInstCallback"
+                        class="table table-hover">
+                    </table>
+                </div>
+            </div>
+            <div class="row inside">
+                <h3 ng-if="!m.BoaStatements.tableData.length">There are no entries in the database.</h3>
+            </div>
+
+            <div ng-show="true" class="panel-footer text-right container-fluid">
+                <div class="col-sm-8 pull-right">
+                    <!--<a class="btn btn-info" ng-click="m.BoaStatements.upload()">Import Statements</a>-->
+                </div>
+            </div>
+        </uib-tab>
+        <!--<uib-tab index="'BoaStatementsImportTab'" ng-show="m.BoaStatements.viewForm.show">
+            <uib-tab-heading>
+                <em class="fas fa-search fa-fw"></em>Bank of America Statement Import
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-validate form-horizontal" name="m.BoaStatements.ui.validate" ng-submit="m.BoaStatements.submitData()">
+                            <fieldset>
+                                <legend>Import Statement</legend>
+                            </fieldset>
+
+                            
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Import from Excel
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <div class="well well-sm">
+                                            <p>Data must be in Sheet1 and have the following columns:
+                                                <ul><li>Date, Description, Ammount, Department, Item Type, P.O. #</li></ul>
+                                            </p>
+                                            <p>The first 6 rows are reserved for the statement header</p>
+                                            <p>Columns may be left blank. </p>
+                                        </div>
+                                        <input id="boaFile" filestyle type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-button-text="Choose File" data-classbutton="btn btn-info" data-classinput="form-control inline"
+                                            ng-click="m.InitHandler()" style="display: inline" />
+                                        <button class="btn btn-purple" ng-show="m.ShowImportBtn" ng-click="m.BoaStatements.parseCSV()">Upload and Parse Data</button>
+                                        
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            
+                            <div class="panel-footer text-center">
+                                <button type="button" class="btn btn-info" ng-click="m.BoaStatements.viewForm.CancelTab()">Close</button>
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>-->
+
+        <!--<uib-tab index="'BoaStatementsImportTab'" ng-show="m.BoaStatements.viewForm.show">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-plus-square"></em>Bank of America Statement Import
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-validate form-horizontal" name="m.BoaStatements.ui.validate" >
+                            <fieldset>
+                                <legend>Bank of America Statement Import</legend>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Import from Excel
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <div class="well well-sm">
+                                            <p>Data must be in Sheet1 and have the following columns:
+                                                <ul><li>Date, Description, Ammount, Department, Item Type, P.O. #</li></ul>
+                                            </p>
+                                            <p>The first 6 rows are reserved for the statement header</p>
+                                            <p>Columns may be left blank. </p>
+                                        </div>
+                                        <input id="file" filestyle type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-button-text="Choose File" data-classbutton="btn btn-info" data-classinput="form-control inline"
+                                            ng-click="m.InitBoaHandler()" style="display: inline"/>
+                                        <button class="btn btn-purple" ng-show="m.ShowImportBtn" ng-click="m.BoaStatements.parseCSV()">Upload and Parse Data</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="panel-footer text-center">
+                                
+                                <button type="button" class="btn btn-info" ng-click="m.BoaStatements.viewForm.CancelTab()">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>-->
+        
+
+        <!--This is where you can individually look at the Procurify table data-->
+        <uib-tab index="'ProcurifyStatements'" ng-click="m.ProcurifyStatements.initData()">
+            <uib-tab-heading>
+                <em class="fas fa-tasks fa-fw responsive"></em> View Procurify Statements
+            </uib-tab-heading>
+            <div class="table-responsive">
+                <div ng-if="m.ProcurifyStatements.dataReady">
+                    <table id="ProcurifyStatements" datatable dt-options="m.ProcurifyStatements.dtOptions" dt-columns="m.ProcurifyStatements.dtColumns" dt-column-defs="m.ProcurifyStatements.dtColDefs" dt-instance="m.ProcurifyStatements.DtInstCallback"
+                        class="table table-hover">
+                    </table>
+                </div>
+            </div>
+            <div class="row inside">
+                <h3 ng-if="!m.ProcurifyStatements.tableData.length">There are no entries in the database.</h3>
+            </div>
+
+            <div ng-show="true" class="panel-footer text-right container-fluid">
+                <div class="col-sm-8 pull-right">
+                    <!--<a class="btn btn-info" ng-click="m.ProcurifyStatements.upload()">Import Statements</a>-->
+                </div>
+            </div>
+        </uib-tab>
+
+        <!--<uib-tab index="'ProcurifyStatementsImportTab'" ng-show="m.ProcurifyStatements.viewForm.show">
+            <uib-tab-heading>
+                <em class="fas fa-search fa-fw"></em>Procurify Statement Upload
+            </uib-tab-heading>
+
+            <div class="panel panel-default">
+                <div class="panel-heading margin-left-10">
+                    <h3 class="panel-title">Import from CSV</h3>
+                </div>
+                <div class="panel-body margin-left-10">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <h4>Data must be in Sheet1 and have the following columns:</h4>
+                                <ul><li>Order ID, Line Number, Requester, Submitted Date, Last Modified Date</li>
+                                    <li>Received Date, PO ID, Purchase Date, Approval Date, Approver</li>
+                                    <li>Due Date, Invoice Date, Vendor, Item, SKU</li>
+                                    <li>Quantity, Unit, Unit Cost, Currency, Line Cost</li>
+                                    <li>Status, Location, Location ID, Department, Department ID</li>
+                                    <li>Account Code, Account Description, Note, External ID</li>
+                                    <li>Project and Additional Projects or those not listed. Please separate by commas</li>
+                                </ul>
+                            <h5>Columns may be left blank. </h5>
+
+                            <input id="ProcurifyFile" filestyle type="file" accept=".csv" data-button-text="Choose File" data-classbutton="btn btn-info" data-classinput="form-control inline"
+                                ng-click="m.InitProcurifyHandler()" style="display: inline" />
+                            <button class="btn btn-purple" ng-show="m.ShowImportBtn" ng-click="m.ProcurifyStatements.parseCSV()">Upload and Parse Data</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer text-center">
+                    <button type="button" class="btn btn-info" ng-click="m.ProcurifyStatements.viewForm.CancelTab()">Close</button>
+                </div>
+            </div>
+        </uib-tab>-->
+
+        <uib-tab index="'ImportTab'">
+            <uib-tab-heading>
+                <em class="fas fa-upload fa-fw"></em>Import Data
+            </uib-tab-heading>
+            <div class="content-wrapper">
+                <uib-tabset justified="true" class="bg-white p0 tab-no-border">
+                    <uib-tab index="'ProcurifyUpload'">
+                        <uib-tab-heading>
+                            <em class="fa fa-upload fa-fw"></em>Procurify Upload
+                        </uib-tab-heading>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form class="form-validate form-horizontal" name="m.Import.ui.validate" ng-submit="m.Import.SubmitTabProcurify()">
+                                        <fieldset>
+                                            <legend>Import Statements</legend>
+                                        </fieldset>
+            
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">
+                                                    Import from CSV
+                                                </label>
+                                                <div class="col-sm-6">
+                                                    <div class="well well-sm">
+                                                        <p>Data must be in Sheet1 and have the following columns:
+                                                            <ul><li>Order ID, Line Number, Requester, Submitted Date, Last Modified Date</li>
+                                                            <li>Received Date, PO ID, Purchase Date, Approval Date, Approver</li>
+                                                            <li>Due Date, Invoice Date, Vendor, Item, SKU</li>
+                                                            <li>Quantity, Unit, Unit Cost, Currency, Line Cost</li>
+                                                            <li>Status, Location, Location ID, Department, Department ID</li>
+                                                            <li>Account Code, Account Description, Note, External ID</li>
+                                                            <li>Project and Additional Projects or those not listed. Please separate by commas</li>
+                                                            </ul>
+                                                        </p>
+                                                        <p>Columns may be left blank. </p>
+                                                    </div>
+                                                    <input id="fileProcurify" filestyle="" type="file" accept=".csv" data-button-text="Choose File" data-classbutton="btn btn-info" data-classinput="form-control inline"
+                                                        ng-click="m.InitProcurifyHandler()" style="display: inline" />
+                                                    <button class="btn btn-purple" ng-show="m.ShowImportBtn" ng-click="m.Import.parseCSVprocurify()">Upload and Parse Data</button>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </uib-tab>
+                    <uib-tab index="'BOAupload'">
+                        <uib-tab-heading>
+                            <em class="fa fa-upload fa-fw"></em>BOA Upload
+                        </uib-tab-heading>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form class="form-validate form-horizontal" name="m.Import.ui.validate" ng-submit="m.Import.SubmitTabBOA()">
+                                        <fieldset>
+                                            <legend>Import Statements</legend>
+                                        </fieldset>
+            
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">
+                                                    Import from Excel
+                                                </label>
+                                                <div class="col-sm-6">
+                                                    <div class="well well-sm">
+                                                        <p>Data must be in Sheet1 and have the following columns:
+                                                            <ul>
+                                                                <li>Purchase Date, Description, Amount, Department, Item Type, PO Number</li>
+                                                            </ul>
+                                                        </p>
+                                                        <p>Columns may be left blank. </p>
+                                                    </div>
+                                                    <input id="fileBOA" filestyle type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-button-text="Choose File" data-classbutton="btn btn-info" data-classinput="form-control inline"
+                                                        ng-click="m.InitBoaHandler()" style="display: inline"/>
+                                                    <button class="btn btn-purple" ng-show="m.ShowImportBtn" ng-click="m.Import.parseCSVBOA()">Upload and Parse Data</button>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </uib-tab>
+
+    </uib-tabset>
+</div>

@@ -1,0 +1,267 @@
+<h3>Tasks</h3>
+<div class="panel panel-transparent">
+    <uib-tabset justified="true" class="bg-white p0" active="m.activeTab">
+        <uib-tab index="'Timeline'">
+            <uib-tab-heading>
+                <em class="far fa-clock fa-fw responsive"></em> Timeline
+            </uib-tab-heading>
+            <div class="row">
+                <div class="col-md-12">
+                    <script type='text/javascript' src='https://tableau.systimmune.net/javascripts/api/viz_v1.js'></script>
+                    <div class='tableauPlaceholder' style='width: 100%; height: 1000px;'>
+                        <object class='tableauViz' width='100%' height='1000' style='display:none;'>
+                            <param name='host_url' value='https%3A%2F%2Ftableau.systimmune.net%2F' />
+                            <param name='embed_code_version' value='3' />
+                            <param name='site_root' value='' />
+                            <param name='name' value='IOtimeline081618&#47;Dashboard1' />
+                            <param name='tabs' value='no' />
+                            <param name='toolbar' value='yes' />
+                            <param name='showAppBanner' value='false' />
+                            <param name='filter' value='iframeSizedToWindow=true' />
+                        </object>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'ViewAllTab'">
+            <uib-tab-heading>
+                <em class="far fa-clock fa-fw responsive"></em> Table View
+            </uib-tab-heading>
+            <div class="table-responsive">
+                <div ng-if="m.dataReady">
+                    <table datatable dt-options="m.dtOptions" dt-columns="m.dtColumns" dt-column-defs="m.dtColDefs" dt-instance="m.DtInstCallback"
+                        class="table table-hover">
+                    </table>
+                </div>
+            </div>
+            <div ng-show="!m.tableData">
+                <h3>Loading...</h3>
+            </div>
+            <div ng-show="m.tableData && m.tableData.length == 0">
+                <h3>No matching Tasks found</h3>
+            </div>
+            <div ng-show="m.lastRowClicked" class="panel-footer text-right container-fluid">
+                <div class="col-sm-8 pull-right">
+                    <a class="btn btn-info" ng-click="m.viewDetail()">View Detail</a>
+                    <a class="btn btn-info" permission permission-only="['writeIO', 'adminIO']" ng-click="m.editDetail()">Edit</a>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'CreateTab'" permission permission-only="['writeIO', 'adminIO']" ng-click="m.CreateForm.initTab()">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-plus-square"></em>Create Task
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-validate form-horizontal" name="m.CreateForm.ui.validate" ng-submit="m.CreateForm.SubmitTab()">
+                            <fieldset>
+                                <legend>Create Task</legend>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Experiment Name
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <input required name="name" type="text" placeholder="Experiment Name" class="form-control" ng-model="m.CreateForm.data.name">
+                                        <span ng-show="m.ValidateCreateInput('name', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Start Date</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <input type="text" name="startDate" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="m.CreateForm.data.startDate.dt"
+                                                is-open="m.CreateForm.data.startDate.opened" ng-required="true" close-text="Close" class="form-control" />
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="m.dp.dpOpen($event, 'CreateForm', 'startDate')" class="btn btn-default">
+                                                    <em class="far fa-calendar-alt"></em>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <span ng-show="m.ValidateCreateInput('startDate', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">End Date</label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group mb">
+                                            <input type="text" name="endDate" uib-datepicker-popup="{{m.dp.dpFormat}}" ng-model="m.CreateForm.data.endDate.dt"
+                                                is-open="m.CreateForm.data.endDate.opened" ng-required="true" close-text="Close" class="form-control" />
+                                            <span class="input-group-btn">
+                                                <button type="button" ng-click="m.dp.dpOpen($event, 'CreateForm', 'endDate')" class="btn btn-default">
+                                                    <em class="far fa-calendar-alt"></em>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <span ng-show="m.ValidateCreateInput('endDate', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Project
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <select required name="stableCellLineId" class="chosen-select input-md" width="'300px'" ng-model="m.CreateForm.data.stableCellLineId"
+                                            chosen data-placeholder-text-single="'Choose a Stable Cell Line'" ng-options="key as value.name for (key, value) in m.StableCellLineDisplayData.ListHash">
+                                            <option>N/A</option>
+                                        </select>
+                                        <span ng-show="m.ValidateCreateInput('stableCellLineId', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Priority
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <div class="checkbox c-checkbox">
+                                            <label>
+                                                <input type="checkbox" ng-model="m.CreateForm.data.priority" ng-true-value="'Y'" ng-false-value="'N'" />
+                                                <span class="fa fa-check"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Instrument
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <select required name="stableCellLineId" class="chosen-select input-md" width="'300px'" ng-model="m.CreateForm.data.stableCellLineId"
+                                            chosen data-placeholder-text-single="'Choose a Stable Cell Line'" ng-options="key as value.name for (key, value) in m.StableCellLineDisplayData.ListHash">
+                                            <option>N/A</option>
+                                        </select>
+                                        <span ng-show="m.ValidateCreateInput('stableCellLineId', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Task Type
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <select required name="stableCellLineId" class="chosen-select input-md" width="'300px'" ng-model="m.CreateForm.data.stableCellLineId"
+                                            chosen data-placeholder-text-single="'Choose a Stable Cell Line'" ng-options="key as value.name for (key, value) in m.StableCellLineDisplayData.ListHash">
+                                            <option>N/A</option>
+                                        </select>
+                                        <span ng-show="m.ValidateCreateInput('stableCellLineId', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Resource
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <select required name="stableCellLineId" class="chosen-select input-md" width="'300px'" ng-model="m.CreateForm.data.stableCellLineId"
+                                            chosen data-placeholder-text-single="'Choose a Stable Cell Line'" ng-options="key as value.name for (key, value) in m.StableCellLineDisplayData.ListHash">
+                                            <option>N/A</option>
+                                        </select>
+                                        <span ng-show="m.ValidateCreateInput('stableCellLineId', 'required')" class="text-danger">This field is required</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="panel-footer text-center">
+                                <button class="btn btn-info" type="submit">
+                                    Create
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'EditTab'" ng-show="m.editForm.show">
+            <uib-tab-heading>
+                <em class="far fa-fw fa-edit"></em>Edit Task
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form name="m.editForm.ui.validate" ng-submit="m.editForm.SubmitTab()" novalidate="" class="form-validate form-horizontal">
+                            <fieldset class="b0">
+                                <legend>Edit Task</legend>
+                            </fieldset>
+                            
+                            <div class="panel-footer text-center">
+                                <button type="button" class="btn btn-purple" ng-click="m.editForm.DenyReq()" ng-disabled="m.editForm.data.requestStatus != 'Submitted'">Deny</button>
+                                <button type="button" class="btn btn-danger" ng-click="m.editForm.DeleteReq()" ng-disabled="m.editForm.data.requestStatus == 'Completed'">Delete</button>
+                                <button type="button" class="btn btn-info" ng-click="m.editForm.CancelTab()">Close</button>
+                                <button type="button" class="btn btn-info" ng-click="m.editForm.SubmitTab()">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'DetailTab'" ng-show="m.viewForm.show">
+            <uib-tab-heading>
+                <em class="fas fa-search fa-fw"></em>Task details
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form novalidate="" class="form-validate form-horizontal">
+                            <fieldset class="b0">
+                                <legend>View details</legend>
+                            </fieldset>
+                           
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Created By</label>
+                                    <div class="col-sm-6">
+                                        <strong name="createdBy" class="form-control force-noborder" ng-bind="UserHash[m.viewForm.data.createdBy]"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Updated By</label>
+                                    <div class="col-sm-6">
+                                        <strong name="updatedBy" class="form-control force-noborder" ng-bind="UserHash[m.viewForm.data.updatedBy]"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Created At</label>
+                                    <div class="col-sm-6">
+                                        <strong name="createdAt" class="form-control force-noborder" ng-bind="m.viewForm.data.createdAt"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Updated At</label>
+                                    <div class="col-sm-6">
+                                        <strong name="updatedAt" class="form-control force-noborder" ng-bind="m.viewForm.data.updatedAt"></strong>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="panel-footer text-center">
+                                <button type="button" class="btn btn-info" ng-click="m.viewForm.CancelTab()">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+    </uib-tabset>
+</div>

@@ -1,0 +1,12 @@
+{
+    app: {
+        name: "LIMS User Service - Production"
+    },
+    db: {
+	    name: "SI_LIMS_PROD",
+	    password: "<Not Tracked In Git>",
+	    username: "lims_app",
+	    host: "limsprd-db1.sysimmune.net",
+	    port: 3306
+    }
+}

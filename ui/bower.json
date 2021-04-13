@@ -1,0 +1,20 @@
+{
+  "name": "systimmune-lims-ui",
+  "version": "0.1.0",
+  "dependencies": {
+    "bootstrap": "3.3.7",
+    "angular-datatables": "0.6.4",
+    "datatables.net-buttons-dt": "1.5.3",
+    "datatables.net-buttons-bs": "1.5.3",
+    "datatables.net-colreorder-dt": "1.5.1",
+    "datatables.net-responsive-dt": "2.2.3",
+    "datatables.net-plugins": "^1.10.18",
+    "jszip": "3.1.5",
+    "sequence-viewer": "^0.2.18",
+    "fullcalendar": "3.10.0",
+    "fullcalendar-scheduler": "1.9.4"
+  },
+  "resolutions": {
+    "fullcalendar": "3.10.0"
+  }
+}

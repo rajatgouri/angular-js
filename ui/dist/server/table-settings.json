@@ -1,0 +1,1176 @@
+{ 
+    "tableFriendlyNames": {
+        "protein": "Proteins",
+        "constructRequest": "Construct Requests",
+        "plasmids": "Plasmids",
+        "plasmid": "Plasmids",
+        "transfectionRequest": "Transfection Requests",
+        "querylibs": "Queries",
+        "wellRescue": "Well Rescues",
+        "cloningAndSequence": "Cloning And Sequences",
+        "cloningSequence": "Cloning Sequences",
+        "discoveryPlasmid": "Discovery Plasmids",
+        "humanizationPlasmid": "Humanization Plasmids",
+        "discoveryTransfection": "Discovery Transfections",
+        "humanizationTransfection": "Humanization Transfections",
+        "plate": "Plates",
+        "well": "Wells",
+        "activation": "Activations",
+        "transfection": "Transfections",
+        "proteinPurification": "Protein Purifications",
+        "proteinSummary": "Protein Summary",
+        "bindingData": "Protein Binding Data",
+        "kineticRequest": "Octet Analysis Request",
+        "analyticalSec": "Analytical SECs",
+        "adeTransfection": "ADE Transfections",
+        "bCCPlate": "BCC Plates",
+        "bCellSource": "B Cell Sources",
+        "supernatentPlate": "Supernatent Plates",
+        "mixCondition": "Mix Conditions",
+        "cultureCondition": "Culture Conditions",
+        "harvesting": "Harvesting",
+        "transfectionHarvest": "Tranfection Harvest",
+        "proteinAnalysisRequest": "Protein Analysis Request",
+        "proteinRequest": "Protein Requests",
+        "sort": "Sort",
+        "stableCellLine": "Stable Cell Line",
+        "project": "Projects",
+        "proteinAnalysis": "Protein Analysis",
+        "cellLinePurification": "Cell Line Purifications",
+        "cellLineHarvest": "Cell Line Harvests",
+        "cellLineExperiment": "Cell Line Experiments",
+        "cellLineAnalytic": "Cell Line Analytics",
+        "cellLinePackage": "Cell Line Packages",
+        "cellExpansion": "Cell Expansions",
+        "cellExpansionData": "Cell Expansion Data",
+        "bioreactorExperiment": "Bioreactor Experiments",
+        "bioreactorChemData": "Bioreactor Chem Data",
+        "bioreactorCondition": "Bioreactor Conditions",
+        "bioreactorVCDData": "Bioreactor VCD Data",
+        "bioreactor": "Bioreactors",
+        "bioreactorPurification": "Bioreactor Purifications",
+        "bioreactorAnalytic": "Bioreactor Analytics",
+        "BoaStatements": "Bank of America Statements",
+        "pdAnalysis": "PD Analytics",
+        "task": "Tasks",
+        "reagent": "Reagents",
+        "experiment": "Experiment Log",
+        "cellSource": "Cell Sourcing",
+        "donor": "Donors",
+        "circuit": "Circuits",
+        "equipment": "Equipment",
+        "instrument": "Instruments",
+        "viCellData": "ViCell Data",
+        "plasmidLot": "Plasmid Lots",
+        "ctThaw": "Cell Therapy Thaw Log",
+        "ctFreeze": "Cell Therapy Freeze Log",
+        "ctVessel": "Vessels",
+        "reservation": "Scheduling",
+        "constructStatus": "Construct Statuses",
+        "adTransfectionRequest": "AD Transfection Request",
+        "TimePerProject": "Time Per Project",
+        "PayPeriod": "Pay Period",
+        "AccountingStatements": "Accounting Statements",
+        "ProcurifyStatements": "Procurify Statements",
+        "TimeSpentCategories": "Time Spent Categories",
+        "FreezerProLog": "Freezer Pro Log"
+    },
+    "omitCols": {
+        "project": [
+            "targets",
+            "goals",
+            "homePage",
+            "Users"
+        ],
+        "constructRequest": [
+            "plasmidId",
+            "completed"
+        ],
+        "plasmid": [
+            "userId",
+            "reprep",
+            "constructStatusId",
+            "concentration"
+        ],
+        "protein": [
+            "userId",
+            "userDisplayName",
+            "rank",
+            "typeCode",
+            "projectId"
+        ],
+        "transfectionRequest": [
+            "requestedDate",
+            "requestedHarvestDate",
+            "createdBy",
+            "approvedBy"
+        ],
+        "transfection": [
+            "TransfectionRequest.name",
+            "TransfectionRequest.id",
+            "TransfectionRequest.Protein.id"
+        ],
+        "wellRescue": [
+            "ENUM_wellIndex",
+            "ENUM_wellType"
+        ],
+        "cloningSequence": [
+            "id",
+            "vlClone",
+            "vhClone"
+        ],
+        "proteinAnalysisRequest": [
+            "createdBy"
+        ],
+        "proteinAnalysisRequestExport": [
+            "createdBy",
+            "updatedAt",
+            "id",
+            "concentrationOverride",
+            "status"
+        ],
+        "mixConditionExport": [
+            "eL4B5well",
+            "perOfTsn"
+        ],
+        "proteinAnalysis": [
+            "operators"
+        ],
+        "proteinPurification": [
+            "loadVolume",
+            "ENUM_BEXMethod",
+            "BEXNotes",
+            "BEXconc",
+            "eluateConc",
+            "eluateTRISVolume",
+            "transfectionId",
+            "ENUM_secondColumnUsed",
+            "createdBy",
+            "Transfection.TransfectionRequest.id",
+            "Transfection.TransfectionRequest.Protein.id",
+            "Transfection.TransfectionRequest.name",
+            "Transfection.TransfectionRequest.updatedAt",
+            "volumeRemaining"
+        ],
+        "bCellSource": [
+            "Activation",
+            "createdBy"
+        ],
+        "bCCPlate": [
+            "sortId",
+            "Sort.MixCondition.id",
+            "Sort.MixCondition.name",
+            "Sort.BCellSource.id",
+            "Sort.BCellSource.name",
+            "Sort.MixCondition.Activation.id",
+            "Sort.MixCondition.Activation.projectId",
+            "Sort.MixCondition.Activation.Project.id"
+        ],
+        "supernatentPlate": [
+            "bCCPlateId",
+            "BCCPlate.Sort.id",
+            "BCCPlate.Sort.name",
+            "BCCPlate.Sort.MixCondition.id",
+            "BCCPlate.Sort.MixCondition.name",
+            "BCCPlate.Sort.MixCondition.Activation.id",
+            "BCCPlate.Sort.MixCondition.Activation.Project.id"
+        ],
+        "proteinSummary": [
+            "proteinId",
+            "plasmidIds"
+        ],
+        "discoveryPlasmid": [
+            "version",
+            "wellRescueId"
+        ],
+        "humanizationPlasmid": [
+            "version",
+            "WellRescue.SupernatentPlate.BCCPlate.Sort.Activation.Project.id"
+        ],
+        "humanizationTransfection": [
+            "heavyChainDiscoveryPlasmidId",
+            "heavyChainHumanizationPlasmidId",
+            "lightChainDiscoveryPlasmidId",
+            "lightChainHumanizationPlasmidId",
+            "WellRescue.SupernatentPlate.BCCPlate.Sort.Activation.Project.id"
+        ],
+        "discoveryTransfection": [
+            "heavyChainPlasmidConcentration",
+            "lightChainPlasmidConcentration",
+            "lightChainDiscoveryPlasmidId",
+            "heavyChainDiscoveryPlasmidId",
+            "wellRescueId",
+            "proteinId",
+            "lightChainProteinPlasmidId",
+            "heavyChainProteinPlasmidId"
+        ],
+        "stableCellLine": [
+            "proteinId",
+            "plasmidId"
+        ],
+        "cellLineExperiment": [
+            "StableCellLine.Protein.Project.id",
+            "StableCellLine.Protein.id",
+            "proteinId",
+            "minipoolReference"
+        ],
+        "cellLineHarvest": [
+            "cellLineExperimentId",
+            "experiment.StableCellLine.Protein.Project.id",
+            "experiment.id",
+            "experiment.StableCellLine.id",
+            "experiment.minipoolReference",
+            "experiment.minipool.id"
+        ],
+        "cellLineAnalytic": [
+            "name",
+            "cellLinePurificationId",
+            "CellLinePurification.CLDHarvest.experiment.StableCellLine.Protein.Project.id",
+            "CellLinePurification.CLDHarvest.id",
+            "other"
+        ],
+        "cellLinePackage": [
+            "CellLineExperiments"
+        ],
+        "cellLinePurification": [
+            "cLDHarvestId"
+        ],
+        "bioreactorExperiment": [
+            "stableCellLineId",
+            "StableCellLine.Protein.Project.id",
+            "StableCellLine.id"
+        ],
+        "bioreactor": [
+            "bioreactorConditionId",
+            "BioreactorExperiment.StableCellLine.id",
+            "BioreactorExperiment.StableCellLine.Protein.Project.id",
+            "cellLineHarvestId",
+            "ENUM_pointStyle",
+            "ENUM_lineColor"
+        ],
+        "bioreactorCondition": [
+            "feedMediumTiming",
+            "Bioreactors.name"
+        ],
+        "bioreactorChemData": [
+            "isEdited"
+        ],
+        "bioreactorVCDData": [
+            "isEdited"
+        ],
+        "bioreactorPurification": [
+            "Bioreactors",
+            "AcidTreatmentData",
+            "ColumnPurificationData",
+            "MembranePurificationData",
+            "UFDFData",
+            "projectId",
+            "bioreactorExperimentId"
+        ],
+        "bioreactorAnalytic": [
+            "other",
+            "nrCESDSAnalyzedBy",
+            "rCESDSAnalyzedBy",
+            "cIEFAnalyzedBy",
+            "iEXAnalyzedBy",
+            "bioreactorPurificationId",
+            "iEXBasic",
+            "iEXAcidic",
+            "cIEFpIRange",
+            "rCESDSHC",
+            "rCESDSLC",
+            "rCESDSNG",
+            "nrCESDSNG"
+        ],
+        "cellExpansion": [
+            "CLDHarvest.experiment.StableCellLine.Protein.Project.id",
+            "CLDHarvest.experiment.id",
+            "CLDHarvest.experiment.StableCellLine.id",
+            "CLDHarvest.experiment.minipool.id",
+            "cellLineHarvestId"
+        ],
+        "equipment": [
+            "circuitId"
+        ],
+        "proteinRequest": [
+            "ProteinPurification",
+            "Protein",
+            "proteinId",
+            "proteinPurificationId",
+            "friendlyName",
+            "volumeAmount",
+            "volumeUsed"
+        ],
+        "user": [
+            "Roles",
+            "resetPasswordToken",
+            "resetPasswordExpires",
+            "mailNickname",
+            "access_token_expires_on",
+            "tableHistories"
+        ],
+        "FreezerProLog": [
+            "updatedAt"
+        ]
+    },
+    "commonOmitCols": [
+        "isDeleted",
+        "properties",
+        "references",
+        "updatedBy",
+        "createdAt"
+    ],
+    "hideCols": {
+        "bioreactorAnalytic": [
+            "rCESDSHMW",
+            "nrCESDSMP",
+            "nrCESDSHMW",
+            "SEChmw"
+        ],
+        "bioreactor": [
+            "notes"
+        ],
+        "cellLineAnalytic": [
+            "iEXBasic",
+            "iEXAcidic",
+            "cIEFpIRange",
+            "rCESDSHMW",
+            "rCESDSHC",
+            "rCESDSLC",
+            "nrCESDSMP",
+            "nrCESDSHMW"
+        ],
+        "cellLineHarvest": [
+            "ENUM_titerMethod"
+        ],
+        "mixCondition": [
+            "ENUM_eL4B5Lot",
+            "ENUM_fbsLot",
+            "eL4B5well",
+            "ENUM_plateType",
+            "wellVolume",
+            "daysInCulture",
+            "mlPerPlate"
+        ],
+        "analyticalSec": [
+            "firstStepPOI",
+            "firstStepHMW",
+            "firstStepLMW"
+        ],
+        "proteinSummary": [
+            "projectDescription",
+            "plasmidDescription",
+            "project"
+        ],
+        "proteinRequest": [
+            "massAmount"
+        ],
+        "user": [
+            "email"
+        ],
+        "viCell": [],
+        "bindingData": [
+            "notes"
+        ],
+        "constructStatus": [
+            "designed",
+            "ordered",
+            "cloned",
+            "maxiprep",
+            "sequenceReviewed",
+            "sequenceVerified",
+            "completed"
+        ]
+    },
+    "columnTranslator": {
+        "user": {
+            "displayName": "Name",
+            "username": "User Name",
+            "provider": "Auth Provider",
+            "updatedAt": "Last Activity",
+            "roles": "Roles",
+            "department": "Department"
+        },
+        "project": {
+            "leaders": "Project Leaders",
+            "platforms": "Platforms",
+            "stages": "Stage",
+            "status": "Status"
+        },
+        "constructRequest": {
+            "requestedBy": "Requester",
+            "approvedBy": "Approved",
+            "department": "Department",
+            "newSequence": "New Sequence",
+            "numConstructs": "# Constructs",
+            "estimatedTimeline": "Estimated Timeline",
+            "projectId": "Project",
+            "name": "Request #",
+            "notes": "Notes",
+            "progress": "Progress",
+            "status": "Status"
+        },
+        "constructStatus": {
+            "requesterId": "Requester",
+            "department": "Department",
+            "vector": "Vector",
+            "requestDate": "Request Date",
+            "priority": "Priority",
+            "assignedTo": "Assigned To",
+            "sequenceReviewed": "Sequence Reviewed",
+            "designed": "Designed",
+            "cloned": "Cloned",
+            "ordered": "Frag Ordered",
+            "maxiprep": "Maxiprep/Glycerol",
+            "sequenceVerified": "Sequence Verified",
+            "completed": "Completed",
+            "project": "Project",
+            "name": "Request #",
+            "notes": "Notes",
+            "plasmid": "Plasmid",
+            "progress": "Progress",
+            "status": "Status"
+        },
+        "plasmid": {
+            "name": "Plasmid Name",
+            "projectId": "Project",
+            "description": "Description",
+            "ENUM_vector": "Vector",
+            "ENUM_bacteria": "Bacteria",
+            "ENUM_plasmidTag": "Plasmid Tags",
+            "ENUM_mammalian": "Selection",
+            "concentration": "Concentration [μg/mL]",
+            "completed": "Completed?"
+        },
+        "protein": {
+            "name": "Protein Name",
+            "projectId": "Project",
+            "description": "Description",
+            "ENUM_moleculeType": "Molecule Type",
+            "molecularWeight": "Molecular Weight [Da]",
+            "molarExtCoefficient": "Extinction Coefficient",
+            "antigen": "Antigen",
+            "nanodrop": "Nanodrop E1%"
+        },
+        "transfectionRequest": {
+            "proteinId": "Protein Name",
+            "ENUM_transfectionTag": "Purification Tag",
+            "ENUM_transfectionScale": "Scale",
+            "ENUM_transfectionType": "Transfection Type",
+            "ENUM_transfectionCellLine": "Cell Line",
+            "purifyOrNot": "Purify",
+            "ENUM_transfectionPurificationMethod": "Purification Method",
+            "bufferExchange": "Buffer Exchange",
+            "requesterNotes": "Req. Notes",
+            "notes": "Admin Notes",
+            "requesterId": "Requested By",
+            "requestStatus": "Status",
+            "dnaReady": "DNA Ready"
+        },
+        "transfection": {
+            "name": "Transfection Lot",
+            "trqId": "Request #",
+            "transfectionDate": "Transfection Date",
+            "harvestDate": "Harvest Date",
+            "octetTiter": "Titer [μg/mL]",
+            "transfectionNotes": "Transfection Notes",
+            "TransfectionRequest.Protein.ENUM_moleculeType": "Molecule Type",
+            "TransfectionRequest.Protein.name": "Protein Name",
+            "TransfectionRequest.requestStatus": "Request Status",
+            "approved": "Approved",
+            "trStatus": "Request Status"
+        },
+        "proteinPurification": {
+            "Transfection.name": "Transfection",
+            "purificationDate": "Purification Date",
+            "purifiedBy": "Purified By",
+            "loadVolume": "Load Volume (mL)",
+            "purifiedProtein": "Purified Protein [mg/mL]",
+            "POI": "% POI (Final Step)",
+            "name": "Purification",
+            "ENUM_secondColumnUsed": "Second Column Used",
+            "ENUM_firstColumnUsed": "First Column Used",
+            "eluateTRISVolume": "Eluate+TRIS Volume (if any) (mL)",
+            "eluateConc": "Eluate conc. [mg/mL]",
+            "ENUM_BEXMethod": "BEX Method",
+            "BEX": "BEX",
+            "BEXconc": "BEX conc. [mg/mL]",
+            "BEXNotes": "BEX Notes",
+            "finalConcentration": "Final Concentration (mg/mL)",
+            "finalVolume": "Final Volume (mL)",
+            "Transfection.TransfectionRequest.Protein.pI": "pI",
+            "Transfection.TransfectionRequest.Protein.name": "Protein",
+            "Transfection.TransfectionRequest.Protein.nanoDrop": "NanoDrop E1%",
+            "Transfection.TransfectionRequest.Protein.ENUM_moleculeType": "Protein Type",
+            "Transfection.TransfectionRequest.Protein.molecularWeight": "Molecular Weight [Da]",
+            "Transfection.TransfectionRequest.requestStatus": "Request Status",
+            "Transfection.octetTiter": "Octet Titer",
+            "volumeRemaining": "Volume Remaining [mL]"
+        },
+        "analyticalSec": {
+            "proteinPurificationId": "Protein Purification",
+            "ASECDate": "Date",
+            "firstStepPOI": "% POI (first step)",
+            "firstStepHMW": "% HMW (first step)",
+            "firstStepLMW": "% LMW (first step)",
+            "finalStepPOI": "% POI",
+            "finalStepHMW": "% HMW",
+            "finalStepLMW": "% LMW",
+            "ASECNote": "Notes"
+        },
+        "proteinRequest": {
+            "proteinPurificationId": "Purification",
+            "proteinId": "Protein",
+            "requestStatus": "Status",
+            "amount": "Amount [μL]",
+            "purification": "Purification",
+            "protein": "Protein",
+            "volumeRequested": "Requested Volume [μL]",
+            "massAmount": "Requested Mass [μg]"
+        },
+        "harvesting": {
+            "sortId": "Plate Number",
+            "supHarvestType": "Type of sup harvest",
+            "volumeRemovedPreWell": "Volume removed pre well (μl)",
+            "reagent": "Reagent added to well",
+            "volumeOfReagent": "Volume of Reagent",
+            "harvestingActivationReason": "Method of harvest",
+            "operatorUserId": "Operator",
+            "notes": "Notes"
+        },
+        "proteinAnalysisRequest": {
+            "proteinPurificationId": "Protein Purification",
+            "sampleSubmissionDate": "Submission Date",
+            "methods": "Methods",
+            "notes": "Notes",
+            "requestorUserId": "Requestor",
+            "status": "Status",
+            "concentrationOverride": "Concentration Override",
+            "proteinConcentration": "Protein Concentration [mg/mL]",
+            "reactionVolume": "Reaction Volume [ul]",
+            "submissionVolume": "Submission Volume [uL]"
+        },
+        "proteinAnalysis": {
+            "notes": "Notes",
+            "method": "Method",
+            "purifications": "Purifications"
+        },
+        "kineticRequest": {
+            "antibodies": "Test Antibodies",
+            "antigens": "Test Antigents",
+            "type": "Type",
+            "fullKinetics": "Full Kinetics",
+            "epitopeBinning": "Epitope Binning?",
+            "quantitation": "Quantitation?",
+            "testAntigens": "Test Antigens",
+            "taskNotes": "Notes",
+            "approvalDate": "Approval Date",
+            "approvedBy": "Approved By",
+            "methodDevProgress": "Method Development Progress",
+            "expProgress": "Experiment Progress",
+            "expType": "Experiment Type",
+            "assignedTo": "Assigned To",
+            "timeline": "Timeline"
+        },
+        "bindingData": {
+            "purification": "Purification",
+            "response": "Response",
+            "sensorType": "Sensor Type",
+            "sensorId": "Sample ID",
+            "loadingSensorId": "Loading Sample ID",
+            "concentration": "Conc. (nM)",
+            "kd": "KD (M)",
+            "kon": "kon (1/Ms)",
+            "kdis": "kdis (1/s)",
+            "rMax": "RMax",
+            "fullR2": "Full R<sup>2</sup>",
+            "startDate": "Experiment Date",
+            "realResponse": "Real?",
+            "lowResponse": "Low?",
+            "type": "Exp. Type"
+        },
+        "stableCellLine": {
+            "ENUM_parentalCellLine": "Parental Cell Line",
+            "plasmidId": "Plasmid",
+            "ENUM_transfectionMethod": "Transfection Kit",
+            "ENUM_selectionMarker": "Selection Marker",
+            "Plasmid.name": "Plasmid",
+            "programId": "Program ID",
+            "transfectionDate": "Transfection Date",
+            "Plasmid.description": "Plasmid Description",
+            "Protein.name": "Protein",
+            "Protein.description": "Protein Description",
+            "proteinAlias": "Protein Alias",
+            "name": "Cell Line"
+        },
+        "proteinSummary": {
+            "name": "Protein",
+            "moleculeType": "Molecule Type",
+            "concentration": "Protein Concentration [mg/mL]",
+            "molecularWeight": "Molecular Weight [Da]",
+            "nanoDrop": "NanoDrop E1%",
+            "purificationDate": "Latest Purification Date",
+            "BEX": "Buffer Exchange",
+            "pl": "pI",
+            "poi": "% POI",
+            "octetTiter": "Titer [μg/mL]",
+            "purifications": "Purifications",
+            "transfections": "Transfections",
+            "plasmids": "Plasmids",
+            "tags": "Tags",
+            "purified": "Purified",
+            "project": "Project",
+            "projectDescription": "Project Description",
+            "plasmidDescription": "Plasmid Description"
+        },
+        "wellRescue": {
+            "date": "Date",
+            "vl": "VL",
+            "vh": "VH",
+            "ENUM_pCRBlock": "PCR Block",
+            "cloned": "Cloned",
+            "success": "Success",
+            "supernatentPlateId": "Supernatent Plate",
+            "well": "Well",
+            "project": "Project"
+        },
+        "cloningSequence": {
+            "wellRescueId": "Well Rescue",
+            "vlComments": "VL Comments",
+            "vhComments": "VH Comments",
+            "vlList": "VL",
+            "vhList": "VH"
+        },
+        "discoveryPlasmid": {
+            "wellRescue": "Well Rescue",
+            "lcOrHc": "LC/HC",
+            "clone": "Clone #",
+            "concentration": "Concentration [μg/mL]",
+            "version": "Version",
+            "project": "Project"
+        },
+        "humanizationPlasmid": {
+            "wellRescueId": "Well Rescue",
+            "discoveryPlasmidId": "Discovery Plasmid",
+            "vhOrVl": "VH/VL",
+            "concentration": "Concentration [μg/mL]",
+            "version": "Version",
+            "WellRescue.SupernatentPlate.BCCPlate.Sort.Activation.Project.name": "Project"
+        },
+        "discoveryTransfection": {
+            "rescueControl": "Type",
+            "ENUM_scale": "Scale",
+            "harvestConcentration": "Harvest Concentration [μg/mL]",
+            "harvestDate": "Harvest Date",
+            "location": "Location",
+            "pw": "Well/Name",
+            "heavyChainPlasmid": "Heavy Chain Plasmid",
+            "lightChainPlasmid": "Light Chain Plasmid",
+            "heavyChainConcentration": "VH ng/uL",
+            "lightChainConcentration": "VL ng/uL",
+            "vlToAdd": "VH uL (1 ug)",
+            "vhToAdd": "VL uL (1 ug)",
+            "project": "Project"
+        },
+        "humanizationTransfection": {
+            "wellRescueId": "Well Rescue",
+            "ENUM_hScale": "Scale [mL]",
+            "heavyChainPlasmid": "Heavy Chain Plasmid",
+            "lightChainPlasmid": "Light Chain Plasmid",
+            "heavyChainConcentration": "VH ng/uL",
+            "lightChainConcentration": "VL ng/uL",
+            "vlToAdd": "VH uL (1 ug)",
+            "vhToAdd": "VL uL (1 ug)",
+            "harvestConcentration": "Harvest Concentration [μg/mL]",
+            "harvestDate": "Harvest Date",
+            "version": "VH VL",
+            "WellRescue.SupernatentPlate.BCCPlate.Sort.Activation.Project.name": "Project"
+        },
+        "adTransfectionRequest": {
+            "plasmid": "Plasmid",
+            "date": "Transfection Date",
+            "status": "Status"
+        },
+        "activation": {
+            "projectId": "Project",
+            "description": "Description",
+            "date": "Date",
+            "numberOfPlates": "Number of Plates"
+        },
+        "bCellSource": {
+            "activationId": "Activation",
+            "rabbitIdNumber": "Rabbit ID Number",
+            "ENUM_tissue": "Tissue",
+            "dateSampleObtained": "Date Obtained",
+            "numberOfVialsThawed": "# of Vials",
+            "operator": "Operator",
+            "ENUM_stainType": "Stain type",
+            "ENUM_enrichmentType": "Enrichment Type",
+            "lysis": "Lysis",
+            "sampleThawNotes": "Sample Thaw Notes",
+            "timeOfThaw": "Time of thaw",
+            "liveDeadCount": "Live/dead count",
+            "stainEnrichmentTimeFinished": "Time Finished"
+        },
+        "mixCondition": {
+            "activationId": "Activation",
+            "feederOperator": "Feeder Operator",
+            "mixMakingOperator": "Mix Making Operator",
+            "platingOperator": "Plating Operator",
+            "ENUM_tsnLotNumber": "TSN Lot #",
+            "ENUM_eL4B5Lot": "EL4-B5 Lot",
+            "eL4B5well": "EL4-B5 Well",
+            "ENUM_fbsLot": "FBS Lot",
+            "ENUM_plateType": "Plate Type",
+            "wellVolume": "Well Volume [uL]",
+            "daysInCulture": "Days in Culture",
+            "mlPerPlate": "mL per Plate",
+            "perOfTsn": "% TSN",
+            "numberOfPlatesForMix": "# Plates For Mix",
+            "feederConcentration": "Feeder Conc."
+        },
+        "mixMaking": {
+            "name": "Mix #",
+            "mlPerPlate": "mL/plate",
+            "numberOfPlatesForMix": "Plates in Mix",
+            "feederConcentration": "Feeder Conc.",
+            "volume": "Volume",
+            "feederVolume": "Feeder Volume [mL]",
+            "feedersPerML": "Feeders Per mL",
+            "tsnVolume": "TSN Volume",
+            "mediaVolume": "Media Volume",
+            "totalFeederNeeded": "Total Feeder Needed"
+        },
+        "bCCPlate": {
+            "mixConditionId": "Mix Condition",
+            "Sort.name": "Sort",
+            "status": "Status",
+            "timeSorted": "Time Sorted",
+            "Sort.MixCondition.ENUM_plateType": "Plate Type",
+            "Sort.MixCondition.Activation.name": "Activation",
+            "Sort.MixCondition.Activation.Project.name": "Project"
+        },
+        "supernatentPlate": {
+            "bCCPlateId": "BCC Plate",
+            "dayOfHarvest": "Harvest Day",
+            "operator": "Operator",
+            "ENUM_methodOfHarvest": "Harvest Method",
+            "harvestVolume": "Harvest Volume [mL]",
+            "ENUM_reagent": "Reagent",
+            "reagentVolume": "Reagent Volume [mL]",
+            "BCCPlate.name": "BCC Plate",
+            "BCCPlate.Sort.MixCondition.Activation.name": "Activation",
+            "BCCPlate.Sort.MixCondition.Activation.Project.name": "Project"
+        },
+        "sort": {
+            "operatorUserId": "Operator",
+            "activationId": "Activation",
+            "cellsSeeded": "Cells Seeded",
+            "numberOfPlates": "# of Plates",
+            "sortOperatorUserId": "Sort Operator",
+            "timeSortStarted": "Started At",
+            "mixConditionId": "Mix Condition",
+            "bCellSourceId": "B Cell Source",
+            "timeFinished": "Finished At",
+            "ENUM_sortMode": "Sort Mode",
+            "ENUM_population": "Population",
+            "ENUM_sorterUsed": "Sorter Used",
+            "ENUM_sortActivationReason": "Activation Reason",
+            "ENUM_antigenSpecificity": "Antigen Specificity"
+        },
+        "adeSummary": {
+            "date": "Activation Date",
+            "name": "#"
+        },
+        "cellLineExperiment": {
+            "stableCellLineId": "Cell Line",
+            "ENUM_reactorType": "Reactor Type",
+            "experimentType": "Experiment Type",
+            "scale": "Scale",
+            "ENUM_cultureMedia": "Culture Media",
+            "inoculationDate": "Inoculation Date",
+            "ENUM_studyType": "Study Type",
+            "minipool.wellName": "Minipool",
+            "StableCellLine.Protein.name": "Protein",
+            "StableCellLine.Protein.ENUM_moleculeType": "Molecule Type",
+            "StableCellLine.Protein.nanoDrop": "NanoDrop E1%",
+            "StableCellLine.Protein.description": "Protein Description",
+            "StableCellLine.Protein.Project.name": "Project"
+        },
+        "cellLineHarvest": {
+            "name": "Lot #",
+            "wellName": "Well",
+            "FedbatchID": "Fed batch ID",
+            "harvestDate": "Harvest Date",
+            "ENUM_harvestMethod": "Harvest Method",
+            "harvestDayVCD": "Harvest Day VCD",
+            "harvestDayViability": "Harvest Day Viability",
+            "titer": "Titer [µg/mL]",
+            "ENUM_titerMethod": "Titer Method",
+            "approveForPurification": "Approved",
+            "experiment.name": "Experiment",
+            "experiment.lengthOfCulture": "Length of Culture",
+            "experiment.StableCellLine.Protein.name": "Protein",
+            "stableCellLine": "Cell Line",
+            "experiment.StableCellLine.name": "Cell Line",
+            "experiment.inoculationDate": "Inoculation Date",
+            "experiment.experimentType": "Experiment Type",
+            "experimentType": "Experiment Type",
+            "protein": "Protein",
+            "purificationDate": "Purification Date",
+            "experiment.minipool.wellName": "Minipool Ref",
+            "minipoolReference": "Minipool Ref",
+            "yield": "% Yield"
+        },
+        "cellLinePackage": {
+            "experimentType": "Experiment Type",
+            "stableCellLine": "Transfection #",
+            "protein": "Protein"
+        },
+        "cellLinePurification": {
+            "stableCellLine": "Stable Cell Line",
+            "protein": "Protein",
+            "wellName": "Well Name",
+            "FedbatchID": "Fed batch ID",
+            "minipool": "Minipool",
+            "purificationDate": "Purification Date",
+            "purifiedBy": "Purified By",
+            "titer": "Titer (g/L)",
+            "experimentType": "Type",
+            "ColumnPurificationData.yield": "% Recovery"
+        },
+        "cellLineAnalytic": {
+            "name": "Lot #",
+            "CellLinePurification.CLDHarvest.experiment.StableCellLine.Protein.Project.name": "Project",
+            "CellLinePurification.CLDHarvest.wellName": "Well",
+            "CellLinePurification.CLDHarvest.name": "Lot #",
+            "nrCESDSMP": "CE-SDS (NR) MP %",
+            "nrCESDSType": "CE-SDS (NR) Type",
+            "nrCESDSLMW": "CE-SDS (NR) LMW %",
+            "nrCESDSHMW": "CE-SDS (NR) HMW %",
+            "rCESDSType": "CE-SDS (R) Type",
+            "rCESDSLC": "CE-SDS (R) LC %",
+            "rCESDSHC": "CE-SDS (R) HC %",
+            "rCESDSLMW": "CE-SDS (R) LMW %",
+            "rCESDSHMW": "CE-SDS (R) HMW %",
+            "cIEFType": "cIEF Type",
+            "cIEFpI": "cIEF pI",
+            "cIEFpIRange": "cIEF pI Range",
+            "iEXType": "IEX Type",
+            "iEXMP": "IEX MP %",
+            "iEXAcidic": "IEX Acidic %",
+            "iEXBasic": "IEX Basic %",
+            "other": "Other",
+            "SECData.mp": "SEC MP %",
+            "SECData.hmw": "SEC HMW %",
+            "SECData.type": "SEC Type"
+        },
+        "bioreactorExperiment": {
+            "name": "Experiment Name",
+            "StableCellLine.Protein.Project.name": "Project",
+            "StableCellLine.name": "Transfection",
+            "Bioreactors.name": "Bioreactors",
+            "description": "Description",
+            "inoculationVolume": "Inoculation Volume (L)",
+            "inoculationDate": "Inoculation Time",
+            "stableCellLine": "Cell Line",
+            "protein": "Protein",
+            "minipoolReference": "Minipool Ref"
+        },
+        "bioreactor": {
+            "name": "Bioreactor ID",
+            "bioreactorExperimentId": "Experiment",
+            "cellLineHarvestId": "Harvest",
+            "cloneNotes": "Clone Notes",
+            "bioreactorConditionId": "Bioreactor Condition",
+            "hcfTiter": "HCF Titer (mg/L)",
+            "hcfVolume": "HCF Volume (L)",
+            "ENUM_harvestMethod": "Harvest Method",
+            "approved": "Approved",
+            "ENUM_primaryRecovery": "Primary Recovery",
+            "variable": "Variable",
+            "notes": "Notes",
+            "CLDHarvest.wellName": "Clone ID",
+            "BioreactorExperiment.StableCellLine.name": "Stable Cell Line",
+            "BioreactorExperiment.name": "Experiment",
+            "BioreactorExperiment.StableCellLine.Protein.Project.name": "Project"
+        },
+        "bioreactorCondition": {
+            "inoculationVCDTarget": "Inoculation VCD Target (x10<sup>6</sup>/mL)",
+            "ENUM_vesselScale": "Vessel Scale (L)",
+            "initialTemperature": "Initial Temp (C)",
+            "tempShift1Hour": "Temp Shift 1 Hour",
+            "tempShift1Value": "Temp Shift 1 Value (C)",
+            "tempShift2Hour": "Temp Shift 2 Hour",
+            "tempShift2Value": "Temp Shift 2 Value (C)",
+            "phSetPoint": "pH Set Point",
+            "headspaceGasFlowRate": "Headspace Gas Flow Rate",
+            "doSetpoint": "DO Setpoint (%)",
+            "ENUM_basalMedium": "Basal Medium",
+            "feedGlucoseConc": "Feed Glucose Conc.",
+            "ENUM_feedMedium": "Feed Medium",
+            "feedMediumTiming": "Feed Medium Timing",
+            "agitation": "Agitation"
+        },
+        "bioreactorChemData": {
+            "bioreactorId": "Bioreactor ID",
+            "sampleTime": "Sample Time",
+            "sampleId": "Sample ID",
+            "pH": "pH",
+            "pO2": "PO<sub>2</sub>",
+            "pCO2": "PCO<sub>2</sub>",
+            "gln": "Gln",
+            "glu": "Glu",
+            "gluc": "Gluc",
+            "lac": "Lac",
+            "NH4": "NH<sub>4</sub><sup>+</sup>",
+            "na": "Na<sup>+</sup>",
+            "k": "K<sup>+</sup>",
+            "osmolality": "Osmolality",
+            "vesselTemp": "Vessel Temp (C)",
+            "spargingO2": "Sparging O<sub>2</sub>%",
+            "pHTemp": "pH @ Temp",
+            "pO2Temp": "PO<sub>2</sub> @ Temp",
+            "pCO2Temp": "PCO<sub>2</sub> @ Temp",
+            "o2Saturation": "O<sub>2</sub> Saturation",
+            "cO2Saturation": "CO<sub>2</sub> Saturation",
+            "hCO3": "HCO<sub>3</sub>",
+            "nutrientFlow": "Nutrient/Metabolite Flow",
+            "sampleVolume": "Sample Volume",
+            "workingVolume": "Working Volume",
+            "day": "Day",
+            "hour": "Hour"
+        },
+        "bioreactorVCDData": {
+            "sampleId": "Sample ID",
+            "sampleTime": "Sample Time",
+            "bioreactorId": "Bioreactor ID",
+            "totalDensity": "Total Density",
+            "viableDensity": "Viable Density",
+            "viability": "Viability",
+            "avgLiveDiameter": "Avg Live Diameter",
+            "runTime": "Run Time",
+            "iVCD": "IVCD",
+            "titer": "Titer (μg/mL)",
+            "qp": "Qp",
+            "day": "Day",
+            "hour": "Hour"
+        },
+        "bioreactorPurification": {
+            "name": "Name",
+            "purificationDate": "Purification Date",
+            "purifiedBy": "Purified By",
+            "notes": "Notes",
+            "status": "Status",
+            "bioreactors": "Bioreactors",
+            "project": "Project",
+            "bioreactorExperiment": "Bioreactor Experiment"
+        },
+        "bioreactorAnalytic": {
+            "bioreactors": "Bioreactors",
+            "analysisDate": "Analysis Date",
+            "analyzedBy": "Analyzed By",
+            "nrCESDSMP": "CE-SDS (NR) MP %",
+            "nrCESDSType": "CE-SDS (NR) Type",
+            "nrCESDSLMW": "CE-SDS (NR) LMW %",
+            "nrCESDSHMW": "CE-SDS (NR) HMW %",
+            "rCESDSType": "CE-SDS (R) Type",
+            "rCESDSLC": "CE-SDS (R) LC %",
+            "rCESDSHC": "CE-SDS (R) HC %",
+            "rCESDSLMW": "CE-SDS (R) LMW %",
+            "rCESDSHMW": "CE-SDS (R) HMW %",
+            "cIEFType": "cIEF Type",
+            "cIEFpI": "cIEF pI",
+            "cIEFpIRange": "cIEF pI Range",
+            "iEXType": "IEX Type",
+            "iEXMP": "IEX MP %",
+            "iEXAcidic": "IEX Acidic %",
+            "iEXBasic": "IEX Basic %",
+            "other": "Other",
+            "SECmp": "SEC MP %",
+            "SEChmw": "SEC HMW %",
+            "SECtype": "SEC Type",
+            "clone": "Clone ID",
+            "project": "Project"
+        },
+        "pdAnalysis": {
+            "bioreactors": "Bioreactors",
+            "harvests": "Cell Line Harvests",
+            "method": "Method",
+            "notes": "Notes"
+        },
+        "cellExpansion": {
+            "name": "Name",
+            "cellLineHarvestId": "Clone",
+            "dateBankFrozen": "Date Bank Frozen",
+            "notebookRef": "Notebook Ref",
+            "CLDHarvest.experiment.StableCellLine.Protein.Project.name": "Project",
+            "CLDHarvest.experiment.StableCellLine.name": "Cell Line",
+            "CLDHarvest.experiment.minipool.wellName": "Minipool",
+            "CLDHarvest.wellName": "Clone"
+        },
+        "cellExpansionData": {
+            "name": "Passage #",
+            "cellExpansionId": "Cell Expansion",
+            "sampleTime": "Sample Time",
+            "vcd": "VCD",
+            "viability": "Viability",
+            "split": "Split",
+            "volumeOfCulture": "Volume of Culture",
+            "volumeOfMedium": "Volume of Medium"
+        },
+        "equipment": {
+            "usage": "Peak Usage (A)",
+            "network": "Network Port",
+            "circuit": "Circuit",
+            "location": "Location"
+        },
+        "circuit": {
+            "location": "Location",
+            "capacity": "Capacity (Amps)",
+            "voltage": "Voltage",
+            "peakUsage": "Peak Usage (A)",
+            "peakLoad": "Peak Load (%)"
+        },
+        "instrument": {
+            "name": "Name",
+            "notes": "Notes",
+            "group": "Instrument Group"
+        },
+        "viCell": {
+            "sampleId": "Sample ID",
+            "cellType": "Cell Type",
+            "runDate": "Run Date",
+            "viableCells": "Viable Cell Count",
+            "totalViableCellsPerMl": "Viable Cells / mL",
+            "totalCellsPerMl": "Cells / mL",
+            "viability": "Viability (%)",
+            "dilution": "Dilution",
+            "averageDiameter": "Average Diameter (microns)"
+        },
+        "cellSource": {
+            "vendor": "Vendor",
+            "orderType": "Order Type",
+            "orderNumber": "Order #",
+            "cost": "Cost (USD)",
+            "deliveryDate": "Delivery Date",
+            "deliveryMethod": "Delivery Method",
+            "diversionPouchCollection": "Diversion Pouch Collection",
+            "preparedBy": "Prepared By",
+            "pickedUpBy": "Picked Up By",
+            "donorCount": "Donor Count"
+        },
+        "donor": {
+            "sampleId": "Sample ID",
+            "age": "Age",
+            "gender": "Gender",
+            "bloodType": "Blood Type",
+            "collectionDate": "Collection Date",
+            "cmvStatus": "CMV Status",
+            "orderType": "Order Type",
+            "vendor": "Vendor",
+            "sourceName": "Cell Source #"
+        },
+        "ctFreeze": {
+            "donorId": "Donor",
+            "cryoDate": "Cryo Date",
+            "preCryoViability": "Viabililty (Pre-Cryo)",
+            "cryoVial": "Cryovial",
+            "cryoPreservative": "Preservative"
+        },
+        "ctThaw": {
+            "freezeId": "Freeze #",
+            "thawDate": "Thaw Date",
+            "viability": "Viabililty (Post-Thaw)",
+            "concentration": "Concentration (Post-Thaw)",
+            "volume": "Volume (Post-Thaw)",
+            "recovery": "Recovery (Post-Thaw)"
+        },        
+        "ctExperiment": {
+            "startDate": "Inoculation Date",
+            "purpose": "Purpose"
+        },
+        "ctVessel": {
+            "vesselType": "Vessel Type",
+            "cellsSeeded": "Cells Seeded",
+            "stimulationNotes": "Stimulation",
+            "dose": "Dose",
+            "seedVolume": "Seed Volume",
+            "experiment": "Experiment #",
+            "well": "Well"
+        },
+        "TimePerProject": {
+            "TimeCat": "Time Spent Category",
+            "ProjectID": "Project",
+            "PayPeriodID": "Pay Period",
+            "TimeSpent": "Time Spent",
+            "PercentTime": "Percent Time Spent",
+            "Notes": "Notes"
+        }
+    },
+    "commonTransCols": {
+        "updatedAt": "Updated At",
+        "createdBy": "Created By",
+        "updatedBy": "Updated By",
+        "notes": "Notes",
+        "description": "Description",
+        "name": "Name",
+        "id": "ID"
+    },
+    "tableOrder": {
+        "protein": ["id", "name", "ENUM_moleculeType", "description", "antigen", "molecularWeight", "molarExtCoefficient", "nanodrop", "pI", "createdBy", "updatedAt"],
+        "constructRequest": ["id", "name", "projectId", "department", "requestedBy", "notes", "estimatedTimeline", "newSequence", "numConstructs", "progress", "status", "updatedAt"],
+        "constructStatus": ["id", "name", "plasmid", "description", "vector", "project", "department", "requestDate", "priority", "assignedTo", "sequenceReviewed",
+            "designed", "ordered", "cloned", "maxiprep", "sequenceVerified", "completed", "progress", "status", "updatedAt"],
+        "transfection": ["id", "name", "trqId", "TransfectionRequest.requestStatus", "TransfectionRequest.Protein.name", "TransfectionRequest.Protein.ENUM_moleculeType", "transfectionDate", "harvestDate", "octetTiter", "transfectionNotes", "approved", "createdBy", "updatedAt"],
+        "proteinPurification": [
+            "id", "name", "Transfection.name",
+            "Transfection.TransfectionRequest.Protein.name",
+            "Transfection.TransfectionRequest.Protein.ENUM_moleculeType",
+            "Transfection.TransfectionRequest.Protein.molecularWeight",
+            "finalConcentration", "finalVolume", "volumeRemaining",
+            "Transfection.octetTiter", "BEX", "notes", "purificationDate",
+            "purifiedBy", "updatedAt", "Transfection.TransfectionRequest.requestStatus"
+        ],
+        "bindingData": ["id", "purification", "type", "sensorType", "sensorId", "loadingSensorId", "concentration",
+            "response", "realResponse", "lowResponse", "kd", "kon", "kdis", "notes", "startDate", "createdBy", "updatedAt"],
+        "proteinRequest": ["id", "name", "purification", "protein", "volumeRequested", "notes", "requestStatus", "createdBy", "updatedAt"],
+        "kineticRequest": ["id", "name", "type", "antigens", "antibodies", "fullKinetics", "quantitation", "epitopeBinning", "expProgress", "assignedTo", "createdBy", "updatedAt"],
+        "stableCellLine": ["id", "name", "ENUM_parentalCellLine", "Plasmid.name", "Plasmid.description","ENUM_transfectionMethod", "ENUM_selectionMarker", 
+            "proteinAlias", "Protein.name", "Protein.description", "programId", "transfectionDate", "createdBy", "updatedAt"],
+        "proteinAnalysis": ["id", "name", "purifications", "method", "notes", "createdBy", "updatedAt"],
+        "pdAnalysis": ["id", "name", "bioreactors", "harvests", "method", "notes", "createdBy", "updatedAt"],
+        "cellLineExperiment": ["id", "name", "StableCellLine.Protein.Project.name", "stableCellLineId", "minipool.wellName", "StableCellLine.Protein.name",
+            "StableCellLine.Protein.ENUM_moleculeType", "StableCellLine.Protein.nanoDrop", "experimentType", "scale", "ENUM_cultureMedia", "inoculationDate",
+            "createdBy", "updatedAt"],
+        "cellLineHarvest": ["id", "experiment.name", "experiment.StableCellLine.Protein.name", "experiment.StableCellLine.name", "experiment.minipool.wellName", "wellName",
+            "FedbatchID", "experiment.experimentType", "harvestDate", "experiment.lengthOfCulture", "experiment.inoculationDate", "ENUM_harvestMethod", "harvestDayVCD",
+            "harvestDayViability", "titer", "approveForPurification", "createdBy", "updatedAt"],
+        "cellLinePackage": ["protein", "stableCellLine", "experimentType", "notes", "createdBy", "updatedAt"],
+        "cellLinePurification": ["id", "name", "protein", "stableCellLine", "minipool", "wellName", "FedbatchID", "titer", "purificationDate", 
+            "purifiedBy", "notes", "createdBy", "updatedAt"],
+        "bioreactorExperiment": ["id", "name", "StableCellLine.Protein.Project.name", "StableCellLine.name", "description",
+            "inoculationVolume", "inoculationDate", "Bioreactors.name", "createdBy", "updatedAt"],
+        "bioreactor": ["id", "name", "bioreactorExperimentId", "BioreactorExperiment.StableCellLine.Protein.Project.name", "BioreactorExperiment.StableCellLine.name",
+            "CLDHarvest.wellName", "cloneNotes", "hcfTiter", "hcfVolume","ENUM_harvestMethod", "variable", "ENUM_primaryRecovery", "notes", "createdBy", "updatedAt"],
+        "cellSource": ["id", "name", "vendor", "orderType", "cost", "deliveryDate", "deliveryMethod", "diversionPouchCollection", 
+            "preparedBy", "pickedUpBy", "donorCount", "createdBy", "updatedAt"],
+        "donor": ["id", "name", "sampleId", "sourceName", "vendor", "orderType", "collectionDate", "bloodType", "age", "gender", "cmvStatus", "createdBy", "updatedAt"],
+        "ctVessel": ["id", "name", "experiment", "vesselType", "cellsSeeded", "stimulationNotes", "dose", "seedVolume", "well", "notes", "createdBy", "updatedAt"],
+        "wellRescue": ["id", "name", "supernatentPlateId", "project", "well", "date", "ENUM_pCRBlock", "VL", "VH", "success", "cloned", "createdBy", "updatedAt"],
+        "discoveryPlasmid": ["id", "name", "project", "wellRescue", "clone", "lcOrHc", "concentration", "createdBy", "updatedAt"],
+        "adTransfectionRequest": ["id", "name", "plasmid", "description", "date", "status", "createdBy", "updatedAt"],
+        "BoaStatements": ["purchaseDate", "description", "amount", "department", "itemType", "PONumber"],
+        "PayPeriod": ["DateRange"],
+        "TimePerProject": ["UserID", "TimeSpent", "PercentTime", "ProjectID", "PayPeriod", "Notes"],
+        "AccountingProject": ["PONumber", "PurchaseDate", "Description", "Amount", "Department", "ItemType", "Projects", "NumOfProjects", "isDeleted", "createdAt", "updatedAt"],
+        "ProcurifyStatements":["OrderID", "LineNumber", "Requester", "SubmittedDate", "LastModified",
+            "RecievedDate", "POID","PurchaseDate", "ApprovalDate", "Approver", "DueDate",
+            "InvoiceDate", "Vendor", "Item", "SKU", "Quanity", "Unit", "UnitCost",
+            "Currency", "LineCost", "Status","Location", "LocationID", "Department",
+            "DepartmentID", "AccountCode", "AccountDescription", "Note", "External_ID",
+            "Project", "AdditionalProjects", "isDeleted" ],
+        "TimeSpentCategories": ["id", "name", "isDeleted", "createdBy", "createdAt", "updatedAt" ],
+        "FreezerProLog": ["User", "Date", "Time", "Object", "ArchiveRecord", "Comment"]
+    }
+}

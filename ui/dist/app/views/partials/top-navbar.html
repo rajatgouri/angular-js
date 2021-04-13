@@ -1,0 +1,74 @@
+<!-- START Top Navbar-->
+<nav role="navigation" class="navbar topnavbar">
+  <!-- START navbar header-->
+  <div class="navbar-header">
+    <a href="#/" class="navbar-brand">
+      <div class="brand-logo">
+        <img src="app/img/logo.png" alt="App Logo" class="img-responsive" />
+      </div>
+      <div class="brand-logo-collapsed">
+        <img src="app/img/logo-single.png" alt="App Logo" class="img-responsive" />
+      </div>
+    </a>
+  </div>
+  <!-- END navbar header-->
+  <!-- START Nav wrapper-->
+  <div ng-controller="HeaderController" class="nav-wrapper">
+    <!-- START Left navbar-->
+    <ul class="nav navbar-nav">
+      <li>
+        <!-- Button used to collapse the left sidebar. Only visible on tablet and desktops-->
+        <a href="" trigger-resize="" ng-if="!app.layout.isCollapsedText" ng-click="app.layout.isCollapsed = !app.layout.isCollapsed" class="hidden-xs">
+          <em class="fas fa-bars"></em>
+        </a>
+        <!-- Button to show/hide the sidebar on mobile. Visible on mobile only.-->
+        <a href="" ng-click="app.asideToggled = !app.asideToggled" class="visible-xs sidebar-toggle">
+          <em class="fas fa-bars"></em>
+        </a>
+      </li>
+    </ul>
+    <!-- END Left navbar-->
+    <!-- START Right Navbar-->
+    <ul class="nav navbar-nav navbar-right" data-ng-hide="global.authenticated">
+      <!-- ww:START our signin icon, re-using the lock icon-->
+      <li>
+          <a ui-sref="page.signin" title="SystImmune login">  
+          <!-- <a ng-href="{{gatewayUrl + '/login'}}" title="SystImmune login"> -->
+          Log In
+        </a>
+      </li>
+    </ul>
+
+
+    <!-- Logged in user see their name-->
+    <ul class="nav navbar-nav navbar-right" data-ng-show="global.authenticated">
+      <!-- ww:START our signin icon, re-using the lock icon-->
+      <li class="dropdown" uib-dropdown="dropdown">
+        <a class="dropdown-toggle" uib-dropdown-toggle="">
+          {{global.user.displayName}}<b class="caret"></b>
+        </a>
+        <ul role="menu" class="dropdown-menu">
+          <li><a ng-href="/#!/app/settings">{{ 'offsidebar.setting.SETTINGS' | translate}}</a></li>
+          <li><a ng-click="SignOut()">{{ 'offsidebar.setting.SIGNOUT' | translate}}</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="onenote:https://systimmuneinc.sharepoint.com/SiteAssets/Team%20Site%20Notebook/LIMS%20Documentation.one#General&section-id={6C0D72E2-962B-492F-93CF-DF68B6B37D1A}&page-id={33418E0E-0729-4322-B566-51A35DCF697D}&end" title="Help">
+          <i class="icon-question"></i>
+        </a>
+      </li>
+    </ul>
+    <!-- END Right Navbar-->
+  </div>
+  <!-- END Nav wrapper-->
+  <!-- START Search form-->
+  <form role="search" action="search.html" class="navbar-form">
+    <div class="form-group has-feedback">
+      <input type="text" placeholder="{{ 'topbar.search.PLACEHOLDER' | translate }}" class="form-control" />
+      <div search-dismiss="search-dismiss" class="fa fa-times form-control-feedback"></div>
+    </div>
+    <button type="submit" class="hidden btn btn-default">Submit</button>
+  </form>
+  <!-- END Search form-->
+</nav>
+<!-- END Top Navbar-->

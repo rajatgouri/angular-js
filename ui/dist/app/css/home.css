@@ -1,0 +1,21 @@
+.responsive-scale{
+  width:100%;
+  padding-bottom: 66.666666666667%; /* 960px/1440px */
+  background-image:url(/app/img/home_bg.jpg);
+  background-size:cover;
+  background-position:center; /* IE fix */
+}
+
+/* For controller vectors etc. */
+.force-inline {
+    display:inline;
+}
+
+/* Rid of the form-control's border for static control */
+.force-noborder {
+    border-color: transparent;
+}
+
+.margin-left-10 {
+    margin-left: 10px;
+}

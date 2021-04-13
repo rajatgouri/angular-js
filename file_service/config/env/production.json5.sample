@@ -1,0 +1,7 @@
+{
+    // This is your MYSQL Database configuration
+    db: "mongodb://limsprd-fs1.systimmune.net:27017/lims-prod",
+    app: {
+        name: "LIMS File Service - Development"
+    }
+}

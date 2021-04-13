@@ -1,0 +1,40 @@
+<div ng-controller="LoginFormController as login" class="block-center mt-xl wd-xl">
+   <!-- START panel-->
+   <div class="panel panel-dark panel-flat">
+      <div class="panel-heading text-center">
+         <a href="#">
+            <img src="app/img/logo.png" alt="Image" class="block-center" />
+         </a>
+      </div>
+      <div class="panel-body">
+         <p class="text-center pv">Sign in to Continue</p>
+         <form role="form" ng-submit="login.login()" name="login.loginForm" novalidate="" class="form-validate mb-lg">
+            <div class="form-group has-feedback">
+               <input id="exampleInputEmail1" type="email" name="account_email" placeholder="Enter username" autocomplete="off" ng-model="login.account.email" required="" class="form-control" />
+               <span class="fas fa-user form-control-feedback text-muted"></span>
+               <span ng-show="login.loginForm.account_email.$dirty && login.loginForm.account_email.$error.required" class="text-danger">This field is required</span>
+               <span ng-show="login.loginForm.account_email.$dirty && login.loginForm.account_email.$error.email" class="text-danger">This field must be a valid username (with @)</span>
+            </div>
+            <div class="form-group has-feedback">
+               <input id="exampleInputPassword1" type="password" name="account_password" placeholder="Password" ng-model="login.account.password" required="" class="form-control" />
+               <span class="fas fa-lock form-control-feedback text-muted"></span>
+               <span ng-show="login.loginForm.account_password.$dirty && login.loginForm.account_password.$error.required" class="text-danger">This field is required</span>
+            </div>
+            <button type="submit" class="btn btn-block btn-primary mt-lg">Login</button>
+         </form>
+         <div ng-show="login.authMsg" class="alert alert-danger text-center">{{login.authMsg}}</div>
+         <hr>
+         <p class="text-center"><i class="fas fa-arrow-down"></i><i class="fas fa-arrow-down"></i><i class="fas fa-arrow-down"></i> Click me <i class="fas fa-arrow-down"></i><i class="fas fa-arrow-down"></i><i class="fas fa-arrow-down"></i></p>
+         <div class="text-center"><a ng-href="{{gatewayUrl + '/loginaad'}}"><img src="app/img/azurelogin.svg"></a></div>
+      </div>
+   </div>
+   <!-- END panel-->
+   <div class="p-lg text-center">
+      <span>&copy;</span>
+      <span ng-bind="app.year"></span>
+      <span>-</span>
+      <span ng-bind="app.name"></span>
+      <br/>
+      <span ng-bind="app.description"></span>
+   </div>
+</div>

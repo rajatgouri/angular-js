@@ -1,0 +1,14 @@
+# Ignore deploy key
+/*.rsa
+/*.rsa.pub
+pm2-all.json
+npm-debug.log
+/data_service/node_modules/
+/user_service/node_modules/
+/gate/node_modules/
+/email_service/node_modules/
+/file_service/node_modules/
+/ui/node_modules/
+~$*
+.*#
+**/*.sw?

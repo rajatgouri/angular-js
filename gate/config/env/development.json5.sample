@@ -1,0 +1,48 @@
+{
+    // This is your MYSQL Database configuration
+    db: {
+        name: "",
+        // ww: I use this password for my local test MySql.
+        // ww: Recommend we just use the same for simplicity.
+        password: "",
+        username: "",
+        host: "",
+        port: 3306
+    },
+    app: {
+        name: "Gate - Development"
+    },
+    expressSessionSecret: '$uper$ecret$e$$ionKey',
+    domain: {
+        user: "http://localhost:3002/",
+        data: "http://localhost:3001/"
+    },
+    azuread: {
+        tenantIdOrName: 'systimmuneinc.onmicrosoft.com',
+        redirectUrl: 'http://127.0.0.1:3000/api/login',
+        clientID: 'b74ebc89-2ecc-4b18-99b2-d8a59eb9363e',
+        clientSecret: '<Not Tracked In Git>',
+        identityMetadata: 'https://login.microsoftonline.com/systimmuneinc.onmicrosoft.com/v2.0/.well-known/openid-configuration',
+        allowHttpForRedirectUrl: true,
+        responseType: 'code',
+        validateIssuer: false,
+        responseMode: 'query',
+        scope: ['User.Read']
+    },
+    helperAPI: "https://graphs.apps.systimmune.net/",
+    seqUtilsAPI: {
+        url: "http://sequence-utils.apps.systimmune.net/",
+        key: "<not tracked>"
+    },
+    ldap: {
+        server: {
+            url: 'ldaps://dc1.systimmune.net:636',
+            bindDn: '<not tracked>',
+            bindCredentials: '<not tracked>',
+            searchBase: 'OU=SystImmune,dc=systimmune,dc=net',
+            searchFilter: '(&(objectcategory=person)(objectclass=user)(|(samaccountname={{username}})(userPrincipalName={{username}})))',
+            searchAttributes: ['displayName', 'mail', 'userPrincipalName', 'department'],
+            sslCert: './config/env/ca.crt'
+        }
+    },
+}

@@ -1,0 +1,290 @@
+<div class="card panel panel-default">
+    <div class="panel-heading" ng-if="!widget.hideTitle || widgetdata.editEnabled">{{widgetdata.getName(widget)}}
+        <paneltool tool-dismiss="tool-dismiss" class="pull-right" ng-if="widgetdata.editEnabled">
+            <a ng-click="widgetdata.edit.open(widgetlist, index)" uib-tooltip="Edit"> 
+                <em class="far fa-edit"></em>
+            </a>
+            <a panel-dismiss="" ng-click="widgetdata.remove(widgetlist, index)" uib-tooltip="Remove"> 
+                <em class="fa fa-times"></em>
+            </a>
+        </paneltool>
+    </div>
+    <div class="panel-body">
+        <div ng-if="widget.type == 'overviewGraph'">
+            <div class="col-md-3">
+                <canvas id="pie" class="chart chart-pie" chart-data="widgetdata.data.overviewGraph.trData.data" chart-labels="widgetdata.data.overviewGraph.trData.labels" chart-colors="widgetdata.data.overviewGraph.trData.colors" chart-options="widgetdata.data.overviewGraph.trOptions" chart-dataset-override="widgetdata.data.overviewGraph.trData.override" responsive="true"></canvas>
+            </div>
+            <div class="col-md-6">
+                <canvas id="line" class="chart chart-line" chart-data="widgetdata.data.overviewGraph.countData.data" chart-labels="widgetdata.data.overviewGraph.countData.labels" chart-colors="widgetdata.data.overviewGraph.countData.colors" chart-options="widgetdata.data.overviewGraph.countOptions" chart-dataset-override="widgetdata.data.overviewGraph.countDatasetOverride"></canvas>
+            </div>
+            <div class="col-md-3">
+                <table class="table table-hover table-striped table-border">
+                    <thead>
+                        <tr>
+                            <th class="text-center" colspan="2">LIMS Leaderboard (Past two weeks)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="data in widgetdata.data.overviewGraph.leaderboard | limitTo: 10">
+                            <td>{{data.displayName}}</td>
+                            <td>{{data.total}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div ng-if="widget.type == 'text'">
+            <h4>{{widget.text}}</h4>
+        </div>
+
+        <div ng-if="widget.type == 'tableau'">
+            <script type='text/javascript' src='https://tableau.systimmune.net/javascripts/api/viz_v1.js'></script>
+            <div class='tableauPlaceholder' ng-style="{width: '100%', height: widget.height + 'px'}">
+                <object class='tableauViz' width='100%' height='{{widget.height}}' style='display:none;'>
+                    <param name='host_url' value='https://tableau.systimmune.net/'/>
+                    <param name='embed_code_version' value='3'/>
+                    <param name='site_root' value='' />
+                    <param name='name' value='{{widget.dashboardName}}'/>
+                    <param name='tabs' value='no'/>
+                    <param name='toolbar' value='{{widget.showToolbar || "no"}}'/>
+                    <param name='showAppBanner' value='false'/>
+                    <param name='filter' value='iframeSizedToWindow=true'/>
+                </object>
+            </div>
+        </div>
+
+        <div class="list-group" ng-if="widget.type == 'latestActivities'">
+            <div class="list-group-item" ng-repeat="t in widgetdata.data.latestActivities track by $index">
+                <div class="media-box">
+                    <div class="pull-left">
+                        <span class="fa-stack">
+                        <em class="fa fa-circle fa-stack-2x text-info"></em>
+                        <em class="far fa-file-alt fa-stack-1x fa-inverse text-white"></em>
+                    </span>
+                    </div>
+                    <div class="media-box-body clearfix">
+                        <small class="text-muted pull-right ml">{{t.ReadableTimestamp}}</small>
+                        <div class="media-box-heading"><a href="{{t.url}}" class="text-info m0">{{t.table}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="widget.type == 'myConstructs'">
+            <table class="table table-hover">
+                <thead>
+                    <th>#</th>
+                    <th>Description</th>
+                    <th>Progress</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="entry in widgetdata.data.myConstructs">
+                        <td><a ui-sref="app.research.constructStatus({ op: 'view', id: entry.id })">{{entry.name}}</a></td>
+                        <td>{{entry.description}}</td>
+                        <td style="width: 25%">
+                            <div class="progress progress-striped" uib-tooltip="{{entry.status}}">
+                                <div ng-class="{'progress-bar progress-bar-info': entry.progress < 100, 'progress-bar progress-bar-success': entry.progress >= 100}"
+                                    ng-style="{width: entry.progress +'%'}" aria-valuenow="{{entry.progress}}" role="progressbar" aria-valuemin="0" ria-valuemax="100">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-if="widget.type == 'constructsAwaiting'">
+            <table class="table table-hover">
+                <thead>
+                    <th>#</th>
+                    <th>Notes</th>
+                    <th>Requested By</th>
+                    <th>Date</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="entry in widgetdata.data.constructsAwaiting">
+                        <td><a ui-sref="app.research.constructRequest({ op: 'view', id: entry.id })">{{entry.name}}</a></td>
+                        <td>{{entry.notes}}</td>
+                        <td>{{model.UserHash[entry.requestedBy]}}</td>
+                        <td>{{model.getDateOnly(entry.createdAt)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-if="widget.type == 'octetRequestsAwaiting'">
+            <table class="table table-hover">
+                <thead>
+                    <th>#</th>
+                    <th>Full Kinetics</th>
+                    <th>Quantitation</th>
+                    <th>Requested By</th>
+                    <th>Date</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="entry in widgetdata.data.octetRequestsAwaiting">
+                        <td><a ui-sref="app.research.kineticRequest({ op: 'view', id: entry.id })">{{entry.name}}</a></td>
+                        <td>
+                            <span class="fa fa-check" ng-if="entry.fullKinetics"></span>
+                        </td>
+                        <td>
+                            <span class="fa fa-check" ng-if="entry.quantitation"></span>
+                        </td>
+                        <td>{{model.UserHash[entry.createdBy]}}</td>
+                        <td>{{model.getDateOnly(entry.createdAt)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-if="widget.type == 'myEvents'">
+            <table class="table table-hover">
+                <thead>
+                    <th>Instrument</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <!-- <th></th> -->
+                </thead>
+                <tbody>
+                    <tr ng-repeat="entry in widgetdata.data.myEvents">
+                        <td>{{entry.Instrument.name}}</td>
+                        <td>{{model.getDateTime(entry.startDate)}}</td>
+                        <td>{{model.getDateTime(entry.endDate)}}</td>
+                        <!-- <td><span class="label label-primary" ng-if="entry.startDate.getTime() <= new Date().getTime()">In Progress</span></td> -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-if="widget.type == 'adTransfectionsAwaiting'">
+            <table class="table table-hover">
+                <thead>
+                    <th>#</th>
+                    <th>Requested By</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="entry in widgetdata.data.adTransfectionsAwaiting">
+                        <td>
+                            <a ui-sref="app.ade.transfectionRequest({ op: 'view', id: entry.id })">{{entry.name}}</a>
+                        </td>
+                        <td>{{model.UserHash[entry.createdBy]}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-if="widget.type == 'pendingTRs'">
+            <table class="table table-hover">
+                <thead>
+                    <th>#</th>
+                    <th>Protein</th>
+                    <th>Requested By</th>
+                    <th>Date</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="entry in widgetdata.data.pendingTRs">
+                        <td>
+                            <a ui-sref="app.research.transfectionRequests({ op: 'view', id: entry.id })">{{entry.name}}</a>
+                        </td>
+                        <td>
+                            <a ui-sref="app.research.proteins({ op: 'view', id: entry.Protein.id })" uib-tooltip="{{entry.Protein.description}}">{{entry.Protein.name}} - {{entry.Protein.ENUM_moleculeType}}</a>
+                        </td>
+                        <td>{{model.UserHash[entry.requesterId]}}</td>
+                        <td>{{model.getDateOnly(entry.createdAt)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-if="widget.type == 'approvedTRs'">
+            <table class="table table-hover">
+                <thead>
+                    <th>#</th>
+                    <th>Protein</th>
+                    <th>Plasmid</th>
+                    <th>DNA Ready</th>
+                    <th>Requested By</th>
+                    <th>Date</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="entry in widgetdata.data.approvedTRs">
+                        <td>
+                            <a ui-sref="app.research.transfectionRequests({ op: 'view', id: entry.id })">{{entry.name}}</a>
+                        </td>
+                        <td>
+                            <a ui-sref="app.research.proteins({ op: 'view', id: entry.Protein.id })" uib-tooltip="{{entry.Protein.description}}">{{entry.Protein.name}}</a>
+                        </td>
+                        <td>
+                            <span ng-repeat="plasmid in entry.Protein.Plasmids">{{plasmid.name}}&nbsp;</span>
+                        </td>
+                        <td><span class="fa fa-check" ng-if="entry.dnaReady"></span></td>
+                        <td>{{model.UserHash[entry.requesterId]}}</td>
+                        <td>{{model.getDateOnly(entry.createdAt)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-if="widget.type == 'inTransfection'">
+            <table class="table table-hover">
+                <thead>
+                    <th>#</th>
+                    <th>Protein</th>
+                    <th>Cell Line</th>
+                    <th>Transfection Date</th>
+                    <th>Created By</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="entry in widgetdata.data.inTransfection">
+                        <td>
+                            <a ui-sref="app.research.transfections({ op: 'view', id: entry.id })">{{entry.name}}</a>
+                        </td>
+                        <td>
+                            <a ui-sref="app.research.proteins({ op: 'view', id: entry.TransfectionRequest.Protein.id })" uib-tooltip="{{entry.TransfectionRequest.Protein.description}}">{{entry.TransfectionRequest.Protein.name}}</a>
+                        </td>
+                        <td>{{entry.TransfectionRequest.ENUM_transfectionCellLine}}</td>
+                        <td>{{model.getDateOnly(entry.transfectionDate)}}</td>
+                        <td>{{model.UserHash[entry.createdBy]}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div ng-if="widget.type == 'inPurification'">
+            <table class="table table-hover">
+                <thead>
+                    <th>#</th>
+                    <th>Protein</th>
+                    <th>Purification Method</th>
+                    <th>Harvest Date</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="entry in widgetdata.data.inPurification">
+                        <td>
+                            <a ui-sref="app.research.transfections({ op: 'view', id: entry.id })">{{entry.name}}</a>
+                        </td>
+                        <td>
+                            <a ui-sref="app.research.proteins({ op: 'view', id: entry.Transfection.TransfectionRequest.Protein.id })" uib-tooltip="{{entry.Transfection.TransfectionRequest.Protein.description}}">{{entry.Transfection.TransfectionRequest.Protein.name}}</a>
+                        </td>
+                        <td>{{entry.Transfection.TransfectionRequest.ENUM_transfectionPurificationMethod}}</td>
+                        <td>{{model.getDateOnly(entry.Transfection.harvestDate)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="list-group" ng-if="widget.type == 'inProgTRs'">
+            <div class="list-group-item" ng-repeat='tr in TrDashboard["In Progress"].trsList track by $index'>
+                <div class="media-box">
+                    <div class="pull-left">
+                        <span class="fa-stack">
+                <em class="fa fa-circle fa-stack-2x text-info"></em>
+                <em class="far fa-file-alt fa-stack-1x fa-inverse text-white"></em>
+            </span>
+                    </div>
+                    <div class="media-box-body clearfix">
+                        <small class="text-muted pull-right ml">{{tr.createdAt}}</small>
+                        <div class="media-box-heading"><a href="{{tr.url}}" class="text-info m0">{{tr.name}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

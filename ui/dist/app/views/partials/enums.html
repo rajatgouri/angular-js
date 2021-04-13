@@ -1,0 +1,29 @@
+<h3>Dropdown Editor</h3>
+<div ng-repeat="(section, tables) in enumList">
+    <div class="row" ng-repeat="(table, children) in tables" ng-if="$state.includes(section)">
+        <!--TODO : refine format-->
+        <div class="panel-title" style="padding: 15px;">{{tableTranslator(table)}}</div>
+        <div class="col-lg-3" ng-repeat="(name, friendlyName) in children">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">{{friendlyName}}</div>
+                </div>
+                <div ng-if="enumsReady" class="container-fluid" style="margin-left: 15px">
+                    <ul html-sortable="sortableOptions" html-sortable-callback="sortableCallback" ng-model="name" class="list-group"
+                        contenteditable="true">
+                        <div ng-repeat="itm in enumData[name] track by $index">
+                            <input ng-disabled="enumOptions.disableEdit{{name}}" type="text" value="{{itm}}" class="list-group-item {{name}}Item force-inline"
+                                ng-class="enumOptions.{{name}}ListClass"></input>
+                            <i class="fa fa-times force-inline" ng-click="deleteEnumValue($index, name)"></i>
+                        </div>
+                    </ul>
+                    <div style="margin-bottom: 10px">
+                        <button ng-click="addEnumValue(name)" class="btn btn-info">Add another</button>
+                        <button ng-click="enableEditEnumValue(name)" class="btn btn-info">Edit</button>
+                        <button ng-click="saveEnumValue(name, table)" class="btn btn-info">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

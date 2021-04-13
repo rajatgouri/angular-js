@@ -1,0 +1,64 @@
+{
+  "apps": [
+    {
+      "name": "data",
+      "script": "./data_service/app.js",
+      "env": {
+        "NODE_ENV": "development",
+        "PORT": "9507",
+        "IP": "0.0.0.0"
+      },
+      "env_production": {
+        "NODE_ENV": "production",
+        "IP": "127.0.0.1"
+      },
+      "exec_mode": "cluster",
+      "instances": "max"
+    },
+    {
+      "name": "user",
+      "script": "./user_service/app.js",
+      "env": {
+        "NODE_ENV": "development",
+        "PORT": "9509",
+        "IP": "0.0.0.0"
+      },
+      "env_production": {
+        "NODE_ENV": "production",
+        "IP": "127.0.0.1"
+      },
+      "exec_mode": "cluster",
+      "instances": "max"
+    },
+    {
+      "name": "gate",
+      "script": "./gate/app.js",
+      "env": {
+        "NODE_ENV": "development",
+        "PORT": "9506",
+        "IP": "0.0.0.0"
+      },
+      "env_production": {
+        "NODE_ENV": "production",
+        "IP": "127.0.0.1"
+      },
+      "exec_mode": "cluster",
+      "instances": "max"
+    },
+    {
+      "name": "ui",
+      "script": "./ui/app.js",
+      "env": {
+        "NODE_ENV": "development",
+        "PORT": "9505",
+        "IP": "127.0.0.1"
+      },
+      "env_production": {
+        "NODE_ENV": "production",
+        "IP": "127.0.0.1"
+      },
+      "exec_mode": "cluster",
+      "instances": "max"
+    }
+  ]
+}

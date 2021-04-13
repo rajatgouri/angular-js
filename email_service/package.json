@@ -1,0 +1,46 @@
+{
+  "name": "systimmune-lims-userservice",
+  "description": "Systimmune LIMS user service api component",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Nathan Thorpe",
+  "license": "Proprietary",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.systimmune.net/it/lims.git"
+  },
+  "engines": {
+    "node": "4.2.x",
+    "npm": "2.14.x"
+  },
+  "dependencies": {
+    "async": "latest",
+    "bcrypt-nodejs": "latest",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "glob": "^7.1.3",
+    "jshint-stylish": "^2.1.0",
+    "json5": "^2.1.0",
+    "lodash": "^4.17.11",
+    "morgan": "^1.6.1",
+    "mysql2": "^1.6.1",
+    "nconf": "^0.10.0",
+    "superagent": "^3.5.2",
+    "pm2": "^1.0.0",
+    "proxyquire": "^1.7.3",
+    "request": "*",
+    "sequelize": "^4.39.0",
+    "standard-error": "^1.1.0",
+    "winston": "^3.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.10.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0"
+  }
+}

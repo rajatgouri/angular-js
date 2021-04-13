@@ -1,0 +1,210 @@
+<div class="container-fluid">
+    <div class="col-lg-8">
+        <!-- Main panel-->
+        <div class="panel b">
+            <div class="panel-heading">
+                <div class="pull-right mt">
+                    <div ng-bind-html="m.viewDetails.status"></div>
+                </div>
+                <h4 class="mv">
+                    <span>Project {{m.viewDetails.name}}</span>
+                </h4>
+            </div>
+            <div class="panel-body">
+                <h4>Description</h4>
+                <p>{{m.viewDetails.description}}</p>
+            </div>
+            <div class="panel-body">
+                <div class="row text-center" ng-if="dataReady">
+                    <div class="col-xs-3">
+                        <div class="inline">
+                            <div class="sparkline" sparkline values="{{m.viewDetails.sparklines.plasmids.total}},{{m.viewDetails.sparklines.plasmids.project}}" data-type="pie" data-height="60" data-slice-colors="{{[colorByName('gray-lighter'), colorByName('info')]}}"></div>
+                        </div>
+                        <p class="mt-lg">Plasmids</p>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="inline">
+                            <div class="sparkline" sparkline values="{{m.viewDetails.sparklines.proteins.total}},{{m.viewDetails.sparklines.proteins.project}}" data-type="pie" data-height="60" data-slice-colors="{{[colorByName('gray-lighter'), colorByName('success')]}}"></div>
+                        </div>
+                        <p class="mt-lg">Proteins</p>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="inline">
+                            <div class="sparkline" sparkline values="{{m.viewDetails.sparklines.stableCellLines.total}},{{m.viewDetails.sparklines.stableCellLines.project}}" data-type="pie" data-height="60" data-slice-colors="{{[colorByName('gray-lighter'), colorByName('warning')]}}"></div>
+                        </div>
+                        <p class="mt-lg">Cell Lines</p>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="inline">
+                            <div class="sparkline" sparkline values="{{m.viewDetails.sparklines.clones.total}},{{m.viewDetails.sparklines.clones.project}}" data-type="pie" data-height="60" data-slice-colors="{{[colorByName('gray-lighter'), colorByName('purple')]}}"></div>
+                        </div>
+                        <p class="mt-lg">Clones</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-transparent">
+            <uib-tabset justified="true" class="bg-white p0">
+                <uib-tab index="'Plasmids'">
+                    <uib-tab-heading>
+                        <em class="fas fa-search fa-fw"></em>Plasmids
+                    </uib-tab-heading>
+                    <div class="table-responsive">
+                        <div ng-if="m.plasmids.dataReady">
+                            <table datatable dt-options="m.plasmids.dtOptions" dt-columns="m.plasmids.dtColumns" dt-column-defs="m.plasmids.dtColDefs" dt-instance="m.plasmids.DtInstCallback"
+                                class="table table-hover">
+                            </table>
+                        </div>
+                    </div>
+                    <div ng-show="!m.plasmids.DtInst">
+                        <h3>There are no entries in the database.</h3>
+                    </div>
+                </uib-tab>
+                <uib-tab index="'Proteins'" ng-click="m.proteins.initData()">
+                    <uib-tab-heading>
+                        <em class="fas fa-search fa-fw"></em>Proteins
+                    </uib-tab-heading>
+                    <div class="table-responsive">
+                        <div ng-if="m.proteins.dataReady">
+                            <table datatable dt-options="m.proteins.dtOptions" dt-columns="m.proteins.dtColumns" dt-column-defs="m.proteins.dtColDefs" dt-instance="m.proteins.DtInstCallback"
+                                class="table table-hover">
+                            </table>
+                        </div>
+                    </div>
+                    <div ng-show="!m.proteins.DtInst">
+                        <h3>There are no entries in the database.</h3>
+                    </div>
+                </uib-tab>
+                <uib-tab index="'Activations'" ng-click="m.ade.initData()">
+                    <uib-tab-heading>
+                        <em class="fas fa-search fa-fw"></em>ADE Activation Summary
+                    </uib-tab-heading>
+                    <div class="table-responsive">
+                        <div ng-if="m.ade.dataReady">
+                            <table datatable dt-options="m.ade.dtOptions" dt-columns="m.ade.dtColumns" dt-column-defs="m.ade.dtColDefs" dt-instance="m.ade.DtInstCallback"
+                                class="table table-hover">
+                            </table>
+                        </div>
+                    </div>
+                    <div ng-show="!m.ade.DtInst">
+                        <h3>There are no entries in the database.</h3>
+                    </div>
+                </uib-tab>
+                <uib-tab index="'CLDHarvests'" ng-click="m.cellLines.initData()">
+                    <uib-tab-heading>
+                        <em class="fas fa-search fa-fw"></em>Cell Line Clones
+                    </uib-tab-heading>
+                    <div class="table-responsive">
+                        <div ng-if="m.cellLines.dataReady">
+                            <table datatable dt-options="m.cellLines.dtOptions" dt-columns="m.cellLines.dtColumns" dt-column-defs="m.cellLines.dtColDefs" dt-instance="m.cellLines.DtInstCallback"
+                                class="table table-hover">
+                            </table>
+                        </div>
+                    </div>
+                    <div ng-show="!m.cellLines.DtInst">
+                        <h3>There are no entries in the database.</h3>
+                    </div>
+                </uib-tab>
+                <uib-tab index="'Bioreactor'" ng-click="m.bioreactorExp.initData()">
+                    <uib-tab-heading>
+                        <em class="fas fa-search fa-fw"></em>Bioreactor Experiments
+                    </uib-tab-heading>
+                    <div class="table-responsive">
+                        <div ng-if="m.bioreactorExp.dataReady">
+                            <table datatable dt-options="m.bioreactorExp.dtOptions" dt-columns="m.bioreactorExp.dtColumns" dt-column-defs="m.bioreactorExp.dtColDefs" dt-instance="m.bioreactorExp.DtInstCallback"
+                                class="table table-hover">
+                            </table>
+                        </div>
+                    </div>
+                    <div ng-show="!m.bioreactorExp.DtInst">
+                        <h3>There are no entries in the database.</h3>
+                    </div>
+                </uib-tab>
+            </uib-tabset>
+        </div>
+        <!-- End Main panel-->
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Aside panel-->
+        <div class="panel b">
+            <table class="table bb">
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong>Start date</strong>
+                        </td>
+                        <td>02/01/2016</td>
+                        <td><a permission permission-only="['writeProject','adminProject']" class="btn btn-info btn-xs pull-right" href="#!/app/projects/table?op=edit&id={{m.viewDetails.id}}">Edit</a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Project Leaders</strong>
+                        </td>
+                        <td>
+                            <strong>Stage</strong>
+                        </td>
+                        <td>
+                            <strong>Leader</strong>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="user in m.viewDetails.Users">
+                        <td></td>
+                        <td>{{user.ProjectStage.stage}}</td>
+                        <td>{{user.displayName}}</td>
+                    </tr>
+                    <tr ng-if="m.viewDetails.Users.length == 0">
+                        <td></td>
+                        <td>No Data</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Targets</strong>
+                        </td>
+                        <td ng-bind="m.viewDetails.targets"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Platforms</strong>
+                        </td>
+                        <td ng-bind="m.viewDetails.platforms.join(', ')"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Pinned files</strong>
+                        </td>
+                        <td colspan="2">
+                            <table class="table table-bordered bg-transparent" ng-if="m.viewDetails.references.length > 0">
+                                <tbody>
+                                    <tr ng-repeat="reference in m.viewDetails.references">
+                                        <td>
+                                            <em class="fa fa-lg fa-file-code-o"></em>
+                                            <span ng-bind="reference.section"></span>
+                                        </td>
+                                        <td><a ng-href="{{reference.url}}">{{reference.name}}</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <strong ng-if="m.viewDetails.references.length == 0">No files</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Procurify</strong>
+                        </td>
+                        <td colspan="2">
+                            <span>Please Tag Purchases with Project ID</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="text-right"><a class="btn btn-link" target="_blank" href="{{m.viewDetails.sharePointGroup}}">Open All SharePoint Files</a>
+            </p>
+        </div>
+        <!-- end Aside panel-->
+    </div>
+</div>

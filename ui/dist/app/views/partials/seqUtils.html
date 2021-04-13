@@ -1,0 +1,81 @@
+<h3>Sequence Utilities</h3>
+<div class="panel panel-transparent">
+    <uib-tabset justified="true" class="bg-white p0" active="m.activeTab">
+        <uib-tab index="'TrypsinFrags'">
+            <uib-tab-heading>
+                <em class="fas fa-search fa-fw responsive"></em>Trypsin Fragment Finder
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-validate form-horizontal mt" name="m.TrypsinFrags.ui.validate">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Enter Sequence
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" ng-model="m.TrypsinFrags.data.sequence">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-primary btn-labeled" ng-disabled="!m.TrypsinFrags.data.sequence" ng-click="m.TrypsinFrags.SubmitTab('manual')">
+                                                    <span class="btn-label">
+                                                        <em class="fas fa-sync"></em>
+                                                    </span>
+                                                    Get Fragments
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">
+                                        Select Protein
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group col-sm-4">
+                                            <select name="proteinId" class="chosen-select input-md" width="'300px'" ng-model="m.TrypsinFrags.data.proteinId" chosen data-placeholder-text-single="'Choose a Protein'"
+                                                required ng-options="p.value as p.text for p in m.ProteinDisplayData.ItemList">
+                                            </select>
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-primary btn-labeled" ng-disabled="!m.TrypsinFrags.data.proteinId" ng-click="m.TrypsinFrags.SubmitTab('protein')">
+                                                    <span class="btn-label">
+                                                        <em class="fas fa-sync"></em>
+                                                    </span>
+                                                    Get Fragments
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group">
+                                    <div class="col-sm-8 col-sm-offset-2">
+                                        <div id="result"></div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="'SeqAnnotation'">
+            <uib-tab-heading>
+                <em class="fas fa-search fa-fw"></em>Sequence Annotation
+            </uib-tab-heading>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        In Progress
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+    </uib-tabset>
+</div>
